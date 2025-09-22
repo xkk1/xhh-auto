@@ -22,7 +22,7 @@ def 主函数():
     网站.register_blueprint(主页蓝图)
     
     调试 = (os.environ.get("DEBUG", "False") == "True")  # 如果没设置，默认认为是生产环境
-    端口 = int(os.environ.get("PORT", "8080"))
+    端口 = int(os.environ.get("PORT", "44321"))  # 默认端口 44321
     if 调试:
         网站.run(host="0.0.0.0", port=端口, debug=True)
     else:
