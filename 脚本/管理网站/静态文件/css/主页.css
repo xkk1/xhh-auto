@@ -1,0 +1,37 @@
+body {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: #fafafa; */
+}
+
+#header {
+    background: white;
+}
+
+/* 2. Main 样式（主体部分） */
+#main {
+  flex: 1;           /* 或固定宽度，如 width: 200px; */
+  display: flex;
+}
+
+/* 2.1 主体内部的导航栏（比如侧边栏） */
+#nav {
+  /* flex: 1;           或固定宽度，如 width: 200px; */
+  width: 200px;
+  background: white;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+/* 2.2 主内容区域 */
+#content {
+  flex: 1; /* 比导航栏更宽 */
+  background: white;
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
