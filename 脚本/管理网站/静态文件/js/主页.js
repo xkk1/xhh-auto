@@ -7,9 +7,9 @@ document.addEventListener('DOMContentLoaded', function () {
         navWrap.classList.toggle('collapsed');  // 切换 collapsed 类
         // 可选：根据状态更改按钮文字
         if (navWrap.classList.contains('collapsed')) {
-        toggleBtn.textContent = '展开侧边栏';
+            toggleBtn.textContent = '展开侧边栏';
         } else {
-        toggleBtn.textContent = '收起侧边栏';
+            toggleBtn.textContent = '收起侧边栏';
         }
     };
     toggleBtn.addEventListener('click', toggleNav);
