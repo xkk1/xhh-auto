@@ -21,9 +21,6 @@ def 主函数():
     os.environ["PLAYWRIGHT_BROWSERS_PATH"] = (启动器目录 / "浏览器").as_posix()
     # 设置数据目录
     os.environ["DATA_DIR"] = (启动器目录 / "数据").as_posix()
-    # 添加小红狐目录到系统路径
-    sys.path.append((启动器目录 / "小红狐").as_posix())
-    sys.path.append((启动器目录 / "元梦之星小红狐").as_posix())
     # 设置 Debug 模式
     os.environ["DEBUG"] = "True"
     # 导入脚本

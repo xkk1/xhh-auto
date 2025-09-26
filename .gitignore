@@ -2,10 +2,10 @@
 /.venv/
 __pycache__/
 *.pyc
-*.pyz
 
-# 脚本
-/脚本/打包/
+# pyinstaller 打包
+/dist/
+/build/
 
 # 浏览器
 /浏览器/**/*
