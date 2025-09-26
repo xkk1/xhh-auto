@@ -8,6 +8,8 @@ import sys
 import os
 
 # 预导入 方便打包识别
+import logging
+
 import playwright
 import flask
 import waitress
