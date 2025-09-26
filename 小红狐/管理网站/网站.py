@@ -9,8 +9,7 @@ from .路由 import *
 
 def 主函数():
     # 获取当前目录
-    网站目录 = Path(os.environ.get("SCRIPT_DIR", (Path(".") / "脚本").resolve())) / "管理网站"
-    print(网站目录)
+    网站目录 = Path(__file__).parent.resolve()
     网站 = Flask(
         __name__,
         static_folder=(网站目录/"静态文件").as_posix(),
