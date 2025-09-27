@@ -74,7 +74,7 @@ class 异步任务管理器类:
             except asyncio.CancelledError:
                 日志.信息(f"任务 '{任务名称}' 已被用户停止")
             except Exception as 错误:
-                日志.信息(f"[错误] 任务 '{任务名称}' 发生异常：{错误}")
+                日志.错误(f"任务 '{任务名称}' 发生异常：{错误}")
             日志.信息(f"任务 '{任务名称}' 已完成")
 
         # ✅ 使用 Event 确认任务是否成功创建
@@ -91,7 +91,7 @@ class 异步任务管理器类:
 
         # 等待任务真正启动
         if 超时 and (not 已启动.wait(timeout=超时)):
-            日志.信息(f"[错误] 任务 '{任务名称}' 启动超时")
+            日志.错误(f"任务 '{任务名称}' 启动超时")
             return False
 
         return True
@@ -119,7 +119,7 @@ class 异步任务管理器类:
 
         # 等待确认停止
         if 超时 and (not 已停止.wait(timeout=超时)):
-            日志.信息(f"[错误] 任务 '{任务名称}' 停止超时")
+            日志.错误(f"任务 '{任务名称}' 停止超时")
             return False
 
         return True

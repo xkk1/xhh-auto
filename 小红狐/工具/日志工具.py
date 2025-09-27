@@ -16,9 +16,9 @@ class 日志级别:
     自动级别 = 调试 if os.environ.get("DEBUG", "False") == "True" else 信息
 
 class 日志类(logging.Logger):
-    def __init__(self, name, level=logging.NOTSET):
+    def __init__(self, name, 级别=日志级别.未设置):
         # 必须调用父类 Logger 的 __init__，传入 name 和 level
-        super().__init__(name, level)
+        super().__init__(name, 级别)
         self.调试 = super().debug
         self.信息 = super().info
         self.警告 = super().warning
