@@ -1,5 +1,6 @@
 import asyncio
 import time
+import traceback
 from typing import Dict, Callable, Optional
 import threading
 
@@ -74,7 +75,7 @@ class 异步任务管理器类:
             except asyncio.CancelledError:
                 日志.信息(f"任务 '{任务名称}' 已被用户停止")
             except Exception as 错误:
-                日志.错误(f"任务 '{任务名称}' 发生异常：{错误}")
+                日志.错误(f"任务 '{任务名称}' 发生异常：{错误}\n{traceback.format_exc()}")
             日志.信息(f"任务 '{任务名称}' 已完成")
 
         # ✅ 使用 Event 确认任务是否成功创建
@@ -160,7 +161,7 @@ class 异步任务管理器类:
 异步任务管理器 = 异步任务管理器类()
 
 def main():
-    任务管理器 = 异步任务管理器类()
+    异步任务管理器 = 异步任务管理器类()
 
     async def foo():
         i = 0
@@ -169,18 +170,18 @@ def main():
             日志.信息(f"任务1 正在运行 {i = }")
             await asyncio.sleep(1)
 
-    if 任务管理器.启动任务("任务1", foo):
+    if 异步任务管理器.启动任务("任务1", foo):
         日志.信息("任务1 已确认启动成功")
-    if 任务管理器.启动任务("任务2", foo, 超时=0.001):
+    if 异步任务管理器.启动任务("任务2", foo, 超时=0.001):
         日志.信息("任务2 已确认启动成功")
 
     time.sleep(3)
 
-    if 任务管理器.停止任务("任务1", 超时=0.001):
+    if 异步任务管理器.停止任务("任务1", 超时=0.001):
         日志.信息("任务1 已确认停止成功")
     else:
         日志.信息("停止任务1 失败")
-    del 任务管理器
+    del 异步任务管理器
 
     time.sleep(3)
 
