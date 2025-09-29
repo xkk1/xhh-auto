@@ -1,7 +1,7 @@
 import pathlib
 from typing import Dict, Literal, Optional, Union
 
-from playwright.async_api import Playwright, Browser, Page, Mouse, Keyboard
+from playwright.async_api import Playwright, Browser, BrowserType, Page, Mouse, Keyboard
 from playwright.async_api import async_playwright
 
 
@@ -22,11 +22,13 @@ async def 获取Playwright异步浏览器(
             kwargs["headless"] = kwargs.get("headless", True)
         case 'firefox':
             浏览器类型 = 异步上下文管理器.firefox
+            kwargs["headless"] = kwargs.get("headless", False)
         case 'webkit':
             浏览器类型 = 异步上下文管理器.webkit
+            kwargs["headless"] = kwargs.get("headless", False)
         case _:
             raise ValueError(f"不支持的浏览器类型：{浏览器类型}")
-    浏览器 = await 浏览器类型.launch(*args, **kwargs)
+    浏览器: BrowserType = await 浏览器类型.launch(*args, **kwargs)
     return 浏览器
 
 async def 获取Playwright异步页面(异步浏览器: Browser) -> Page:
