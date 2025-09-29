@@ -1,3 +1,4 @@
+import atexit
 import copy
 import json
 import pathlib
@@ -10,6 +11,8 @@ class 数据类:
         self.数据 = copy.deepcopy(self.默认值) if 默认值 else {}
         self.路径 = 路径
         self.加载()
+        if self.路径:
+            atexit.register(self.保存)  # 注册退出时保存
     
     def 加载(self):
         # 加载数据
@@ -44,7 +47,10 @@ class 数据类:
 
     def __del__(self):
         # 析构函数
-        self.保存()
+        try:
+            self.保存()
+        except Exception:
+            pass  # 忽略 Python 解释器关机时的异常
 
     def __getitem__(self, 键):
         # 获取值
