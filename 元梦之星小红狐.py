@@ -1,18 +1,27 @@
 #!/usr/bin/env python3
-"""
+"""/
 元梦之星小红狐启动器
 """
-import importlib
-import pathlib
-import sys
-import os
-
 # 预导入 方便打包识别
+import asyncio
+import atexit
+import copy
+import importlib
+import json
+import os
+import pathlib
 import logging
+import shutil
+import sys
+import threading
+import time
+import traceback
+import typing
 
 import playwright
 import flask
 import waitress
+
 
 def 主函数():
     # 导入脚本
