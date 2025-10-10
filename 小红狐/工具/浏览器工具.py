@@ -1,7 +1,7 @@
 import pathlib
 from typing import Dict, Literal, Optional, Union
 
-from playwright.async_api import Playwright, Browser, BrowserType, Page, Mouse, Keyboard
+from playwright.async_api import Playwright, Browser, BrowserType, BrowserContext, Page, Mouse, Keyboard
 from playwright.async_api import async_playwright
 
 
@@ -31,8 +31,12 @@ async def 获取Playwright异步浏览器(
     浏览器: BrowserType = await 浏览器类型.launch(*args, **kwargs)
     return 浏览器
 
-async def 获取Playwright异步页面(异步浏览器: Browser) -> Page:
-    页面 = await 异步浏览器.new_page()
+async def 获取Playwright异步浏览器上下文(异步浏览器: Browser, *args, **kwargs) -> BrowserContext:
+    浏览器上下文 = await 异步浏览器.new_context(*args, **kwargs)
+    return 浏览器上下文
+
+async def 获取Playwright异步页面(异步浏览器: Browser, *args, **kwargs) -> Page:
+    页面 = await 异步浏览器.new_page(*args, **kwargs)
     return 页面
 
 
