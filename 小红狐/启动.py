@@ -1,5 +1,5 @@
 import traceback
-from .核心.配置 import 初始化环境变量
+from .核心.小红狐配置 import 初始化环境变量
 
 
 def 主函数():

@@ -5,7 +5,7 @@ from flask import Flask
 from waitress import serve
 
 from ..工具.日志工具 import 获取日志记录器
-from ..核心.配置 import 配置数据
+from ..核心.小红狐配置 import 配置数据
 from .路由 import *
 
 
