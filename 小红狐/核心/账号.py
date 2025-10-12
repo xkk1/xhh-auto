@@ -5,7 +5,7 @@ from typing import Any, Dict, Optional
 from 小红狐.工具.数据工具 import 数据类, 获取本地数据
 from ..工具.目录工具 import 账号目录
 
-
+浏览器存储状态文件名 = "浏览器存储状态.json"
 默认浏览器存储状态文件 = pathlib.Path(__file__).parent / "默认浏览器存储状态.json"
 账号目录.mkdir(parents=True, exist_ok=True)
 
@@ -25,7 +25,7 @@ def 新建账号(账号名: str) -> pathlib.Path:
     新建账号目录 = 获取账号目录(账号名)
     新建账号目录.mkdir()
     # 复制默认浏览器存储状态文件
-    shutil.copy(默认浏览器存储状态文件, 新建账号目录 / "浏览器存储状态.json")
+    shutil.copy(默认浏览器存储状态文件, 新建账号目录 / 浏览器存储状态文件名)
     return 新建账号目录
 
 def 删除账号(账号名: str):
