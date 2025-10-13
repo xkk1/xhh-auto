@@ -66,11 +66,17 @@ class 小红狐脚本信息:
 
 导入脚本信息字典: dict[str, 小红狐脚本信息] = {}
 
-def 导入脚本(模块名: str) -> ModuleType:
+def 重载脚本(模块名: str) -> ModuleType:
     if 模块名 in 导入脚本信息字典:
         模块 = importlib.reload(导入脚本信息字典[模块名].模块)
         导入脚本信息字典[模块名] = 小红狐脚本信息(模块)
         return 导入脚本信息字典[模块名]
+    else:
+        raise ImportError(f"无法重载脚本：{模块名}, 脚本未导入")
+
+def 导入脚本(模块名: str) -> ModuleType:
+    if 模块名 in 导入脚本信息字典:
+        return 重载脚本(模块名)
     try:
         模块 = importlib.import_module(模块名 + ".小红狐脚本")
         导入脚本信息字典[模块名] = 小红狐脚本信息(模块)
@@ -90,14 +96,6 @@ def 删除脚本(模块名: str) -> bool:
         return True
     else:
         return False
-
-def 重载脚本(模块名: str) -> ModuleType:
-    if 模块名 in 导入脚本信息字典:
-        模块 = importlib.reload(导入脚本信息字典[模块名].模块)
-        导入脚本信息字典[模块名] = 小红狐脚本信息(模块)
-        return 导入脚本信息字典[模块名]
-    else:
-        raise ImportError(f"无法重载脚本：{模块名}, 脚本未导入")
 
 def 获取脚本目录(模块名: str | None = None) -> pathlib.Path:
     if 模块名:
@@ -119,8 +117,3 @@ def 加载所有脚本() -> dict[str, ImportError]:
         except ImportError as e:
             错误信息字典[模块名] = e
     return 错误信息字典
-
-def 重载所有脚本() -> dict[str, ImportError]:
-    for 模块名 in 导入脚本信息字典:
-        删除脚本(模块名)
-    return 加载所有脚本()
