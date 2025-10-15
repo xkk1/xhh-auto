@@ -53,4 +53,4 @@ def 获取账号数据(账号名: Optional[str]=None, 默认值: Optional[Dict[s
 def 获取账号浏览器存储状态文件(账号名: str) -> pathlib.Path:
     if 账号名 not in 获取全部账号名():
         raise FileNotFoundError(f"账号 {账号名} 不存在")
-    return 获取账号目录(账号名) / "浏览器存储状态.json"
+    return 获取账号目录(账号名) / 浏览器存储状态文件名
