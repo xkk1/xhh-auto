@@ -1,6 +1,6 @@
 import pathlib
 import shutil
-from typing import Any, Dict, Optional
+from typing import Any
 
 from 小红狐.工具.数据工具 import 数据类, 获取本地数据
 from ..工具.目录工具 import 账号目录
@@ -10,7 +10,7 @@ from ..工具.目录工具 import 账号目录
 账号目录.mkdir(parents=True, exist_ok=True)
 
 
-def 获取账号目录(账号名: Optional[str]=None):
+def 获取账号目录(账号名: str | None = None):
     if 账号名:
         return 账号目录 / 账号名
     else:
@@ -47,7 +47,7 @@ def 复制账号(账号名: str, 新账号名: str):
         raise FileNotFoundError(f"账号 {账号名} 不存在")
     shutil.copytree(获取账号目录(账号名), 获取账号目录(新账号名))
 
-def 获取账号数据(账号名: Optional[str]=None, 默认值: Optional[Dict[str, Any]] = None) -> 数据类:
+def 获取账号数据(账号名: str | None = None, 默认值: dict[str, Any] | None = None) -> 数据类:
     return 获取本地数据(获取账号目录(账号名) / "数据.json", 默认值=默认值)
 
 def 获取账号浏览器存储状态文件(账号名: str) -> pathlib.Path:
