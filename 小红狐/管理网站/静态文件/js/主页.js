@@ -1,3 +1,56 @@
+// 页面缓存，保存已打开的页面 URL
+let pageCache = [];
+
+// 当前激活的页面 URL
+let currentPage = null;
+
+/**
+ * 打开页面
+ * @param {string} url 页面 URL
+ */
+function openPage(url) {
+    // 如果页面已经打开，则什么都不做
+    if (currentPage === url) {
+        return;
+    }
+    // 如果页面已经打开过，显示页面
+    if (pageCache.includes(url)) {
+        // 显示页面
+        document.getElementById(url).style.display = 'block';
+        // 隐藏之前打开的页面
+        if (currentPage) {
+            document.getElementById(currentPage).style.display = 'none';
+        }
+        // 更新当前页面
+        currentPage = url;
+        return;
+    }
+    // 如果页面未打开，则新建一个页面
+    const newIframe = document.createElement('iframe');
+    newIframe.src = url;
+    newIframe.id = url;
+    // 隐藏旧页面
+    if (currentPage) {
+        document.getElementById(currentPage).style.display = 'none';
+    }
+    // 显示新页面
+    document.getElementById('content-iframe').appendChild(newIframe);
+    // 更新当前页面
+    currentPage = url;
+    // 缓存页面
+    pageCache.push(url);
+}
+
+// 检查是否为移动端
+function isMobile() {
+    // 获取根元素的 CSS 变量 --is-mobile 的值
+    const rootStyles = getComputedStyle(document.documentElement);
+    const isMobileValue = rootStyles.getPropertyValue('--is-mobile').trim(); // 得到 "0" 或 "1"
+    
+    const isMobile = isMobileValue === '1'; // 转为布尔值
+    return isMobile;
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     // 侧边栏切换
     const toggleBtn = document.getElementById('toggle-nav-btn');
@@ -27,11 +80,12 @@ document.addEventListener('DOMContentLoaded', function () {
             if (event.target.classList.contains('open-page')) {
                 event.preventDefault(); // 阻止默认跳转行为
 
-                var href = event.target.getAttribute('href'); // 获取链接地址
-                console.log('阻止跳转，open-page 链接是：', href);
+                let href = event.target.getAttribute('href'); // 获取链接地址
+                openPage(href);
 
-                // 你也可以弹窗提示或做其他逻辑
-                // alert('特殊链接，地址为：' + href);
+                if (isMobile()) {
+                    toggleNav(); // 在移动端时，点击链接后自动收起侧边栏
+                }
             }
         }
     });

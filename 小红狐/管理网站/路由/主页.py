@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint
 
 from ...工具.日志工具 import 获取日志记录器
 from .. import 静态文件目录
@@ -15,4 +15,4 @@ from .. import 静态文件目录
 @主页蓝图.route('/')
 def 主页():
     日志.调试("访问主页")
-    return 主页蓝图.send_static_file("index.html")
+    return 主页蓝图.send_static_file("主页.html")
