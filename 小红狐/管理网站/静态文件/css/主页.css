@@ -1,8 +1,13 @@
+:root {
+    /* 移动端判断 */
+    --is-mobile: 0;
+}
+
 body {
-  display: flex;
-  flex-direction: column;
-  /* align-items: center;
-  justify-content: center;*/
+    display: flex;
+    flex-direction: column;
+    /* align-items: center;
+    justify-content: center;*/
 }
 
 #header {
@@ -44,8 +49,13 @@ body {
 #nav-wrap.collapsed #nav {
     transform: translateX(-20rem)
 }
-/* 手机端侧边栏样式 */
+/* 移动端样式 */
 @media (max-width: 768px) {
+    /* 设置值使 js 可以判断当前是否为移动端 */
+    :root {
+        --is-mobile: 1;
+    }
+    /* 侧边栏 */
     #nav-wrap {
         position: absolute;
         top: 0;
@@ -71,12 +81,11 @@ body {
 }
 
 /* 主内容区域 */
-#content {
+#content-iframe {
     flex: 1;
-    background-color: #ff5b5b;
 }
 
-#content iframe {
+#content-iframe iframe {
     width: 100%;
     height: 100%;
     border: none;
