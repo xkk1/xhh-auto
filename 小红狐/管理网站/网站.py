@@ -11,7 +11,6 @@ from ..工具.日志工具 import 获取日志记录器
 from ..工具.任务管理器工具 import 异步任务管理器
 from ..核心.小红狐配置 import 获取调试, 获取管理网站端口, 获取自动打开管理网站
 from . import 网站目录, 静态文件目录, 模板目录
-from .路由 import *
 
 
 日志 = 获取日志记录器(__name__)
@@ -45,7 +44,10 @@ def 主函数():
         )
 
     # 注册蓝图
+    from .路由.主页 import 主页蓝图
     网站.register_blueprint(主页蓝图)
+    from .路由.目录 import 目录蓝图
+    网站.register_blueprint(目录蓝图)
     
     if 检测端口占用(端口):
         日志.严重(f"❌端口 {端口} 已被占用，请选择其他端口")
