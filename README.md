@@ -1,4 +1,4 @@
-# 元梦之星小红狐
+# 小红狐
 
 ## 项目介绍
 
@@ -8,7 +8,7 @@
 2. 安装 git 克隆仓库 `https://gitee.com/xkk1/letsgo-xhh.git` 或前往 <https://gitee.com/xkk1/letsgo-xhh/repository/archive/main.zip> 下载压缩包解压，进入项目目录下
 3. 安装依赖包 `python -m pip install -e .`
 4. 安装 Playwright 浏览器 `python 安装浏览器.py`
-5. 运行程序 `python 元梦之星小红狐.py`
+5. 运行程序 `python 小红狐自动化.py`
 
 可通过设置环境变量来改变运行设置：
 

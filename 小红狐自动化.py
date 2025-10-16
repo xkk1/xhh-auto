@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""/
-元梦之星小红狐启动器
+"""
+小红狐启动器
 """
 # 预导入 方便打包识别
 import asyncio

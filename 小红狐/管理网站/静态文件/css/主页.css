@@ -9,10 +9,16 @@ body {
     background: white;
 }
 
+#header h1 {
+    margin: 0;
+}
+
 /* 主体 + 侧边栏部分 */
 #main {
     flex: 1;
     display: flex;
+    margin: 0;
+    padding: 0;
 }
 
 /* 侧边栏 */
@@ -67,5 +73,11 @@ body {
 /* 主内容区域 */
 #content {
     flex: 1;
-    padding: 1.5rem;
+    background-color: #ff5b5b;
+}
+
+#content iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
 }

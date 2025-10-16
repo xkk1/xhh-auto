@@ -1,7 +1,7 @@
 [project]
-name = "letsgo-xhh"
+name = "xhh-auto"
 version = "0.0.1"
-description = "元梦之星小红狐"
+description = "小红狐自动化"
 dependencies = [
   "playwright==1.55.0",
   "Flask==3.1.2",
