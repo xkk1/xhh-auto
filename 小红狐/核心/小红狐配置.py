@@ -1,8 +1,8 @@
 import os
 import pathlib
 
-from ..工具.目录工具 import 数据目录
-from ..工具.数据工具 import 获取本地数据
+from ..import __package__ as 模块名
+from ..核心.配置 import 获取配置数据
 
 
 默认配置 = {
@@ -16,8 +16,7 @@ from ..工具.数据工具 import 获取本地数据
         "DEBUG": "False"
     }
 }
-
-配置数据 = 获取本地数据(数据目录 / "小红狐.json", 默认配置)
+配置数据 = 获取配置数据(脚本模块名=模块名, 默认值=默认配置)
 
 
 def 初始化小红狐配置():
