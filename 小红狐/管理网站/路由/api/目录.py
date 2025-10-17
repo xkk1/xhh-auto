@@ -1,14 +1,14 @@
 from flask import Blueprint, send_from_directory
 
-from ...工具.日志工具 import 获取日志记录器
-from ...工具.目录工具 import 数据目录, 小红狐目录, 脚本目录
+from ....工具.日志工具 import 获取日志记录器
+from ....工具.目录工具 import 数据目录, 小红狐目录, 脚本目录
 
 
 日志 = 获取日志记录器(__name__)
 目录蓝图 = Blueprint(
     "目录",
     __name__,
-    url_prefix="/api/目录"
+    url_prefix="/目录"
 )
 
 # 返回数据目录文件

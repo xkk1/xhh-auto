@@ -46,10 +46,8 @@ def 主函数():
     # 注册蓝图
     from .路由.主页 import 主页蓝图
     网站.register_blueprint(主页蓝图)
-    from .路由.目录 import 目录蓝图
-    网站.register_blueprint(目录蓝图)
-    from .路由.数据 import 数据蓝图
-    网站.register_blueprint(数据蓝图)
+    from .路由.api import api蓝图
+    网站.register_blueprint(api蓝图)
     
     if 检测端口占用(端口):
         日志.严重(f"❌端口 {端口} 已被占用，请选择其他端口")

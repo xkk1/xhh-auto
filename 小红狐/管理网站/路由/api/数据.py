@@ -1,15 +1,15 @@
 from flask import Blueprint, jsonify, request
 
-from ...工具.日志工具 import 获取日志记录器
-from ...工具.目录工具 import 数据目录
-from ...工具.数据工具 import 获取本地数据, 获取内存数据
+from ....工具.日志工具 import 获取日志记录器
+from ....工具.目录工具 import 数据目录
+from ....工具.数据工具 import 获取本地数据, 获取内存数据
 
 
 日志 = 获取日志记录器(__name__)
 数据蓝图 = Blueprint(
     "数据",
     __name__,
-    url_prefix="/api/数据"
+    url_prefix="/数据"
 )
 
 
