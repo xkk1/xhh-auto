@@ -31,7 +31,7 @@ def 新建账号(账号名: str):
     if 账号名 in 获取全部账号名():
         raise FileExistsError(f"账号 {账号名} 已经存在")
     新建账号目录 = 获取账号目录(账号名=账号名, 脚本模块名=模块名)
-    新建账号目录.mkdir()
+    新建账号目录.mkdir(parents=True, exist_ok=True)
     # 复制默认浏览器存储状态文件
     shutil.copy(默认浏览器存储状态文件, 新建账号目录 / 浏览器存储状态文件名)
 
