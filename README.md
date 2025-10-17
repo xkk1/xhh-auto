@@ -19,4 +19,5 @@
 - `MANAGE_SITE_PORT` 管理网站端口，默认为 `44321`
 - `MANAGE_SITE_AUTO_OPEN_BROWSER` 是否自动在浏览器打开管理网站，默认为 `True`
 - `MANAGE_SITE_AUTO_OPEN_DELAY` 自动打开浏览器的延迟时间，默认为 `1`，单位秒
+- `MANAGE_SITE_ROOT_REDIRECT_URL` 管理网站根目录重定向地址，默认为 `/小红狐.html`
 - `DEBUG` 是否开启调试模式，默认为 `False`，设置为 `True` 时生效调试模式

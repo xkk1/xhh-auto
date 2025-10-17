@@ -13,6 +13,7 @@ from ..核心.配置 import 获取配置数据
         "MANAGE_SITE_PORT": "44321",
         "MANAGE_SITE_AUTO_OPEN_BROWSER": "True",
         "MANAGE_SITE_AUTO_OPEN_DELAY": "1.0",
+        "MANAGE_SITE_ROOT_REDIRECT_URL": "/小红狐.html",
         "DEBUG": "False"
     }
 }
