@@ -24,18 +24,18 @@ class 小红狐脚本信息:
                 return None
     
     小红狐脚本信息字典: dict[str, Any] = {
-        "主函数": 脚本默认替换变量("脚本模块.main"),  # 脚本入口
         "模块": 脚本默认替换变量("脚本模块"),  # 脚本模块
         "路径": 脚本默认替换变量("pathlib.Path(脚本模块.__file__).parent"),  # 脚本路径
         "名称": 脚本默认替换变量("脚本模块.__package__"),  # 脚本名称
         "简介": 脚本默认替换变量("脚本模块.__doc__"),  # 脚本简介
         "作者": 脚本默认替换变量("脚本模块.__author__"),  # 脚本作者
         "版本": 脚本默认替换变量("[脚本模块.__version__]"),  # 脚本版本
-        "类型": "页面操作",  # "依赖"、"页面生成"、"页面操作"
-        "调试": False,  # 仅开启调试模式时启用脚本
-        "总控URL": None,  # 总控 URL
-        "配置URL": None,  # 配置 URL
-        "flask_route": None,  # flask 路由 api
+        "调试": False, # 仅开启调试模式时启用脚本
+        "总控URL": None, # 总控 URL
+        "配置URL": None, # 配置 URL
+        "flask_route": None, # flask 路由 api
+        "页面生成": None, # 页面生成同步函数
+        "页面操作": None, # 页面操作异步函数
     }
 
     @classmethod
