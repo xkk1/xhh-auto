@@ -2,6 +2,7 @@ import logging
 import os
 from logging.handlers import RotatingFileHandler
 
+from .. import __package__ as 模块名
 from .目录工具 import 日志目录
 
 
@@ -28,9 +29,15 @@ class 日志类(logging.Logger):
         self.日志 = super().log
 
 
+def 获取日志目录(脚本模块名: str | None = None):
+    if 脚本模块名:
+        return 日志目录 / 脚本模块名
+    else:
+        return 日志目录
+
 def 获取日志记录器(
-    名称="小红狐",
-    日志文件=日志目录/"小红狐.log",
+    名称=模块名,
+    日志文件=获取日志目录(模块名)/f"{模块名}.log",
     日志级别=日志级别.自动级别,
     控制台级别=日志级别.自动级别,
     文件级别=日志级别.自动级别,
