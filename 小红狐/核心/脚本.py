@@ -7,7 +7,7 @@ from typing import Any
 from ..工具.目录工具 import 脚本目录
 
 
-def 初始化():
+def 初始化脚本():
     # 将脚本目录添加到系统路径中
     if str(脚本目录) not in sys.path:
         sys.path.append(str(脚本目录))
@@ -87,7 +87,7 @@ def 导入脚本(模块名: str) -> ModuleType:
 def 获取导入脚本模块名列表() -> list[str]:
     return list(导入脚本信息字典.keys())
 
-def 获取脚本(模块名: str) -> ModuleType:
+def 获取脚本(模块名: str) -> 小红狐脚本信息:
     return 导入脚本信息字典[模块名]
 
 def 删除脚本(模块名: str) -> bool:
@@ -109,11 +109,17 @@ def 获取脚本目录所有模块名() -> list[str]:
     """
     return [模块名.name for 模块名 in 获取脚本目录().iterdir() if 模块名.is_dir() and (模块名 / "小红狐脚本.py").exists()]
 
+加载脚本错误信息字典: dict[str, ImportError] = {}
+
 def 加载所有脚本() -> dict[str, ImportError]:
-    错误信息字典: dict[str, ImportError] = {}
+    # 错误信息字典: dict[str, ImportError] = {}
+    加载脚本错误信息字典.clear()
     for 模块名 in 获取脚本目录所有模块名():
         try:
             导入脚本(模块名)
         except ImportError as e:
-            错误信息字典[模块名] = e
-    return 错误信息字典
+            加载脚本错误信息字典[模块名] = e
+    return 加载脚本错误信息字典
+
+def 获取加载脚本错误信息字典() -> dict[str, ImportError]:
+    return 加载脚本错误信息字典
