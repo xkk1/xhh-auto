@@ -12,6 +12,9 @@ def 主函数():
     日志.信息("🚀小红狐启动中…")
 
     try:
+        from .核心 import 脚本
+        日志.信息(f"加载所有脚本：{脚本.加载所有脚本()}")
+
         from . import 管理网站
         管理网站.主函数()
     except Exception as e:
