@@ -35,6 +35,7 @@ class 小红狐脚本信息:
         "调试": False,  # 仅开启调试模式时启用脚本
         "总控URL": None,  # 总控 URL
         "配置URL": None,  # 配置 URL
+        "flask_route": None,  # flask 路由 api
     }
 
     @classmethod
@@ -47,6 +48,9 @@ class 小红狐脚本信息:
                 信息字典[键] = 值.值(模块)
             else:
                 信息字典[键] = 值
+        for 键 in dir(模块):
+            if not 键.startswith("_") and (键 not in cls.小红狐脚本信息字典):
+                信息字典[键] = getattr(模块, 键)
         return 信息字典
     
     def __init__(self, 模块: ModuleType):
@@ -109,7 +113,7 @@ def 获取脚本目录所有模块名() -> list[str]:
     """
     获取脚本目录下的所有模块名，模块是目录且有“小红狐脚本.py” 文件
     """
-    return [模块名.name for 模块名 in 获取脚本目录().iterdir() if 模块名.is_dir() and (模块名 / "小红狐脚本.py").exists()]
+    return ["小红狐"] + [模块名.name for 模块名 in 获取脚本目录().iterdir() if 模块名.is_dir() and (模块名 / "小红狐脚本.py").exists()]
 
 加载脚本错误信息字典: dict[str, ImportError] = {}
 
