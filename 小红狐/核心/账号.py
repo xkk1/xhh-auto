@@ -2,7 +2,8 @@ import pathlib
 import shutil
 from typing import Any
 
-from 小红狐.工具.数据工具 import 数据类, 获取本地数据
+from .. import __package__ as 模块名
+from ..工具.数据工具 import 数据类, 获取本地数据
 from ..工具.目录工具 import 账号目录
 
 浏览器存储状态文件名 = "浏览器存储状态.json"
@@ -10,47 +11,50 @@ from ..工具.目录工具 import 账号目录
 账号目录.mkdir(parents=True, exist_ok=True)
 
 
-def 获取账号目录(账号名: str | None = None):
-    if 账号名:
+def 获取账号目录(账号名: str | None = None, 脚本模块名: str | None = None) -> pathlib.Path:
+    if 账号名 and 脚本模块名:
+        return 账号目录 / 账号名 / 脚本模块名
+    elif 账号名 and not 脚本模块名:
         return 账号目录 / 账号名
+    elif not 账号名 and 脚本模块名:
+        raise ValueError("账号名不能为空")
     else:
         return 账号目录
+
+def 获取账号数据(账号名: str | None = None, 脚本模块名: str | None = None, 默认值: dict[str, Any] | None = None) -> 数据类:
+    return 获取本地数据(获取账号目录(账号名=账号名, 脚本模块名=脚本模块名) / "数据.json", 默认值=默认值)
 
 def 获取全部账号名():
     return [账号名.name for 账号名 in 获取账号目录().iterdir()]
 
-def 新建账号(账号名: str) -> pathlib.Path:
+def 新建账号(账号名: str):
     if 账号名 in 获取全部账号名():
         raise FileExistsError(f"账号 {账号名} 已经存在")
-    新建账号目录 = 获取账号目录(账号名)
+    新建账号目录 = 获取账号目录(账号名=账号名, 脚本模块名=模块名)
     新建账号目录.mkdir()
     # 复制默认浏览器存储状态文件
     shutil.copy(默认浏览器存储状态文件, 新建账号目录 / 浏览器存储状态文件名)
-    return 新建账号目录
 
 def 删除账号(账号名: str):
     if 账号名 not in 获取全部账号名():
         raise FileNotFoundError(f"账号 {账号名} 不存在")
-    shutil.rmtree(获取账号目录(账号名))
+    shutil.rmtree(获取账号目录(账号名=账号名))
 
 def 修改账号名(账号名: str, 新账号名: str):
     if 新账号名 in 获取全部账号名():
         raise FileExistsError(f"账号 {新账号名} 已经存在")
     if 账号名 not in 获取全部账号名():
         raise FileNotFoundError(f"账号 {账号名} 不存在")
-    shutil.move(获取账号目录(账号名), 获取账号目录(新账号名))
+    shutil.move(获取账号目录(账号名=账号名), 获取账号目录(账号名=新账号名))
 
 def 复制账号(账号名: str, 新账号名: str):
     if 新账号名 in 获取全部账号名():
         raise FileExistsError(f"账号 {新账号名} 已经存在")
     if 账号名 not in 获取全部账号名():
         raise FileNotFoundError(f"账号 {账号名} 不存在")
-    shutil.copytree(获取账号目录(账号名), 获取账号目录(新账号名))
-
-def 获取账号数据(账号名: str | None = None, 默认值: dict[str, Any] | None = None) -> 数据类:
-    return 获取本地数据(获取账号目录(账号名) / "数据.json", 默认值=默认值)
+    shutil.copytree(获取账号目录(账号名=账号名), 获取账号目录(账号名=新账号名))
 
 def 获取账号浏览器存储状态文件(账号名: str) -> pathlib.Path:
     if 账号名 not in 获取全部账号名():
         raise FileNotFoundError(f"账号 {账号名} 不存在")
-    return 获取账号目录(账号名) / 浏览器存储状态文件名
+    return 获取账号目录(账号名=账号名, 脚本模块名=模块名) / 浏览器存储状态文件名
