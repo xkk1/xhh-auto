@@ -42,7 +42,7 @@ class 小红狐脚本信息:
 
     @classmethod
     def 获取脚本信息(cls, 模块: ModuleType) -> dict[str, Any]:
-        信息字典 = {}
+        信息字典: dict[str, Any] = {}
         for 键, 值 in cls.小红狐脚本信息字典.items():
             if hasattr(模块, 键):
                 信息字典[键] = getattr(模块, 键)
@@ -56,8 +56,8 @@ class 小红狐脚本信息:
         return 信息字典
     
     def __init__(self, 模块: ModuleType):
-        self.模块 = 模块
-        self.脚本信息字典 = self.获取脚本信息(模块)
+        self.模块: ModuleType = 模块
+        self.脚本信息字典: dict[str, Any] = self.获取脚本信息(模块)
     
     def __getitem__(self, 键):
         return self.脚本信息字典[键]
@@ -94,6 +94,12 @@ def 导入脚本(模块名: str) -> ModuleType:
 
 def 获取导入脚本模块名列表() -> list[str]:
     return list(导入脚本信息字典.keys())
+
+def 获取导入脚本信息字典() -> dict[str, 小红狐脚本信息]:
+    return 导入脚本信息字典
+
+def 获取导入脚本信息列表() -> list[dict[str], Any]:
+    return [{"模块名": 键, **值.脚本信息字典} for 键, 值 in 导入脚本信息字典.items()]
 
 def 获取脚本(模块名: str) -> 小红狐脚本信息:
     return 导入脚本信息字典[模块名]
