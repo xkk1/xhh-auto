@@ -4,6 +4,8 @@ import sys
 from types import ModuleType
 from typing import Any
 
+
+from .. import __package__ as 小红狐模块名
 from ..工具.目录工具 import 脚本目录
 
 
@@ -113,7 +115,10 @@ def 获取脚本目录所有模块名() -> list[str]:
     """
     获取脚本目录下的所有模块名，模块是目录且有“小红狐脚本.py” 文件
     """
-    return ["小红狐"] + [模块名.name for 模块名 in 获取脚本目录().iterdir() if 模块名.is_dir() and (模块名 / "小红狐脚本.py").exists()]
+    模块名列表 = [模块名.name for 模块名 in 获取脚本目录().iterdir() if 模块名.is_dir() and (模块名 / "小红狐脚本.py").exists()]
+    if 小红狐模块名 not in 模块名列表:
+        模块名列表.insert(0, 小红狐模块名)
+    return 模块名列表
 
 加载脚本错误信息字典: dict[str, ImportError] = {}
 
