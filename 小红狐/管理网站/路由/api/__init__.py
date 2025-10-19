@@ -17,3 +17,5 @@ from .数据 import 数据蓝图
 api蓝图.register_blueprint(数据蓝图)
 from .脚本接口 import 脚本接口蓝图
 api蓝图.register_blueprint(脚本接口蓝图)
+from .脚本 import 脚本蓝图
+api蓝图.register_blueprint(脚本蓝图)
