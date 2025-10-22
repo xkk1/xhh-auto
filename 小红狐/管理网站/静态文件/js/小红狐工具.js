@@ -1,0 +1,175 @@
+// 小红狐工具函数 IIFE（立即调用函数表达式）
+(function (全局对象) {
+    // 私有函数：执行实际的 HTTP 请求
+    function 执行请求(请求方式, 网址, 数据 = null, 查询参数 = {}) {
+        let 请求网址 = 网址;
+
+        // 如果是 GET 请求，且带有查询参数，则拼接到 URL 上
+        if (请求方式 === 'GET' && Object.keys(查询参数).length > 0) {
+            const 查询字符串 = new URLSearchParams(查询参数).toString();
+            请求网址 = `${网址}?${查询字符串}`;
+        }
+
+        const 请求配置 = {
+            method: 请求方式, // GET, POST, PUT, DELETE
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
+
+        // 如果不是 GET 请求，并且有数据，则放入请求体中
+        if (数据 && 请求方式 !== 'GET') {
+            请求配置.body = JSON.stringify(数据);
+        }
+
+        return fetch(请求网址, 请求配置)
+            .then((响应) => {
+                if (!响应.ok) {
+                    // 如果响应失败（如 4xx, 5xx），尝试解析错误信息并 reject
+                    return 响应.json().then((错误信息) => Promise.reject(错误信息));
+                }
+
+                const 内容类型 = 响应.headers.get('content-type');
+                if (内容类型 && 内容类型.includes('application/json')) {
+                    return 响应.json(); // 解析 JSON 数据
+                }
+                return 响应.text(); // 或者返回文本
+            })
+            .catch((错误) => {
+                console.error('[请求工具] 请求出错:', 错误);
+                return Promise.reject(错误);
+            });
+    }
+
+    // 对外提供的 RESTful 中文接口
+    const 请求 = {
+        获取: (网址, 查询参数) => 执行请求('GET', 网址, null, 查询参数),           // 查
+        新增: (网址, 数据) => 执行请求('POST', 网址, 数据),                       // 增
+        修改: (网址, 数据) => 执行请求('PUT', 网址, 数据),                        // 改
+        删除: (网址, 数据) => 执行请求('DELETE', 网址, 数据),                     // 删
+    };
+
+    // 获取 URL 的 GET 参数
+    function 获取Get参数(参数名) {
+        参数名 = decodeURIComponent(参数名);
+        let 查询字符串 = window.location.search.substring(1);
+        let 参数列表 = 查询字符串.split("&");
+        for (let 索引 = 0; 索引 < 参数列表.length; 索引++) {
+            let 键值对 = 参数列表[索引].split("=");
+            if (decodeURIComponent(键值对[0]) == 参数名) {
+                return decodeURIComponent(键值对[1]);
+            }
+        }
+        return null;
+    }
+
+    // 修改 URL 的 GET 参数
+    function 修改Get参数(参数名, 参数值) {
+        参数名 = decodeURIComponent(参数名);
+        let 查询字符串 = window.location.search.substring(1);
+        let 键值对列表 = 查询字符串.split("&");
+        let 存在参数 = false;
+        for (let 索引 = 0; 索引 < 键值对列表.length; 索引++) {
+            let 键值对 = 键值对列表[索引].split("=");
+            if (decodeURIComponent(键值对[0]) == 参数名) {
+                // 如果已经存在该参数，则更新参数值
+                参数列表[索引] = encodeURIComponent(参数名) + "=" + encodeURIComponent(参数值);
+                存在参数 = true;
+                break;
+            }
+        }
+        if (!存在参数) {
+            // 如果不存在该参数，则添加参数
+            参数列表.push(encodeURIComponent(参数名) + "=" + encodeURIComponent(参数值));
+        }
+        // 构建新的 URL
+        let 新的URL = window.location.origin + window.location.pathname + "?" + 键值对列表.join("&") + window.location.hash;
+        window.history.replaceState({}, "", 新的URL);
+    }
+
+    /**
+     * 复制文字到剪贴板
+     * 
+     * @param {string} 要复制的文字 要复制的文字
+     */
+    let 复制文字到剪贴板 = function (要复制的文字) { };
+    // 判断是否支持现代剪贴板 API
+    if (navigator.clipboard) {
+        // 如果支持，使用现代 API
+        复制文字到剪贴板 = function (要复制的文字) {
+            navigator.clipboard.writeText(要复制的文字);
+        };
+    } else {
+        // 如果不支持，使用传统 execCommand 方式
+        复制文字到剪贴板 = function (要复制的文字) {
+            let 临时文本框 = document.createElement("textarea");
+            // 为了避免影响原页面布局，不建议隐藏，或者可以设置 position: absolute + left: -9999px
+            // 临时文本框.style.position = 'absolute';
+            // 临时文本框.style.left = '-9999px';
+            // 临时文本框.style.display = 'none'; // 如果要隐藏可以取消注释
+            document.body.appendChild(临时文本框);
+            临时文本框.value = 要复制的文字;
+            临时文本框.select();
+            // 执行复制命令
+            document.execCommand("copy");
+            // 移除临时元素
+            document.body.removeChild(临时文本框);
+        };
+    }
+
+    /**
+     * 防抖函数 debounce
+     * 频繁操作、耗时操作、仅关心最后一次操作
+     * 
+     * @param {function} fn 要防抖的函数
+     * @param {number} duration 防抖时间
+     * @returns {function} 防抖后的函数
+     */
+    function 防抖(fn, duration = 300) {
+        let timerId = null;
+        return function () {
+            if (timerId) {
+                clearTimeout(timerId);
+            }
+            let args = arguments;
+            timerId = setTimeout(() => {
+                fn.apply(this, args);
+            }, duration);
+        }
+    }
+
+    /**
+     * 节流函数 throttle
+     * 频繁操作、耗时操作、仅关心连续操作
+     * 
+     * @param {function} fn 要节流的函数
+     * @param {number} duration 节流时间
+     * @returns {function} 节流后的函数
+     */
+    function 节流(fn, duration = 300) {
+        let lastTime = 0;
+        return function () {
+            let nowTime = Date.now();
+            if (nowTime - lastTime > duration) {
+                fn.apply(this, arguments);
+                lastTime = nowTime;
+            }
+        }
+    }
+
+    // 对外暴露的 小红狐工具 方法
+    const 小红狐工具 = {
+        请求: 请求,
+        获取Get参数: 获取Get参数,
+        修改Get参数: 修改Get参数,
+        复制文字到剪贴板: 复制文字到剪贴板,
+        防抖: 防抖,
+        节流: 节流
+    };
+
+    // 将 小红狐工具 挂载到全局对象上（比如 window），这样外部可直接使用
+    if (typeof 全局对象 !== 'undefined') {
+        全局对象.小红狐工具 = 小红狐工具;
+    }
+
+})(typeof window !== 'undefined' ? window : this);
