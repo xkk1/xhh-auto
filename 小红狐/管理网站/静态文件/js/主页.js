@@ -32,17 +32,17 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // 多页面
-    let 多页面 = 小红狐工具.获取多页面(document.getElementById('content-iframe'));
-    window.openPage = 多页面.打开页面;
-    // 事件委托阻止 #nav 下链接 a.open-page 点击事件冒泡
+    window.多页面 = 小红狐工具.获取多页面(document.getElementById('content-iframe'));
+    window.打开页面 = window.多页面.打开页面;
+    // 事件委托阻止 #nav 下链接 a.打开页面 点击事件冒泡
     nav.addEventListener('click', function (event) {
         if (event.target.tagName === 'A') {
-            // 进一步判断该 <a> 是否包含 class="open-page"
-            if (event.target.classList.contains('open-page')) {
+            // 进一步判断该 <a> 是否包含 class="打开页面"
+            if (event.target.classList.contains('打开页面')) {
                 event.preventDefault(); // 阻止默认跳转行为
 
                 let href = event.target.getAttribute('href'); // 获取链接地址
-                openPage(href);
+                打开页面(href);
 
                 if (isMobile()) {
                     toggleNav(); // 在移动端时，点击链接后自动收起侧边栏
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // 请求页面名
         小红狐.获取页面名()
             .then(页面名数组 => {
-                页面列表元素.innerHTML = 页面名数组.map(页面名 => `<li><a href="#${页面名}" class="open-page">${页面名}</a></li>`).join('');
+                页面列表元素.innerHTML = 页面名数组.map(页面名 => `<li><a href="#${页面名}" class="打开页面">${页面名}</a></li>`).join('');
             })
             .catch(错误 => {
                 console.error('获取页面名失败:', 错误);
