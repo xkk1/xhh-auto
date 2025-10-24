@@ -157,6 +157,83 @@
         }
     }
 
+    function 获取多页面(iframe容器元素) {
+        // 页面缓存，保存已打开的页面 URL 和 iframe 元素
+        let 打开页面缓存 = {};
+
+        // 当前激活的页面 URL
+        let 当前页面URL = null;
+
+        /**
+         * 打开页面
+         * @param {string} url 页面 URL
+         */
+        function 打开页面(url) {
+            // 如果页面已经打开，则什么都不做
+            if (当前页面URL === url) {
+                return;
+            }
+            // 如果页面已经打开过，显示页面
+            if (打开页面缓存.hasOwnProperty(url)) {
+                // 显示页面
+                打开页面缓存[url].style.display = 'block';
+                // 隐藏之前打开的页面
+                if (当前页面URL) {
+                    打开页面缓存[当前页面URL].style.display = 'none';
+                }
+                // 更新当前页面
+                当前页面URL = url;
+                return;
+            }
+            // 如果页面未打开，则新建一个页面
+            const 新建iframe元素 = document.createElement('iframe');
+            新建iframe元素.src = url;
+            新建iframe元素.id = url;
+            // 隐藏旧页面
+            if (当前页面URL) {
+                打开页面缓存[当前页面URL].style.display = 'none';
+            }
+            // 显示新页面
+            iframe容器元素.appendChild(新建iframe元素);
+            // 更新当前页面
+            当前页面URL = url;
+            // 缓存页面
+            打开页面缓存[url] = 新建iframe元素;
+        }
+
+        function 关闭页面(url) {
+            url = url || 当前页面URL;
+            // 如果页面未打开，则什么也不做
+            if (!url || !打开页面缓存.hasOwnProperty(url)) {
+                return;
+            }
+            // 删除页面缓存
+            打开页面缓存[url].remove();
+            delete 打开页面缓存[url];
+            // 如果关闭的是当前页面，则显示第一个打开的页面
+            if (当前页面URL === url) {
+                if (打开页面缓存[Object.keys(打开页面缓存)[0]]) {
+                    打开页面(打开页面缓存[Object.keys(打开页面缓存)[0]].src);
+                }
+            }
+        }
+
+        function 获取当前页面URL() {
+            return 当前页面URL;
+        }
+
+        function 获取打开页面列表() {
+            return Object.keys(打开页面缓存);
+        }
+
+        return {
+            打开页面: 打开页面,
+            关闭页面: 关闭页面,
+            获取当前页面URL: 获取当前页面URL,
+            获取打开页面列表: 获取打开页面列表,
+        };
+    }
+
     // 对外暴露的 小红狐工具 方法
     const 小红狐工具 = {
         请求: 请求,
@@ -164,7 +241,8 @@
         修改Get参数: 修改Get参数,
         复制文字到剪贴板: 复制文字到剪贴板,
         防抖: 防抖,
-        节流: 节流
+        节流: 节流,
+        获取多页面: 获取多页面,
     };
 
     // 将 小红狐工具 挂载到全局对象上（比如 window），这样外部可直接使用

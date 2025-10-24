@@ -1,46 +1,3 @@
-// 页面缓存，保存已打开的页面 URL
-let pageCache = [];
-
-// 当前激活的页面 URL
-let currentPage = null;
-
-/**
- * 打开页面
- * @param {string} url 页面 URL
- */
-function openPage(url) {
-    // 如果页面已经打开，则什么都不做
-    if (currentPage === url) {
-        return;
-    }
-    // 如果页面已经打开过，显示页面
-    if (pageCache.includes(url)) {
-        // 显示页面
-        document.getElementById(url).style.display = 'block';
-        // 隐藏之前打开的页面
-        if (currentPage) {
-            document.getElementById(currentPage).style.display = 'none';
-        }
-        // 更新当前页面
-        currentPage = url;
-        return;
-    }
-    // 如果页面未打开，则新建一个页面
-    const newIframe = document.createElement('iframe');
-    newIframe.src = url;
-    newIframe.id = url;
-    // 隐藏旧页面
-    if (currentPage) {
-        document.getElementById(currentPage).style.display = 'none';
-    }
-    // 显示新页面
-    document.getElementById('content-iframe').appendChild(newIframe);
-    // 更新当前页面
-    currentPage = url;
-    // 缓存页面
-    pageCache.push(url);
-}
-
 // 检查是否为移动端
 function isMobile() {
     // 获取根元素的 CSS 变量 --is-mobile 的值
@@ -73,7 +30,10 @@ document.addEventListener('DOMContentLoaded', function () {
             toggleNav();
         }
     });
-    
+
+    // 多页面
+    let 多页面 = 小红狐工具.获取多页面(document.getElementById('content-iframe'));
+    window.openPage = 多页面.打开页面;
     // 事件委托阻止 #nav 下链接 a.open-page 点击事件冒泡
     nav.addEventListener('click', function (event) {
         if (event.target.tagName === 'A') {
