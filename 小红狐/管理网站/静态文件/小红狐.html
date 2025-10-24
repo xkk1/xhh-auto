@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/通用样式.css">
     <link rel="stylesheet" href="./css/主页.css">
+    <script src="./js/小红狐工具.js"></script>
+    <script src="./js/小红狐.js"></script>
     <script src="./js/主页.js"></script>
     <title>小红狐自动化</title>
 </head>
@@ -16,8 +18,8 @@
         <div id="nav-wrap">
             <nav id="nav">
                 <a href="总控">总控</a>
-                <ul>
-                    <li></li>
+                <button onclick="更新页面名()">刷新页面列表</button>
+                <ul id="页面列表">
                 </ul>
                 <a href="./html/页面管理.html" class="open-page">页面添加/管理</a>
                 <a href="https://www.120107.xyz" class="open-page">https://www.120107.xyz</a>

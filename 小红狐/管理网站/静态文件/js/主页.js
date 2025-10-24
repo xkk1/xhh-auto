@@ -51,6 +51,7 @@ function isMobile() {
     return isMobile;
 }
 
+// DOM 加载完成时执行
 document.addEventListener('DOMContentLoaded', function () {
     // 侧边栏切换
     const toggleBtn = document.getElementById('toggle-nav-btn');
@@ -89,4 +90,20 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     });
+
+    // 更新显示所有页面名
+    let 页面列表元素 = document.querySelector('ul#页面列表');
+    function 更新页面名() {
+        // 请求页面名
+        小红狐.获取页面名()
+            .then(页面名数组 => {
+                页面列表元素.innerHTML = 页面名数组.map(页面名 => `<li><a href="#${页面名}" class="open-page">${页面名}</a></li>`).join('');
+            })
+            .catch(错误 => {
+                console.error('获取页面名失败:', 错误);
+            }
+        );
+    }
+    更新页面名();
+    window.更新页面名 = 更新页面名;
 });
