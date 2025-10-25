@@ -2,7 +2,7 @@ import pathlib
 import shutil
 from typing import Any
 
-from .. import __package__ as 模块名
+from .. import __package__ as 小红狐模块名
 from ..工具.数据工具 import 数据类, 获取本地数据
 from ..工具.目录工具 import 页面目录
 
@@ -19,7 +19,7 @@ def 获取页面目录(页面名: str | None = None, 脚本模块名: str | None
     else:
         return 页面目录
 
-def 获取页面数据(页面名: str | None = None, 脚本模块名: str | None = None, 默认值: dict[str, Any] | None = None) -> 数据类:
+def 获取页面数据(页面名: str | None = None, 脚本模块名: str = 小红狐模块名, 默认值: dict[str, Any] | None = None) -> 数据类:
     return 获取本地数据(获取页面目录(页面名=页面名, 脚本模块名=脚本模块名) / "数据.json", 默认值=默认值)
 
 def 获取全部页面名():
