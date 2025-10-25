@@ -48,6 +48,11 @@ class 数据类:
     def 更新(self, 数据: dict[str, Any]) -> None:
         self.数据.update(数据)
 
+    def 添加默认值(self, 新默认值) -> dict[str, Any]:
+        self.数据 = self.合并字典(self.数据, 新默认值)
+        self.默认值 = self.合并字典(self.默认值, 新默认值)
+        return self.数据
+
     def __del__(self):
         # 析构函数
         try:
@@ -110,6 +115,7 @@ def 获取本地数据(路径: pathlib.Path | str, 默认值: dict[str, Any] | N
     路径 = pathlib.Path(路径)
     路径字符串 = str(路径.resolve())
     if 路径字符串 in 本地数据字典:
+        本地数据字典[路径字符串].添加默认值(默认值)
         return 本地数据字典[路径字符串]
     本地数据字典[路径字符串] = 数据类(默认值=默认值, 路径=路径)
     return 本地数据字典[路径字符串]
@@ -122,6 +128,7 @@ def 获取本地数据路径列表() -> list[str]:
 def 获取内存数据(标识: str, 默认值: dict[str, Any] | None = None) -> 数据类:
     """获取内存数据"""
     if 标识 in 内存数据字典:
+        内存数据字典[标识].添加默认值(默认值)
         return 内存数据字典[标识]
     内存数据字典[标识] = 数据类(默认值=默认值)
     return 内存数据字典[标识]
