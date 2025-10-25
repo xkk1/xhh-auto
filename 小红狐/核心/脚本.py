@@ -7,6 +7,10 @@ from typing import Any
 
 from .. import __package__ as 小红狐模块名
 from ..工具.目录工具 import 脚本目录
+from ..核心.小红狐配置 import 获取调试
+
+
+调试 = 获取调试()
 
 
 def 初始化脚本():
@@ -82,12 +86,15 @@ def 重载脚本(模块名: str) -> ModuleType:
     else:
         raise ImportError(f"无法重载脚本：{模块名}, 脚本未导入")
 
-def 导入脚本(模块名: str) -> ModuleType:
+def 导入脚本(模块名: str) -> 小红狐脚本信息 | None | ImportError:
     if 模块名 in 导入脚本信息字典:
         return 重载脚本(模块名)
     try:
         模块 = importlib.import_module(模块名 + ".小红狐脚本")
-        导入脚本信息字典[模块名] = 小红狐脚本信息(模块)
+        脚本信息 = 小红狐脚本信息(模块)
+        if 脚本信息["调试"] == True and not 调试:
+            return None  # 仅开启调试模式时启用脚本
+        导入脚本信息字典[模块名] = 脚本信息
         return 导入脚本信息字典[模块名]
     except ImportError as e:
         raise ImportError(f"无法导入脚本：{模块名}, 错误信息：{e}")
