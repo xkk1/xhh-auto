@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 多页面
     window.多页面 = 小红狐工具.获取多页面(document.getElementById('content-iframe'));
     window.打开页面 = window.多页面.打开页面;
+    let 选中元素 = null;
     // 事件委托阻止 #nav 下链接 a.打开页面 点击事件冒泡
     nav.addEventListener('click', function (event) {
         if (event.target.tagName === 'A') {
@@ -42,6 +43,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 event.preventDefault(); // 阻止默认跳转行为
 
                 let href = event.target.getAttribute('href'); // 获取链接地址
+                if (选中元素) {
+                    选中元素.classList.remove('选中'); // 移除之前选中的元素
+                }
+                event.target.classList.add('选中'); // 添加选中样式
+                选中元素 = event.target; // 记录当前选中的元素
                 打开页面(href);
 
                 if (isMobile()) {

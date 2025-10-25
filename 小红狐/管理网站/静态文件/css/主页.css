@@ -41,6 +41,9 @@ body {
     margin: 0;
     transition: transform 0.3s ease-in-out; 
 }
+#nav a.选中 {
+    background: #ff4d4d;
+}
 /* 收起状态 */
 #nav-wrap.collapsed {
     width: 0;
