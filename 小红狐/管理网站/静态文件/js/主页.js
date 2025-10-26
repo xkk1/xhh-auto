@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // 请求页面名
         小红狐.获取页面名()
             .then(页面名数组 => {
-                页面列表元素.innerHTML = 页面名数组.map(页面名 => `<li><a href="#${页面名}" class="打开页面">${页面名}</a></li>`).join('');
+                页面列表元素.innerHTML = 页面名数组.map(页面名 => `<li><a href="./html/配置.html?页面名=${页面名}" class="打开页面">${页面名}</a></li>`).join('');
             })
             .catch(错误 => {
                 console.error('获取页面名失败:', 错误);
