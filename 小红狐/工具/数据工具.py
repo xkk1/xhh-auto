@@ -49,8 +49,8 @@ class 数据类:
         self.数据.update(数据)
 
     def 添加默认值(self, 新默认值) -> dict[str, Any]:
-        self.数据 = self.合并字典(self.数据, 新默认值)
-        self.默认值 = self.合并字典(self.默认值, 新默认值)
+        self.数据 = self.合并字典(新默认值, self.数据)
+        self.默认值 = self.合并字典(新默认值, self.默认值)
         return self.数据
 
     def __del__(self):
