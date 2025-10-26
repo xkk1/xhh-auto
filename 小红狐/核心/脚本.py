@@ -8,9 +8,11 @@ from typing import Any
 from .. import __package__ as 小红狐模块名
 from ..工具.目录工具 import 脚本目录
 from ..核心.小红狐配置 import 获取调试
+from ..工具.日志工具 import 获取异步日志记录器
 
 
 调试 = 获取调试()
+日志 = 获取异步日志记录器(__name__)
 
 
 def 初始化脚本():
@@ -74,6 +76,23 @@ class 小红狐脚本信息:
     
     def 脚本信息(self) -> dict[str, Any]:
         return self.脚本信息字典
+    
+    def 获取配置页面(self, 页面名: str = "") -> dict[str, str]:
+        try:
+            配置页面 = self.脚本信息字典["配置页面"](页面名)
+            if isinstance(配置页面, dict):
+                for 键, 值 in 配置页面.items():
+                    if not isinstance(键, str):
+                        raise TypeError(f"配置页面字典的键必须为字符串，但为 {type(值)}")
+                    if not isinstance(值, str):
+                        raise TypeError(f"配置页面字典的值必须为字符串，但 {键} 的值为 {type(值)}")
+            else:
+                raise TypeError(f"配置页面必须返回字典，但返回了 {type(配置页面)}")
+            return 配置页面
+        except Exception as e:
+            日志.警告(f"获取“{self.脚本信息字典["模块名"]}”配置页面失败：{e}")
+            return {}
+
 
 
 导入脚本信息字典: dict[str, 小红狐脚本信息] = {}
