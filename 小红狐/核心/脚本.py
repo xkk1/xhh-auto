@@ -128,6 +128,8 @@ def 获取导入脚本信息列表() -> list[dict[str], Any]:
     return [{"模块名": 键, **值.脚本信息字典} for 键, 值 in 导入脚本信息字典.items()]
 
 def 获取脚本(模块名: str) -> 小红狐脚本信息:
+    if 模块名 not in 导入脚本信息字典:
+        raise ImportError(f"无法获取脚本：{模块名}, 脚本未导入")
     return 导入脚本信息字典[模块名]
 
 def 删除脚本(模块名: str) -> bool:
