@@ -10,9 +10,15 @@ from . import __package__ as 模块名
 总控页面: dict[str, str] = {  # 总控页面 {URL: 标题}
     "/api/目录/小红狐/内置脚本/网站/总控.html": "总控",
 }
-配置页面: dict[str, str] = {  # 配置页面 {URL: 标题}
-    "/api/目录/小红狐/内置脚本/网站/配置.html": "页面管理",
-}
+def 配置页面(页面名: str) -> dict[str, str]:
+    页面: dict[str, str] = {
+        "/api/目录/小红狐/内置脚本/网站/配置.html": "页面管理",
+    }
+    if 页面名 in ["小喾苦", "xkk", "xkk1"]:
+        页面.update({
+            "https://www.120107.xyz": "小喾苦的个人网站",
+        })
+    return 页面
 
 def 页面生成():
     ...
