@@ -7,8 +7,12 @@ from . import __package__ as 模块名
 作者: list[str] = [__author__]  # 脚本作者，默认：__author__
 版本: str = __version__  # 脚本版本，默认：[__version__]
 调试: bool = False  # 仅开启调试模式时启用脚本。默认：False
-总控URL: str = f"/api/目录/小红狐/内置脚本/网站/总控.html"  # 总控 URL
-配置URL: str = f"/api/目录/小红狐/内置脚本/网站/配置.html"  # 配置 URL
+总控页面: dict[str, str] = {  # 总控页面 {URL: 标题}
+    "/api/目录/小红狐/内置脚本/网站/总控.html": "总控",
+}
+配置页面: dict[str, str] = {  # 配置页面 {URL: 标题}
+    "/api/目录/小红狐/内置脚本/网站/配置.html": "页面管理",
+}
 
 def 页面生成():
     ...
