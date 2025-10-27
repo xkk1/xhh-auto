@@ -33,29 +33,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 多页面
     window.多页面 = 小红狐工具.获取多页面(document.getElementById('content-iframe'));
-    window.打开页面 = window.多页面.打开页面;
-    let 选中元素 = null;
-    // 事件委托阻止 #nav 下链接 a.打开页面 点击事件冒泡
-    nav.addEventListener('click', function (event) {
-        if (event.target.tagName === 'A') {
-            // 进一步判断该 <a> 是否包含 class="打开页面"
-            if (event.target.classList.contains('打开页面')) {
-                event.preventDefault(); // 阻止默认跳转行为
-
-                let href = event.target.getAttribute('href'); // 获取链接地址
-                if (选中元素) {
-                    选中元素.classList.remove('选中'); // 移除之前选中的元素
-                }
-                event.target.classList.add('选中'); // 添加选中样式
-                选中元素 = event.target; // 记录当前选中的元素
-                打开页面(href);
-
-                if (isMobile()) {
-                    toggleNav(); // 在移动端时，点击链接后自动收起侧边栏
-                }
-            }
+    function 打开页面(页面名) {
+        多页面.打开页面(页面名);
+        if (isMobile()) {
+            toggleNav(); // 在移动端时，点击链接后自动收起侧边栏
         }
-    });
+    }
+    小红狐工具.多页面切换(nav, 打开页面);
 
     // 更新显示所有页面名
     let 页面列表元素 = document.querySelector('ul#页面列表');
