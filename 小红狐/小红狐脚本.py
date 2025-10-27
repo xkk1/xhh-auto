@@ -12,7 +12,7 @@ from . import __package__ as 模块名
 }
 def 配置页面(页面名: str) -> dict[str, str]:
     页面: dict[str, str] = {
-        "/api/目录/小红狐/内置脚本/网站/配置.html": "页面管理",
+        f"/api/目录/小红狐/内置脚本/网站/配置.html?页面名={页面名}": "页面管理",
     }
     if 页面名 in ["小喾苦", "xkk", "xkk1"]:
         页面.update({
