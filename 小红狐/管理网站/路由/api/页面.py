@@ -95,3 +95,14 @@ def 删除脚本(pagename, packagename):
         return jsonify({"状态": "成功"})
     else:
         return jsonify({"状态": "失败", "信息": "脚本不存在"})
+
+# 获取指定页面的脚本
+@页面蓝图.route("/启用脚本包名/<pagename>", methods=["GET"])
+def 获取启用脚本包名(pagename):
+    页面名: str = pagename
+    页面数据: 数据类 = 页面.获取页面数据(
+        页面名=页面名, 脚本模块名=小红狐模块名,
+        默认值={
+            "启用脚本包名": [小红狐模块名],
+        })
+    return jsonify({"脚本": 页面数据["启用脚本包名"]})
