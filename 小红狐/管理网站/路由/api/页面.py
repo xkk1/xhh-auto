@@ -106,3 +106,20 @@ def 获取启用脚本包名(pagename):
             "启用脚本包名": [小红狐模块名],
         })
     return jsonify({"脚本": 页面数据["启用脚本包名"]})
+
+# 获取页面配置
+@页面蓝图.route("/配置/<pagename>", methods=["GET"])
+def 获取页面配置(pagename):
+    页面名: str = pagename
+    页面配置: str = 页面.获取页面配置(页面名=页面名)
+    return jsonify({"配置": 页面配置})
+
+# 修改页面配置
+@页面蓝图.route("/配置/<pagename>", methods=["PUT"])
+def 修改页面配置(pagename):
+    页面名: str = pagename
+    if not request.json or "配置" not in request.json:
+        return jsonify({"错误": "缺少配置"}), 400
+    配置: str = request.json["配置"]
+    页面.修改页面配置(页面名=页面名, 配置=配置)
+    return jsonify({"状态": "成功"})
