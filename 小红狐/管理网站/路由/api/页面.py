@@ -29,8 +29,8 @@ def 新建页面():
     页面.新建页面(页面名)
     return jsonify({"页面名": 页面名}), 201
 
-@页面蓝图.route("/配置页面/<pagename>", methods=["GET"])
-def 获取脚本管理页面(pagename):
+@页面蓝图.route("/配置标签页/<pagename>", methods=["GET"])
+def 获取脚本配置标签页(pagename):
     页面名: str = pagename
     页面数据: 数据类 = 页面.获取页面数据(
         页面名=pagename, 脚本模块名=小红狐模块名,
@@ -39,14 +39,28 @@ def 获取脚本管理页面(pagename):
             "配置页面URL排序": list(获取脚本(模块名=小红狐模块名).获取配置页面(页面名=页面名).keys()),
         })
     配置页面: dict[str, str] = {}
-    配置页面URL排序: list[str] = 页面数据["配置页面URL排序"]
     for 包名 in 页面数据["启用脚本包名"]:
         try:
             脚本模块: 小红狐脚本信息 = 获取脚本(模块名=包名)
             配置页面.update(脚本模块.获取配置页面(页面名=页面名))
         except:
             continue
-    return jsonify({"配置页面": 配置页面, "配置页面URL排序": 配置页面URL排序})
+    
+    配置页面URL排序: list[str] = 页面数据["配置页面URL排序"]
+    脚本配置标签页: list[dict[str, str]] = []
+    for 配置页面URL in 配置页面URL排序:
+        if 配置页面URL in 配置页面:
+            脚本配置标签页.append({
+                "url": 配置页面URL,
+                "标题": 配置页面[配置页面URL],
+            })
+            配置页面.pop(配置页面URL)
+    for 配置页面URL, 配置页面标题 in 配置页面.items():
+        脚本配置标签页.append({
+            "url": 配置页面URL,
+            "标题": 配置页面标题,
+        })
+    return jsonify(脚本配置标签页)
 
 # 给指定页面添加脚本
 @页面蓝图.route("/添加脚本/<pagename>/<packagename>", methods=["POST"])
