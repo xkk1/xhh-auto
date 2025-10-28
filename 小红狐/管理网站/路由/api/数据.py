@@ -44,9 +44,9 @@ def 本地数据(filename):
         本地数据.保存()
     return jsonify(本地数据.数据)
 
-# 创建或更新数据目录指定存储 json 文件最新值
+# 创建或更改数据目录指定存储 json 文件最新值
 @数据蓝图.route("/<path:filename>", methods=["POST"])
-def 创建或更新本地数据(filename):
+def 创建或更改本地数据(filename):
     数据 = request.get_json()
     # 检查是否成功获取到 JSON（客户端必须设置 Content-Type: application/json）
     if 数据 is None:
@@ -55,7 +55,25 @@ def 创建或更新本地数据(filename):
             "信息": "请发送有效的 JSON 数据，并设置 Content-Type: application/json"
         }), 400
     本地数据 = 获取本地数据(数据目录 / filename)
-    本地数据.更新(数据)
+    本地数据.数据 = 数据
+    # 立刻保存数据
+    保存 = request.args.get("保存", default=False)
+    if 保存 != False:
+        本地数据.保存()
+    return jsonify(本地数据.数据)
+
+# 创建或更新数据目录指定存储 json 文件最新值
+@数据蓝图.route("/<path:filename>", methods=["PUT"])
+def 创建或合并本地数据(filename):
+    数据 = request.get_json()
+    # 检查是否成功获取到 JSON（客户端必须设置 Content-Type: application/json）
+    if 数据 is None:
+        return jsonify({
+            "状态": "错误",
+            "信息": "请发送有效的 JSON 数据，并设置 Content-Type: application/json"
+        }), 400
+    本地数据 = 获取本地数据(数据目录 / filename)
+    本地数据.合并(数据)
     # 立刻保存数据
     保存 = request.args.get("保存", default=False)
     if 保存 != False:
