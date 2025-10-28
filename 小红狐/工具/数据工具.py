@@ -47,6 +47,10 @@ class 数据类:
 
     def 更新(self, 数据: dict[str, Any]) -> None:
         self.数据.update(数据)
+    
+    def 合并(self, 数据: dict[str, Any]) -> dict[str, Any]:
+        self.数据 = self.合并字典(self.数据, 数据)
+        return self.数据
 
     def 添加默认值(self, 新默认值) -> dict[str, Any]:
         self.数据 = self.合并字典(新默认值, self.数据)
