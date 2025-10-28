@@ -19,3 +19,5 @@ from .脚本 import 脚本蓝图
 api蓝图.register_blueprint(脚本蓝图)
 from .页面 import 页面蓝图
 api蓝图.register_blueprint(页面蓝图)
+from .配置 import 配置蓝图
+api蓝图.register_blueprint(配置蓝图)
