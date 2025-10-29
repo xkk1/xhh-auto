@@ -8,7 +8,7 @@
             return 小红狐工具.请求.获取(this.api前缀 + "/页面名");
         },
         新增页面: function(页面名) {
-            return 小红狐工具.请求.新增(this.api前缀 + "", {
+            return 小红狐工具.请求.新增(this.api前缀 + "/", {
                 页面名: 页面名,
             });
         },
@@ -23,7 +23,7 @@
     let 脚本 = {
         api前缀: api前缀 + "/脚本",
         获取导入脚本信息列表: function() {
-            return 小红狐工具.请求.获取(this.api前缀 + "");
+            return 小红狐工具.请求.获取(this.api前缀 + "/");
         },
     }
 
