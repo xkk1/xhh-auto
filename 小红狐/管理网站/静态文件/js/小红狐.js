@@ -1,29 +1,30 @@
 // 小红狐 API 函数 IIFE（立即调用函数表达式）
 (function (全局对象) {
     let api前缀 = "/api";
+    let 请求 = 小红狐工具.请求
 
     let 页面 = {
         api前缀: api前缀 + "/页面",
         获取页面名: function() {
-            return 小红狐工具.请求.获取(this.api前缀 + "/页面名");
+            return 请求.获取(this.api前缀 + "/页面名");
         },
         新增页面: function(页面名) {
-            return 小红狐工具.请求.新增(this.api前缀 + "/", {
+            return 请求.新增(this.api前缀 + "/", {
                 页面名: 页面名,
             });
         },
         获取页面配置标签页: function(页面名="页面名六个字") {
-            return 小红狐工具.请求.获取(this.api前缀 + `/配置标签页/${页面名}`);
+            return 请求.获取(this.api前缀 + `/配置标签页/${页面名}`);
         },
         获取启用脚本包名: function(页面名="页面名六个字") {
-            return 小红狐工具.请求.获取(this.api前缀 + `/启用脚本包名/${页面名}`);
+            return 请求.获取(this.api前缀 + `/启用脚本包名/${页面名}`);
         },
     };
 
     let 脚本 = {
         api前缀: api前缀 + "/脚本",
         获取导入脚本信息列表: function() {
-            return 小红狐工具.请求.获取(this.api前缀 + "/");
+            return 请求.获取(this.api前缀 + "/");
         },
     }
 
