@@ -16,7 +16,7 @@ function 初始化多页面() {
 function 页面配置标签页() {
     let 标签页元素 = document.querySelector("ul#标签页");
     标签页元素.innerHTML = ""
-    小红狐.获取页面配置标签页(页面名=页面名)
+    小红狐.页面.获取页面配置标签页(页面名=页面名)
         .then(function (配置标签页) {
             for (let 标签页 of 配置标签页) {
                 let a = document.createElement("a");

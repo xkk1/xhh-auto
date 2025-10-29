@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let 页面列表元素 = document.querySelector('ul#页面列表');
     function 更新页面名() {
         // 请求页面名
-        小红狐.获取页面名()
+        小红狐.页面.获取页面名()
             .then(页面名数组 => {
                 页面列表元素.innerHTML = 页面名数组.map(页面名 => `<li role="none"><a href="./html/配置.html?页面名=${页面名}" class="打开页面" role="tab">${页面名}</a></li>`).join('');
             })
