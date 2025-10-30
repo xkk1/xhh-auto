@@ -1,0 +1,18 @@
+#启用脚本表格 {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+#启用脚本表格 .模块名 {
+    font-size: 0.8rem;
+    color: darkgray;
+}
+
+#启用脚本表格 .模块名::before {
+    content: "(";
+}
+
+#启用脚本表格 .模块名::after {
+    content: ")";
+}
