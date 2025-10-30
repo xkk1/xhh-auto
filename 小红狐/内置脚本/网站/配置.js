@@ -27,11 +27,44 @@ function 渲染启用脚本表格(导入脚本信息列表, 启用脚本模块�
         input.type = "checkbox";
         input.checked = 启用脚本模块名.includes(导入脚本信息.模块名);
         input.dataset.package = 导入脚本信息.模块名;
-        input.addEventListener("change", async function () {
+        input.addEventListener("change", function () {
             if (this.checked) {
-                await 小红狐.页面.添加脚本(页面名, this.dataset.package);
+                Promise.all([
+                    小红狐.页面.添加脚本(页面名, this.dataset.package),
+                    小红狐.脚本.获取脚本配置标签页(this.dataset.package ,页面名)
+                ])
+                    .then(([添加脚本状态, 脚本配置标签页]) => {
+                        console.log(添加脚本状态);
+                        console.log(脚本配置标签页);
+                        if (window !== parent && parent.添加标签页) {
+                            脚本配置标签页.forEach((标签页) => {
+                                parent.添加标签页(标签页.标题, 标签页.url);
+                            });
+                        }
+                    });
             } else {
-                await 小红狐.页面.删除脚本(页面名, this.dataset.package);
+                if (this.dataset.package === "小红狐") {
+                    // 获取输入
+                    let 输入 = prompt("警告：取消启用小红狐脚本可能会无法管理页面！\n请输入“取消启用小红狐脚本”确认取消启用小红狐脚本，输入其他取消本次操作：");
+                    if (输入 !== "取消启用小红狐脚本") {
+                        // 选中多选
+                        this.checked = true;
+                        return;
+                    }
+                }
+                Promise.all([
+                    小红狐.页面.删除脚本(页面名, this.dataset.package),
+                    小红狐.脚本.获取脚本配置标签页(this.dataset.package, 页面名)
+                ])
+                    .then(([删除脚本状态, 脚本配置标签页]) => {
+                        console.log(删除脚本状态);
+                        console.log(脚本配置标签页);
+                        if (window !== parent && parent.删除标签页) {
+                            脚本配置标签页.forEach((标签页) => {
+                                parent.删除标签页(标签页.url);
+                            })
+                        }
+                    })
             }
         });
         td.appendChild(input);
