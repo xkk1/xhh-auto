@@ -206,7 +206,7 @@
             url = url || 当前页面URL;
             // 如果页面未打开，则什么也不做
             if (!url || !打开页面缓存.hasOwnProperty(url)) {
-                return;
+                return null;
             }
             // 删除页面缓存
             打开页面缓存[url].remove();
@@ -214,10 +214,13 @@
             当前页面URL = null;
             // 如果关闭的是当前页面，则显示第一个打开的页面
             if (当前页面URL === url) {
-                if (打开页面缓存[Object.keys(打开页面缓存)[0]]) {
-                    打开页面(打开页面缓存[Object.keys(打开页面缓存)[0]].src);
+                第一个URL = Object.keys(打开页面缓存)[0];
+                if (第一个URL) {
+                    打开页面(第一个URL);
+                    return 第一个URL;
                 }
             }
+            return null;
         }
 
         function 获取当前页面URL() {
