@@ -41,6 +41,46 @@ function 页面配置标签页() {
         });
 }
 
+function 添加标签页(标题, url) {
+    let 标签页元素 = document.querySelector("ul#标签页");
+    if (!标签页元素) return false;
+    let 旧a = 标签页元素.querySelector("a[href='" + url + "']");
+    if (旧a) {
+        旧a.textContent = 标题;
+        return true;
+    } else {
+        let a = document.createElement("a");
+        a.href = url;
+        a.textContent = 标题;
+        a.classList.add("打开页面");
+        a.role = "tab";
+        let li = document.createElement("li");
+        li.appendChild(a);
+        li.role = "none";
+        标签页元素.appendChild(li);
+        return true;
+    }
+}
+
+function 删除标签页(url) {
+    let 标签页元素 = document.querySelector("ul#标签页");
+    if (!标签页元素) return false;
+    let 旧a = 标签页元素.querySelector("a[href='" + url + "']");
+    if (旧a) {
+        let 新url = window.多页面.关闭页面(url);
+        if (新url) {
+            let 新a = 标签页元素.querySelector("a[href='" + 新url + "']");
+            if (新a) {
+                新a.click();
+            }
+        }
+        旧a.parentNode.remove();
+        return true;
+    } else {
+        return true;
+    }
+}
+
 // DOM 加载完成时执行
 document.addEventListener("DOMContentLoaded", function () {
     // 显示页面名
