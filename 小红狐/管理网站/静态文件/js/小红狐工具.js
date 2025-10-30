@@ -179,7 +179,7 @@
                 // 显示页面
                 打开页面缓存[url].style.display = 'block';
                 // 隐藏之前打开的页面
-                if (当前页面URL) {
+                if (当前页面URL && 打开页面缓存.hasOwnProperty(当前页面URL)) {
                     打开页面缓存[当前页面URL].style.display = 'none';
                 }
                 // 更新当前页面
@@ -211,7 +211,6 @@
             // 删除页面缓存
             打开页面缓存[url].remove();
             delete 打开页面缓存[url];
-            当前页面URL = null;
             // 如果关闭的是当前页面，则显示第一个打开的页面
             if (当前页面URL === url) {
                 第一个URL = Object.keys(打开页面缓存)[0];
