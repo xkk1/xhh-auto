@@ -99,7 +99,7 @@ function 初始化拖拽标签页() {
     // 拖拽移入
     标签页元素.ondragenter = (事件) => {
         事件.preventDefault();
-        if (事件.target === 标签页元素 || 事件.target === 拖拽元素 ||事件.target.parentNode === 拖拽元素) {
+        if (!拖拽元素 || 事件.target === 标签页元素 || 事件.target === 拖拽元素 ||事件.target.parentNode === 拖拽元素) {
             return;
         }
         let 目标元素 = 事件.target;
@@ -133,6 +133,7 @@ function 初始化拖拽标签页() {
             .catch(function (错误) {
                 console.error(错误);
             });
+        拖拽元素 = null;
     };
 }
 
