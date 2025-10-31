@@ -81,10 +81,66 @@ function 删除标签页(url) {
     }
 }
 
+function 初始化拖拽标签页() {
+    let 标签页元素 = document.querySelector("ul#标签页");
+    let 拖拽元素 = null;
+    // 拖拽开始
+    标签页元素.ondragstart = (事件) => {
+        setTimeout(() => {
+            事件.target.parentNode.classList.add("拖拽");
+        }, 0);
+        拖拽元素 = 事件.target.parentNode;
+        事件.dataTransfer.effectAllowed = "move";
+    };
+    // 拖拽移入结束
+    标签页元素.ondragover = (事件) => {
+        事件.preventDefault();
+    };
+    // 拖拽移入
+    标签页元素.ondragenter = (事件) => {
+        事件.preventDefault();
+        if (事件.target === 标签页元素 || 事件.target === 拖拽元素 ||事件.target.parentNode === 拖拽元素) {
+            return;
+        }
+        let 目标元素 = 事件.target;
+        // 若是 a 标签则改为父元素
+        if (目标元素.tagName === "A") {
+            目标元素 = 目标元素.parentNode;
+        }
+        const 子元素数组 = Array.from(标签页元素.children);
+        const 拖拽元素下标 = 子元素数组.indexOf(拖拽元素);
+        const 目标元素下标 = 子元素数组.indexOf(目标元素);
+        if (拖拽元素下标 < 目标元素下标) {
+            // 事件.target.parentNode.before(拖拽元素);
+            标签页元素.insertBefore(拖拽元素, 目标元素.nextElementSibling);
+        } else {
+            // 事件.target.parentNode.after(拖拽元素);
+            标签页元素.insertBefore(拖拽元素, 目标元素);
+        }
+    };
+    // 拖拽结束
+    标签页元素.ondragend = (事件) => {
+        事件.target.parentNode.classList.remove("拖拽");
+        const 子元素数组 = Array.from(标签页元素.children);
+        const 配置页面URL排序 = 子元素数组.map(function (元素) {
+            return 元素.querySelector("a").getAttribute('href');
+        });
+        // console.log(配置页面URL排序);
+        小红狐.页面.修改配置页面URL排序(页面名, 配置页面URL排序)
+            .then(function (结果) {
+                // console.log(结果);
+            })
+            .catch(function (错误) {
+                console.error(错误);
+            });
+    };
+}
+
 // DOM 加载完成时执行
 document.addEventListener("DOMContentLoaded", function () {
     // 显示页面名
     document.querySelector("#页面名").textContent = 页面名;
     初始化多页面();
     页面配置标签页();
+    初始化拖拽标签页();
 });

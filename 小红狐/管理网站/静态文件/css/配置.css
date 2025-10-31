@@ -16,6 +16,12 @@ ul#标签页 {
     overflow-x: auto;
 }
 
+ul#标签页>li.拖拽 {
+    background: transparent;
+    color: transparent;
+    border: 1px dashed #ccc;
+}
+
 ul#标签页>li>a {
   display: block;
   padding: 0.2rem 0.4rem;

@@ -62,8 +62,22 @@ def 获取脚本配置标签页(pagename):
         })
     return jsonify(脚本配置标签页)
 
+# 修改配置页面URL排序
+@页面蓝图.route("/配置页面URL排序/<pagename>", methods=["PUT"]) 
+def 修改配置页面URL排序(pagename):
+    页面名: str = pagename
+    if not request.json or "配置页面URL排序" not in request.json:
+        return jsonify({"错误": "缺少配置页面URL排序"}), 400
+    配置页面URL排序: list[str] = request.json["配置页面URL排序"]
+    页面数据: 数据类 = 页面.获取页面数据(
+        页面名=页面名, 脚本模块名=小红狐模块名,
+    )
+    页面数据["配置页面URL排序"] = 配置页面URL排序
+    页面数据.保存()
+    return jsonify({"状态": "成功"})
+
 # 给指定页面添加脚本
-@页面蓝图.route("/添加脚本/<pagename>/<packagename>", methods=["POST"])
+@页面蓝图.route("/脚本/<pagename>/<packagename>", methods=["POST"])
 def 添加脚本(pagename, packagename):
     页面名: str = pagename
     脚本模块名: str = packagename
@@ -80,7 +94,7 @@ def 添加脚本(pagename, packagename):
         return jsonify({"状态": "失败", "信息": "脚本已存在"})
 
 # 删除指定页面的脚本
-@页面蓝图.route("/删除脚本/<pagename>/<packagename>", methods=["DELETE"])
+@页面蓝图.route("/脚本/<pagename>/<packagename>", methods=["DELETE"])
 def 删除脚本(pagename, packagename):
     页面名: str = pagename
     脚本模块名: str = packagename
