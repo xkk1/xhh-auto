@@ -240,24 +240,22 @@
 
     function 多页面切换(标签页父元素, 打开页面) {
         let 选中元素 = null;
-        return (function (标签页父元素, 打开页面) {
-            标签页父元素.addEventListener('click', function (event) {
-                if (event.target.tagName === 'A') {
-                    // 进一步判断该 <a> 是否包含 class="打开页面"
-                    if (event.target.classList.contains('打开页面')) {
-                        event.preventDefault(); // 阻止默认跳转行为
+        标签页父元素.addEventListener('click', function (event) {
+            if (event.target.tagName === 'A') {
+                // 进一步判断该 <a> 是否包含 class="打开页面"
+                if (event.target.classList.contains('打开页面')) {
+                    event.preventDefault(); // 阻止默认跳转行为
 
-                        let href = event.target.getAttribute('href'); // 获取链接地址
-                        if (选中元素) {
-                            选中元素.classList.remove('选中'); // 移除之前选中的元素
-                        }
-                        event.target.classList.add('选中'); // 添加选中样式
-                        选中元素 = event.target; // 记录当前选中的元素
-                        打开页面(href);
+                    let href = event.target.getAttribute('href'); // 获取链接地址
+                    if (选中元素 && 选中元素 !== event.target) {
+                        选中元素.classList.remove('选中'); // 移除之前选中的元素
                     }
+                    event.target.classList.add('选中'); // 添加选中样式
+                    选中元素 = event.target; // 记录当前选中的元素
+                    打开页面(href);
                 }
-            });
-        })(标签页父元素, 打开页面);
+            }
+        });
     }
 
     // 对外暴露的 小红狐工具 方法
