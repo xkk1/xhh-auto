@@ -135,6 +135,24 @@ function 初始化拖拽标签页() {
             });
         拖拽元素 = null;
     };
+    标签页元素.ondrop = (事件) => {
+        事件.preventDefault();
+        if (拖拽元素) return;
+        url = 事件.dataTransfer.getData("text/plain");
+        // 验证 url
+        if (!url) return;
+        try {
+            new URL(url);
+        } catch (错误) {
+            return;
+        }
+        // 请求用户输入添加标签页标题
+        let 标题 = window.prompt(url + "\n请输入标签页标题：");
+        if (标题) {
+            // 添加标签页
+            添加标签页(标题, url);
+        }
+    };
 }
 
 // DOM 加载完成时执行
