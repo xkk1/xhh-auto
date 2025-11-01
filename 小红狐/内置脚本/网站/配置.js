@@ -2,6 +2,8 @@
 let 页面名 = 小红狐工具.获取Get参数("页面名") || "页面名六个字";
 // 标题添加页面名
 document.title = 页面名 + "-" + document.title;
+// 获取配置名
+let 配置名 = 小红狐工具.获取Get参数("配置名") || 页面名;
 
 function 渲染启用脚本表格(导入脚本信息列表, 启用脚本模块名) {
     启用脚本表格元素 = document.querySelector("#启用脚本表格");
@@ -109,5 +111,7 @@ function 刷新启用脚本表格() {
 document.addEventListener("DOMContentLoaded", function () {
     // 显示页面名
     document.querySelector("#页面名").textContent = 页面名;
+    // 显示配置名
+    document.querySelector("#配置名").textContent = 配置名;
     刷新启用脚本表格();
 });
