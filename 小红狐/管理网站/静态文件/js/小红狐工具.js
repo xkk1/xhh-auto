@@ -74,14 +74,14 @@
             let 键值对 = 键值对列表[索引].split("=");
             if (decodeURIComponent(键值对[0]) == 参数名) {
                 // 如果已经存在该参数，则更新参数值
-                参数列表[索引] = encodeURIComponent(参数名) + "=" + encodeURIComponent(参数值);
+                键值对列表[索引] = encodeURIComponent(参数名) + "=" + encodeURIComponent(参数值);
                 存在参数 = true;
                 break;
             }
         }
         if (!存在参数) {
             // 如果不存在该参数，则添加参数
-            参数列表.push(encodeURIComponent(参数名) + "=" + encodeURIComponent(参数值));
+            键值对列表.push(encodeURIComponent(参数名) + "=" + encodeURIComponent(参数值));
         }
         // 构建新的 URL
         let 新的URL = window.location.origin + window.location.pathname + "?" + 键值对列表.join("&") + window.location.hash;
