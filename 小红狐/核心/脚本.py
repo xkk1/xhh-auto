@@ -2,7 +2,7 @@ import importlib
 import pathlib
 import sys
 from types import ModuleType
-from typing import Any
+from typing import Any, Callable, TypeVar
 
 
 from .. import __package__ as 小红狐模块名
@@ -75,10 +75,12 @@ class 小红狐脚本信息:
     
     def 脚本信息(self) -> dict[str, Any]:
         return self.脚本信息字典
-    
-    def 获取配置页面(self, 页面名: str = "") -> dict[str, str]:
+    @staticmethod
+    def 获取配置页面(配置页面生成函数: Callable[..., dict[str, str]], args: tuple = (), kwargs: dict[str, Any] | None = None) -> dict[str, str]:
+        if kwargs is None:
+            kwargs = {}
         try:
-            配置页面 = self.脚本信息字典["配置页面"](页面名)
+            配置页面 = 配置页面生成函数(*args, **kwargs)
             if isinstance(配置页面, dict):
                 for 键, 值 in 配置页面.items():
                     if not isinstance(键, str):
@@ -89,7 +91,7 @@ class 小红狐脚本信息:
                 raise TypeError(f"配置页面必须返回字典，但返回了 {type(配置页面)}")
             return 配置页面
         except Exception as e:
-            日志.警告(f"获取“{self.脚本信息字典["模块名"]}”配置页面失败：{e}")
+            日志.警告(f"获取配置页面失败：{e}")
             return {}
 
 
