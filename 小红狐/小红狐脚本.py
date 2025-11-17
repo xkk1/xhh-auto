@@ -1,3 +1,5 @@
+from typing import Any
+
 from . import __author__, __version__
 from . import __package__ as 模块名
 
@@ -10,7 +12,8 @@ from . import __package__ as 模块名
 总控页面: dict[str, str] = {  # 总控页面 {URL: 标题}
     "/api/目录/小红狐/内置脚本/网站/总控.html": "总控",
 }
-def 配置页面(页面名: str) -> dict[str, str]:
+
+def 小红狐页面生成配置页面(页面名: str) -> dict[str, str]:
     from .核心.页面 import 获取页面配置名
     配置名: str = 获取页面配置名(页面名)
     页面: dict[str, str] = {
@@ -22,11 +25,29 @@ def 配置页面(页面名: str) -> dict[str, str]:
         })
     return 页面
 
-def 页面生成():
+def 小红狐页面生成入口函数():
     ...
 
-async def 页面操作():
-    ...
+# 页面生成脚本
+页面生成: dict[str, dict[str, Any]] = {
+    "小红狐页面生成": {  # 名称，唯一
+        "入口函数": 小红狐页面生成入口函数,  # 入口函数
+        "关闭函数": None,  # 关闭函数
+        "配置页面": 小红狐页面生成配置页面,  # 配置页面函数 (页面名: str) -> dict[str, str]
+        "简介": "小红狐页面生成",  # 脚本简介
+        "调试": False,  # 仅开启调试模式时启用脚本。默认：False
+    }
+}
+
+页面操作: dict[str, dict[str, Any]] = {
+    "小红狐脚本开发者工具": {  # 脚本名称，唯一
+        "入口函数": None,  # 入口函数
+        "关闭函数": None,  # 关闭函数
+        "配置页面": None,
+        "简介": "小红狐脚本开发者工具",  # 脚本简介
+        "调试": True,  # 仅开启调试模式时启用脚本。默认：False
+    }
+}
 
 def flask_route(子路径: str):
     import flask
