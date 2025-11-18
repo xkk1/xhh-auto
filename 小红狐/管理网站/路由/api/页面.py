@@ -5,7 +5,7 @@ from ....工具.日志工具 import 获取日志记录器
 from ....工具.目录工具 import 数据目录
 from ....工具.数据工具 import 数据类, 获取本地数据, 获取内存数据
 from ....核心 import 页面
-from ....核心.页面 import 修改标签页URL排序, 修改页面生成脚本, 获取标签页URL排序, 获取页面操作自动开启脚本, 获取页面生成脚本, 获取页面配置名
+from ....核心.页面 import 修改标签页URL排序, 修改页面生成脚本, 添加页面操作自动开启脚本, 获取标签页URL排序, 获取页面操作自动开启脚本, 获取页面生成脚本, 获取页面配置名
 from ....核心.配置 import 获取配置数据
 from ....核心.脚本 import 小红狐脚本信息, 获取脚本
 from ....小红狐脚本 import 默认启用页面生成脚本名
@@ -91,22 +91,21 @@ def 修改标签页URL排序路由(page_name):
     return jsonify({"状态": "成功"})
 
 # 给指定页面添加脚本
-@页面蓝图.route("/脚本/<page_name>/<package_name>", methods=["POST"])
-def 添加脚本(page_name, package_name):
-    页面名: str = page_name
-    配置名: str = 获取页面配置名(页面名=页面名)
-    脚本模块名: str = package_name
-    页面数据: 数据类 = 页面.获取页面数据(
-        页面名=页面名, 脚本模块名=小红狐模块名,
-        默认值={
-            "启用脚本模块名": [小红狐模块名],
-        })
-    if 脚本模块名 not in 页面数据["启用脚本模块名"]:
-        页面数据["启用脚本模块名"].append(脚本模块名)
-        页面数据.保存()
-        return jsonify({"状态": "成功"})
-    else:
-        return jsonify({"状态": "失败", "信息": "脚本已存在"})
+@页面蓝图.route("/页面操作自动开启脚本", methods=["POST"])
+def 添加页面操作自动开启脚本路由():
+    if not request.json:
+        return jsonify({"错误": "缺少 JSON Body"}), 400
+    if "页面名" not in request.json:
+        return jsonify({"错误": "缺少页面名"}), 400
+    页面名: str = request.json["页面名"]
+    if "脚本模块名" not in request.json:
+        return jsonify({"错误": "缺少脚本模块名"}), 400
+    脚本模块名: str = request.json["脚本模块名"]
+    if "页面操作脚本名" not in request.json:
+        return jsonify({"错误": "缺少页面操作脚本名"}), 400
+    页面操作脚本名: str = request.json["页面操作脚本名"]
+    添加页面操作自动开启脚本(页面名=页面名, 脚本模块名=脚本模块名, 页面操作脚本名=页面操作脚本名)
+    return jsonify({"状态": "成功"})
 
 # 删除指定页面的脚本
 @页面蓝图.route("/脚本/<pagename>/<packagename>", methods=["DELETE"])
