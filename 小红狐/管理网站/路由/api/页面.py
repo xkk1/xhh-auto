@@ -5,7 +5,7 @@ from ....工具.日志工具 import 获取日志记录器
 from ....工具.目录工具 import 数据目录
 from ....工具.数据工具 import 数据类, 获取本地数据, 获取内存数据
 from ....核心 import 页面
-from ....核心.页面 import 修改标签页URL排序, 修改页面生成脚本, 添加页面操作自动开启脚本, 获取标签页URL排序, 获取页面操作自动开启脚本, 获取页面生成脚本, 获取页面配置名
+from ....核心.页面 import 修改标签页URL排序, 修改页面生成脚本, 删除页面操作自动开启脚本, 添加页面操作自动开启脚本, 获取标签页URL排序, 获取页面操作自动开启脚本, 获取页面生成脚本, 获取页面配置名
 from ....核心.配置 import 获取配置数据
 from ....核心.脚本 import 小红狐脚本信息, 获取脚本
 from ....小红狐脚本 import 默认启用页面生成脚本名
@@ -81,27 +81,34 @@ def 获取标签页列表路由(page_name):
 @页面蓝图.route("/标签页URL排序/<page_name>", methods=["PUT"]) 
 def 修改标签页URL排序路由(page_name):
     页面名: str = page_name
-    # 检查请求是否为有效的 JSON
     if not request.is_json:
-        return jsonify({"错误": "请求格式错误"}), 400
-    标签页URL排序: list[str] = request.json
+        return jsonify({"错误": "请求头 Content-Type 必须是 application/json"}), 400
+    json = request.get_json(silent=True)
+    if json is None:
+        return jsonify({"错误": "无效的 JSON 格式，请检查请求体"}), 400
+    if not isinstance(json, list):
+        return jsonify({"错误": "配置格式错误"}), 400
+    标签页URL排序: list[str] = json
     if not isinstance(标签页URL排序, list):
         return jsonify({"错误": "配置格式错误"}), 400
     修改标签页URL排序(页面名=页面名, 标签页URL排序=标签页URL排序)
     return jsonify({"状态": "成功"})
 
-# 给指定页面添加脚本
+# 给指定页面添加页面操作自动开启脚本
 @页面蓝图.route("/页面操作自动开启脚本", methods=["POST"])
 def 添加页面操作自动开启脚本路由():
-    if not request.json:
-        return jsonify({"错误": "缺少 JSON Body"}), 400
-    if "页面名" not in request.json:
+    if not request.is_json:
+        return jsonify({"错误": "请求头 Content-Type 必须是 application/json"}), 400
+    json = request.get_json(silent=True)
+    if json is None:
+        return jsonify({"错误": "无效的 JSON 格式，请检查请求体"}), 400
+    if "页面名" not in json:
         return jsonify({"错误": "缺少页面名"}), 400
-    页面名: str = request.json["页面名"]
-    if "脚本模块名" not in request.json:
+    页面名: str = json["页面名"]
+    if "脚本模块名" not in json:
         return jsonify({"错误": "缺少脚本模块名"}), 400
-    脚本模块名: str = request.json["脚本模块名"]
-    if "页面操作脚本名" not in request.json:
+    脚本模块名: str = json["脚本模块名"]
+    if "页面操作脚本名" not in json:
         return jsonify({"错误": "缺少页面操作脚本名"}), 400
     页面操作脚本名: str = request.json["页面操作脚本名"]
     添加页面操作自动开启脚本(页面名=页面名, 脚本模块名=脚本模块名, 页面操作脚本名=页面操作脚本名)
