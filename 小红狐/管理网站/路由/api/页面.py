@@ -114,22 +114,14 @@ def 添加页面操作自动开启脚本路由():
     添加页面操作自动开启脚本(页面名=页面名, 脚本模块名=脚本模块名, 页面操作脚本名=页面操作脚本名)
     return jsonify({"状态": "成功"})
 
-# 删除指定页面的脚本
-@页面蓝图.route("/脚本/<pagename>/<packagename>", methods=["DELETE"])
-def 删除脚本(pagename, packagename):
-    页面名: str = pagename
-    脚本模块名: str = packagename
-    页面数据: 数据类 = 页面.获取页面数据(
-        页面名=页面名, 脚本模块名=小红狐模块名,
-        默认值={
-            "启用脚本模块名": [小红狐模块名],
-        })
-    if 脚本模块名 in 页面数据["启用脚本模块名"]:
-        页面数据["启用脚本模块名"].remove(脚本模块名)
-        页面数据.保存()
-        return jsonify({"状态": "成功"})
-    else:
-        return jsonify({"状态": "失败", "信息": "脚本不存在"})
+# 删除指定页面的页面操作自动开启脚本
+@页面蓝图.route("/页面操作自动开启脚本/<page_name>/<package_name>/<page_script_name>", methods=["DELETE"])
+def 删除页面操作自动开启脚本路由(page_name, package_name, page_script_name):
+    页面名: str = page_name
+    脚本模块名: str = package_name
+    页面操作脚本名: str = page_script_name
+    删除页面操作自动开启脚本(页面名=页面名, 脚本模块名=脚本模块名, 页面操作脚本名=页面操作脚本名)
+    return jsonify({"状态": "成功"})
 
 # 获取指定页面的脚本
 @页面蓝图.route("/启用脚本模块名/<pagename>", methods=["GET"])
