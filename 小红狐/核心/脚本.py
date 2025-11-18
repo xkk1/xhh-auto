@@ -81,6 +81,8 @@ class 小红狐脚本信息:
             kwargs = {}
         try:
             配置页面 = 配置页面生成函数(*args, **kwargs)
+            if not 配置页面:
+                return {}
             if isinstance(配置页面, dict):
                 for 键, 值 in 配置页面.items():
                     if not isinstance(键, str):
@@ -92,6 +94,21 @@ class 小红狐脚本信息:
             return 配置页面
         except Exception as e:
             日志.警告(f"获取配置页面失败：{e}")
+            return {}
+    
+    def 获取总控页面配置页面(self):
+        return self.获取配置页面(lambda : self.脚本信息字典["总控页面"])
+    
+    def 获取页面生成配置页面(self, 页面生成脚本名: str):
+        try:
+            return self.获取配置页面(self.脚本信息字典["页面生成"][页面生成脚本名]["配置页面"])
+        except:
+            return {}
+    
+    def 获取页面操作配置页面(self, 页面操作脚本名: str):
+        try:
+            return self.获取配置页面(self.脚本信息字典["页面操作"][页面操作脚本名]["配置页面"])
+        except:
             return {}
 
 
