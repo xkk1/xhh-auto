@@ -24,6 +24,8 @@ from . import __package__ as 模块名
     }
 }
 
+默认启用页面生成脚本名: str = "小红狐页面生成"
+
 def 小红狐页面操作页面管理入口函数(页面名: str) -> dict[str, str]:
     from .核心.页面 import 获取页面配置名
     配置名: str = 获取页面配置名(页面名)
