@@ -2,11 +2,8 @@ from flask import Blueprint, jsonify, request
 
 from .... import __package__ as 小红狐模块名
 from ....工具.日志工具 import 获取日志记录器
-from ....工具.目录工具 import 数据目录
-from ....工具.数据工具 import 数据类, 获取本地数据, 获取内存数据
 from ....核心 import 页面
-from ....核心.页面 import 修改标签页URL排序, 修改页面生成脚本, 删除页面操作自动开启脚本, 添加页面操作自动开启脚本, 获取标签页URL排序, 获取页面操作自动开启脚本, 获取页面生成脚本, 获取页面配置名
-from ....核心.配置 import 获取配置数据
+from ....核心.页面 import 修改标签页URL排序, 修改页面生成脚本, 修改页面配置名, 删除页面操作自动开启脚本, 添加页面操作自动开启脚本, 获取标签页URL排序, 获取页面操作自动开启脚本, 获取页面生成脚本, 获取页面配置名
 from ....核心.脚本 import 小红狐脚本信息, 获取脚本
 from ....小红狐脚本 import 默认启用页面生成脚本名
 
@@ -130,18 +127,24 @@ def 获取页面操作自动开启脚本路由(page_name):
     return jsonify(获取页面操作自动开启脚本(页面名=页面名))
 
 # 获取页面配置
-@页面蓝图.route("/配置/<pagename>", methods=["GET"])
-def 获取页面配置(pagename):
-    页面名: str = pagename
-    页面配置: str = 页面.获取页面配置(页面名=页面名)
-    return jsonify({"配置": 页面配置})
+@页面蓝图.route("/配置/<page_name>", methods=["GET"])
+def 获取页面配置名路由(page_name):
+    页面名: str = page_name
+    页面配置: str = 获取页面配置名(页面名=页面名)
+    return jsonify(页面配置)
 
 # 修改页面配置
-@页面蓝图.route("/配置/<pagename>", methods=["PUT"])
-def 修改页面配置(pagename):
-    页面名: str = pagename
-    if not request.json or "配置" not in request.json:
-        return jsonify({"错误": "缺少配置"}), 400
-    配置: str = request.json["配置"]
-    页面.修改页面配置(页面名=页面名, 配置=配置)
+@页面蓝图.route("/配置/<page_name>", methods=["PUT"])
+def 修改页面配置名路由(page_name):
+    页面名: str = page_name
+    if not request.is_json:
+        return jsonify({"错误": "请求头 Content-Type 必须是 application/json"}), 400
+    json = request.get_json(silent=True)
+    if json is None:
+        return jsonify({"错误": "无效的 JSON 格式，请检查请求体"}), 400
+    # json 为 str
+    if not isinstance(json, str):
+        return jsonify({"错误": "配置格式错误"}), 400
+    配置: str = json
+    修改页面配置名(页面名=页面名, 配置名=配置)
     return jsonify({"状态": "成功"})
