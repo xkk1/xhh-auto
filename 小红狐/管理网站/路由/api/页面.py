@@ -123,16 +123,11 @@ def 删除页面操作自动开启脚本路由(page_name, package_name, page_scr
     删除页面操作自动开启脚本(页面名=页面名, 脚本模块名=脚本模块名, 页面操作脚本名=页面操作脚本名)
     return jsonify({"状态": "成功"})
 
-# 获取指定页面的脚本
-@页面蓝图.route("/启用脚本模块名/<pagename>", methods=["GET"])
-def 获取启用脚本模块名(pagename):
-    页面名: str = pagename
-    页面数据: 数据类 = 页面.获取页面数据(
-        页面名=页面名, 脚本模块名=小红狐模块名,
-        默认值={
-            "启用脚本模块名": [小红狐模块名],
-        })
-    return jsonify(页面数据["启用脚本模块名"])
+# 获取指定页面的页面操作自动开启脚本
+@页面蓝图.route("/页面操作自动开启脚本/<page_name>", methods=["GET"])
+def 获取页面操作自动开启脚本路由(page_name):
+    页面名: str = page_name
+    return jsonify(获取页面操作自动开启脚本(页面名=页面名))
 
 # 获取页面配置
 @页面蓝图.route("/配置/<pagename>", methods=["GET"])
