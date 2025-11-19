@@ -148,3 +148,28 @@ def 修改页面配置名路由(page_name):
     配置: str = json
     修改页面配置名(页面名=页面名, 配置名=配置)
     return jsonify({"状态": "成功"})
+
+# 获取页面生成脚本
+@页面蓝图.route("/页面生成脚本/<page_name>", methods=["GET"])
+def 获取页面生成脚本路由(page_name):
+    页面名: str = page_name
+    页面生成脚本: dict[str, str] = 获取页面生成脚本(页面名=页面名)
+    return jsonify(页面生成脚本)
+
+# 修改页面生成脚本
+@页面蓝图.route("/页面生成脚本/<page_name>", methods=["PUT"])
+def 修改页面生成脚本路由(page_name):
+    页面名: str = page_name
+    if not request.is_json:
+        return jsonify({"错误": "请求头 Content-Type 必须是 application/json"}), 400
+    json = request.get_json(silent=True)
+    if json is None:
+        return jsonify({"错误": "无效的 JSON 格式，请检查请求体"}), 400
+    if "脚本模块名" not in json:
+        return jsonify({"错误": "缺少脚本模块名"}), 400
+    脚本模块名: str = json["脚本模块名"]
+    if "页面生成脚本名" not in json:
+        return jsonify({"错误": "缺少页面生成脚本名"}), 400
+    页面生成脚本名: str = json["页面生成脚本名"]
+    修改页面生成脚本(页面名=页面名, 脚本模块名=脚本模块名, 页面生成脚本名=页面生成脚本名)
+    return jsonify({"状态": "成功"})
