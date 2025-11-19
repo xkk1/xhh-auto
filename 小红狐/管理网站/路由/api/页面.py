@@ -92,16 +92,14 @@ def 修改标签页URL排序路由(page_name):
     return jsonify({"状态": "成功"})
 
 # 给指定页面添加页面操作自动开启脚本
-@页面蓝图.route("/页面操作自动开启脚本", methods=["POST"])
-def 添加页面操作自动开启脚本路由():
+@页面蓝图.route("/页面操作自动开启脚本/<page_name>", methods=["POST"])
+def 添加页面操作自动开启脚本路由(page_name):
+    页面名: str = page_name
     if not request.is_json:
         return jsonify({"错误": "请求头 Content-Type 必须是 application/json"}), 400
     json = request.get_json(silent=True)
     if json is None:
         return jsonify({"错误": "无效的 JSON 格式，请检查请求体"}), 400
-    if "页面名" not in json:
-        return jsonify({"错误": "缺少页面名"}), 400
-    页面名: str = json["页面名"]
     if "脚本模块名" not in json:
         return jsonify({"错误": "缺少脚本模块名"}), 400
     脚本模块名: str = json["脚本模块名"]
