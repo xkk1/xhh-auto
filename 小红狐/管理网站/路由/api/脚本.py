@@ -30,6 +30,7 @@ def 标准化(要标准化数据: Any) -> NoneType | str | int | float | bool | 
     else:
         return str(要标准化数据)
 
+@脚本蓝图.route("", methods=["GET"])
 @脚本蓝图.route("/", methods=["GET"])
 def 返回导入脚本信息列表() -> dict[str, NoneType | str | int | float | bool | list | dict]:
     导入脚本信息列表 = 获取导入脚本信息列表()
