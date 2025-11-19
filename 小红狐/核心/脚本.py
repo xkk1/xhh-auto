@@ -2,7 +2,7 @@ import importlib
 import pathlib
 import sys
 from types import ModuleType
-from typing import Any, Callable, TypeVar
+from typing import Any, Callable
 
 
 from .. import __package__ as 小红狐模块名

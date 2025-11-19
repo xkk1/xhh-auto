@@ -114,6 +114,19 @@ def 删除页面操作自动开启脚本路由(page_name, package_name, page_scr
     删除页面操作自动开启脚本(页面名=页面名, 脚本模块名=脚本模块名, 页面操作脚本名=页面操作脚本名)
     return jsonify({"状态": "成功"})
 
+@页面蓝图.route("/页面操作/配置页面/<page_name>/<package_name>/<page_script_name>", methods=["GET"])
+def 获取页面操作配置页面路由(page_name, package_name, page_script_name):
+    页面名: str = page_name
+    脚本模块名: str = package_name
+    页面操作脚本名: str = page_script_name
+    try:
+        脚本模块: 小红狐脚本信息 = 获取脚本(模块名=脚本模块名)
+        脚本模块.获取页面操作配置页面(页面操作脚本名=页面操作脚本名, 页面名=页面名)
+        return jsonify(脚本模块.获取页面操作配置页面(页面操作脚本名=页面操作脚本名, 页面名=页面名))
+    except Exception as e:
+        日志.警告(f"获取页面操作配置页面失败，页面：“{页面名}”，脚本模块名：“{脚本模块名}”，页面操作脚本名“{页面操作脚本名}”: {e}")
+        return jsonify({})
+
 # 获取指定页面的页面操作自动开启脚本
 @页面蓝图.route("/页面操作自动开启脚本/<page_name>", methods=["GET"])
 def 获取页面操作自动开启脚本路由(page_name):
