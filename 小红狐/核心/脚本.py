@@ -79,6 +79,8 @@ class 小红狐脚本信息:
     def 获取配置页面(配置页面生成函数: Callable[..., dict[str, str]], args: tuple = (), kwargs: dict[str, Any] | None = None) -> dict[str, str]:
         if kwargs is None:
             kwargs = {}
+        if not isinstance(配置页面生成函数, Callable):
+            return {}
         try:
             配置页面 = 配置页面生成函数(*args, **kwargs)
             if not 配置页面:
