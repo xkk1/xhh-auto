@@ -22,13 +22,19 @@ def 获取所有页面():
     return jsonify(页面.获取全部页面名())
 
 # 新建页面 post
-@页面蓝图.route("/", methods=["POST"])
+@页面蓝图.route("/页面名", methods=["POST"])
 def 新建页面():
-    if not request.json or "页面名" not in request.json:
-        return jsonify({"错误": "缺少页面名"}), 400
-    页面名: str = request.json["页面名"]
+    if not request.is_json:
+        return jsonify({"错误": "请求头 Content-Type 必须是 application/json"}), 400
+    json = request.get_json(silent=True)
+    if json is None:
+        return jsonify({"错误": "无效的 JSON 格式，请检查请求体"}), 400
+    # json 为 str
+    if not isinstance(json, str):
+        return jsonify({"错误": "配置格式错误"}), 400
+    页面名: str = json
     页面.新建页面(页面名)
-    return jsonify({"页面名": 页面名}), 201
+    return jsonify({"状态": "成功"}), 200
 
 @页面蓝图.route("/标签页列表/<page_name>", methods=["GET"])
 def 获取标签页列表路由(page_name):
