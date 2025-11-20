@@ -57,21 +57,3 @@ def 处理路径(package):
 @脚本蓝图.route("/接口/<package>", methods=HTTP方法)
 def 处理模块(package):
     return 处理接口(脚本模块名=package, 子路径="")
-
-# 获取脚本配置标签页
-@脚本蓝图.route("/配置标签页/<package>/<pagename>", methods=["GET"])
-def 获取脚本配置标签页(package, pagename):
-    模块名: str = package
-    页面名: str = pagename
-    脚本配置标签页: list[dict[str, str]] = []
-    try:
-        脚本模块: 小红狐脚本信息 = 获取脚本(模块名=模块名)
-        配置页面: dict[str, str] = 脚本模块.获取配置页面(页面名=页面名)
-        for 配置页面URL, 配置页面标题 in 配置页面.items():
-            脚本配置标签页.append({
-                "url": 配置页面URL,
-                "标题": 配置页面标题,
-            })
-    except:
-        pass
-    return jsonify(脚本配置标签页)
