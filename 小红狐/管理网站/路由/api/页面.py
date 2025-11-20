@@ -151,14 +151,14 @@ def 获取页面操作自动开启脚本路由(page_name):
     return jsonify(获取页面操作自动开启脚本(页面名=页面名))
 
 # 获取页面配置
-@页面蓝图.route("/配置/<page_name>", methods=["GET"])
+@页面蓝图.route("/配置名/<page_name>", methods=["GET"])
 def 获取页面配置名路由(page_name):
     页面名: str = page_name
     页面配置: str = 获取页面配置名(页面名=页面名)
     return jsonify(页面配置)
 
 # 修改页面配置
-@页面蓝图.route("/配置/<page_name>", methods=["PUT"])
+@页面蓝图.route("/配置名/<page_name>", methods=["PUT"])
 def 修改页面配置名路由(page_name):
     页面名: str = page_name
     if not request.is_json:
