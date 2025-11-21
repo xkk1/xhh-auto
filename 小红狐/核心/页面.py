@@ -1,9 +1,10 @@
 import pathlib
 import shutil
-from typing import Any
+from typing import Any, Callable
 
 from .. import __package__ as 小红狐模块名
-from ..核心.脚本 import 获取脚本
+from ..工具.日志工具 import 获取日志记录器
+from ..核心.脚本 import 小红狐脚本信息, 获取导入脚本信息字典, 获取脚本
 from ..工具.数据工具 import 数据类, 获取本地数据
 from ..工具.目录工具 import 页面目录
 from .配置 import 获取全部配置名, 新建配置
@@ -15,6 +16,7 @@ from .配置 import 修改页面生成脚本 as 配置_修改页面生成脚本
 from ..小红狐脚本 import 默认启用页面操作脚本名元组
 
 
+日志 = 获取日志记录器(__name__)
 页面目录.mkdir(parents=True, exist_ok=True)
 
 def 获取页面目录(页面名: str | None = None, 脚本模块名: str | None = None) -> pathlib.Path:
@@ -100,3 +102,22 @@ def 添加页面操作自动开启脚本(页面名: str = "默认页面六个字
 def 删除页面操作自动开启脚本(页面名: str = "默认页面六个字", 脚本模块名: str | None = None, 页面操作脚本名: str | None = None):
     配置名: str = 获取页面配置名(页面名)
     配置_删除页面操作自动开启脚本(配置名=配置名, 脚本模块名=脚本模块名, 页面操作脚本名=页面操作脚本名)
+
+def 获取页面操作开启脚本(页面名: str = "默认页面六个字") -> dict[str, list[str]]:
+    页面操作开启脚本: dict[str, list[str]] = {}
+    导入脚本信息字典: dict[str, 小红狐脚本信息] = 获取导入脚本信息字典()
+    for 脚本模块名, 脚本信息 in 导入脚本信息字典.items():
+        页面操作: dict[str, dict[str, Any]] = 脚本信息["页面操作"]
+        if not isinstance(页面操作, dict):
+            continue
+        for 页面操作脚本名, 页面操作信息 in 页面操作.items():
+            脚本状态函数: Callable[[str], bool] = 页面操作信息.get("脚本状态", None)
+            if not isinstance(脚本状态函数, Callable):
+                continue
+            try:
+                脚本状态: bool = 脚本状态函数(页面名=页面名)
+                if 脚本状态:
+                    页面操作开启脚本[脚本模块名] = 页面操作开启脚本.get(脚本模块名, []) + [页面操作脚本名]
+            except Exception as e:
+                日志.警告(f"获取页面操作开启脚本“{脚本模块名}”“{页面操作脚本名}”页面“{页面名}”失败: {e}")
+    return 页面操作开启脚本
