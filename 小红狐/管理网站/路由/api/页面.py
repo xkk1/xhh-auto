@@ -90,6 +90,13 @@ def 获取标签页列表路由(page_name):
         })
     return jsonify(标签页列表)
 
+
+@页面蓝图.route("/页面操作开启脚本/<page_name>", methods=["GET"])
+def 获取页面操作开启脚本路由(page_name):
+    页面名: str = page_name
+    页面操作开启脚本: dict[str, list[str]] = 获取页面操作开启脚本(页面名=页面名)
+    return jsonify(页面操作开启脚本)
+
 @页面蓝图.route("/标签页URL排序/<page_name>", methods=["PUT"]) 
 def 修改标签页URL排序路由(page_name):
     页面名: str = page_name
