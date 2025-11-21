@@ -16,7 +16,7 @@ function 初始化多页面() {
 function 页面配置标签页() {
     let 标签页元素 = document.querySelector("ul#标签页");
     标签页元素.innerHTML = ""
-    小红狐.页面.获取页面配置标签页(页面名=页面名)
+    小红狐.页面.获取标签页列表(页面名=页面名)
         .then(function (配置标签页) {
             for (let 标签页 of 配置标签页) {
                 let a = document.createElement("a");
@@ -126,7 +126,7 @@ function 初始化拖拽标签页() {
             return 元素.querySelector("a").getAttribute('href');
         });
         // console.log(配置页面URL排序);
-        小红狐.页面.修改配置页面URL排序(页面名, 配置页面URL排序)
+        小红狐.页面.修改标签页URL排序(页面名, 配置页面URL排序)
             .then(function (结果) {
                 // console.log(结果);
             })
