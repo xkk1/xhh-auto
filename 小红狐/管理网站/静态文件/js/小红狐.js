@@ -57,8 +57,8 @@
 
     let 脚本 = {
         api前缀: api前缀 + "/脚本",
-        获取导入脚本信息列表: function() {
-            return 请求.获取(this.api前缀 + "/");
+        获取导入脚本信息字典: function() {
+            return 请求.获取(this.api前缀 + "/导入脚本信息字典");
         },
     }
 

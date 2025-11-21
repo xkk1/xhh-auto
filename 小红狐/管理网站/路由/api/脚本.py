@@ -3,7 +3,7 @@ from typing import Any
 from flask import Blueprint, jsonify
 
 from ....工具.日志工具 import 获取日志记录器
-from ....核心.脚本 import 小红狐脚本信息, 获取导入脚本信息列表, 获取导入脚本模块名列表, 获取脚本
+from ....核心.脚本 import 获取导入脚本信息字典, 获取导入脚本模块名列表, 获取脚本
 
 
 日志 = 获取日志记录器(__name__)
@@ -30,11 +30,10 @@ def 标准化(要标准化数据: Any) -> NoneType | str | int | float | bool | 
     else:
         return str(要标准化数据)
 
-@脚本蓝图.route("", methods=["GET"])
-@脚本蓝图.route("/", methods=["GET"])
-def 返回导入脚本信息列表() -> dict[str, NoneType | str | int | float | bool | list | dict]:
-    导入脚本信息列表 = 获取导入脚本信息列表()
-    return jsonify(标准化(导入脚本信息列表))
+@脚本蓝图.route("/导入脚本信息字典", methods=["GET"])
+def 返回导入脚本信息字典() -> dict[str, NoneType | str | int | float | bool | list | dict]:
+    导入脚本信息字典: dict[str, dict[str, Any]] = 获取导入脚本信息字典()
+    return jsonify(标准化(导入脚本信息字典))
 
 HTTP方法 = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS', 'HEAD']
 

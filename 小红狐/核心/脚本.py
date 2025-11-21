@@ -115,46 +115,49 @@ class 小红狐脚本信息:
 
 
 
-导入脚本信息字典: dict[str, 小红狐脚本信息] = {}
+导入脚本信息: dict[str, 小红狐脚本信息] = {}
 
 def 重载脚本(模块名: str) -> ModuleType:
-    if 模块名 in 导入脚本信息字典:
-        模块 = importlib.reload(导入脚本信息字典[模块名].模块)
-        导入脚本信息字典[模块名] = 小红狐脚本信息(模块)
-        return 导入脚本信息字典[模块名]
+    if 模块名 in 导入脚本信息:
+        模块 = importlib.reload(导入脚本信息[模块名].模块)
+        导入脚本信息[模块名] = 小红狐脚本信息(模块)
+        return 导入脚本信息[模块名]
     else:
         raise ImportError(f"无法重载脚本：{模块名}, 脚本未导入")
 
 def 导入脚本(模块名: str) -> 小红狐脚本信息 | None | ImportError:
-    if 模块名 in 导入脚本信息字典:
+    if 模块名 in 导入脚本信息:
         return 重载脚本(模块名)
     try:
         模块 = importlib.import_module(模块名 + ".小红狐脚本")
         脚本信息 = 小红狐脚本信息(模块)
         if 脚本信息["调试"] == True and not 调试:
             return None  # 仅开启调试模式时启用脚本
-        导入脚本信息字典[模块名] = 脚本信息
-        return 导入脚本信息字典[模块名]
+        导入脚本信息[模块名] = 脚本信息
+        return 导入脚本信息[模块名]
     except ImportError as e:
         raise ImportError(f"无法导入脚本：{模块名}, 错误信息：{e}")
 
 def 获取导入脚本模块名列表() -> list[str]:
-    return list(导入脚本信息字典.keys())
+    return list(导入脚本信息.keys())
 
-def 获取导入脚本信息字典() -> dict[str, 小红狐脚本信息]:
-    return 导入脚本信息字典
+def 获取导入脚本信息() -> dict[str, 小红狐脚本信息]:
+    return 导入脚本信息
+
+def 获取导入脚本信息字典() -> dict[str, dict[str], Any]:
+    return {键: 值.脚本信息字典 for 键, 值 in 导入脚本信息.items()}
 
 def 获取导入脚本信息列表() -> list[dict[str], Any]:
-    return [{"模块名": 键, **值.脚本信息字典} for 键, 值 in 导入脚本信息字典.items()]
+    return [{"模块名": 键, **值.脚本信息字典} for 键, 值 in 导入脚本信息.items()]
 
 def 获取脚本(模块名: str) -> 小红狐脚本信息:
-    if 模块名 not in 导入脚本信息字典:
+    if 模块名 not in 导入脚本信息:
         raise ImportError(f"无法获取脚本：{模块名}, 脚本未导入")
-    return 导入脚本信息字典[模块名]
+    return 导入脚本信息[模块名]
 
 def 删除脚本(模块名: str) -> bool:
-    if 模块名 in 导入脚本信息字典:
-        del 导入脚本信息字典[模块名]
+    if 模块名 in 导入脚本信息:
+        del 导入脚本信息[模块名]
         return True
     else:
         return False
