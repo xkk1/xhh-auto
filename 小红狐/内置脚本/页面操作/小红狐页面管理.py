@@ -19,6 +19,8 @@ def 关闭函数(页面名: str | None = None):
         return
     if 页面名 in 开启脚本页面名列表:
         开启脚本页面名列表.remove(页面名)
+    else:
+        assert False, "无法手动关闭，若想关闭请关闭“自动开启”"
 
 def 脚本状态(页面名: str | None = None) -> bool:
     if 页面名 == None:
