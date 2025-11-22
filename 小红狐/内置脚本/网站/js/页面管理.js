@@ -117,7 +117,17 @@ function 渲染页面操作脚本表格() {
                     小红狐.页面.关闭页面操作脚本(页面名, 脚本模块名, 页面操作脚本名)
                         .then(() => {
                             // 关闭成功
-                            刷新页面操作脚本表格();
+                            if (window !== parent && parent.删除标签页) {
+                                小红狐.页面.获取页面操作配置页面(页面名, 脚本模块名, 页面操作脚本名)
+                                    .then(function (页面操作配置页面) { 
+                                        for (const [URL, 标题] of Object.entries(页面操作配置页面)) {
+                                            parent.删除标签页(URL);
+                                        }
+                                        刷新页面操作脚本表格();
+                                    });
+                            } else {
+                                刷新页面操作脚本表格();
+                            }
                         })
                         .catch(function (错误) {
                             console.error(错误);
@@ -183,6 +193,22 @@ function 渲染页面操作脚本表格() {
         }
     }
     页面操作脚本表格元素.appendChild(表体);
+    // 添加页面操作开启脚本的标签页
+    if (window !== parent && parent.添加标签页) {
+        for (const 脚本模块名 in 页面操作开启脚本) {
+            for (const 页面操作脚本名 of 页面操作开启脚本[脚本模块名]) {
+                小红狐.页面.获取页面操作配置页面(页面名, 脚本模块名, 页面操作脚本名)
+                    .then(function (页面操作配置页面) {
+                        for (const [URL, 标题] of Object.entries(页面操作配置页面)) {
+                            parent.添加标签页(标题, URL);
+                        }
+                    })
+                    .catch(function (错误) {
+                        console.error(错误);
+                    });
+            }
+        }
+    }
 }
 
 function 刷新页面操作脚本表格() {
