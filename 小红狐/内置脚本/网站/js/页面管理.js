@@ -7,6 +7,7 @@ const 配置名 = 小红狐工具.获取Get参数("配置名") || 页面名;
 let 导入脚本信息字典 = {};
 let 页面操作自动开启脚本 = {};
 let 页面操作开启脚本 = {};
+let 页面生成脚本 = {};
 
 async function 更新导入脚本信息字典() {
     导入脚本信息字典 = await 小红狐.脚本.获取导入脚本信息字典();
@@ -19,6 +20,36 @@ async function 更新页面操作自动开启脚本() {
 async function 更新页面操作开启脚本() {
     页面操作开启脚本 = await 小红狐.页面.获取页面操作开启脚本(页面名);
 }
+
+async function 更新页面生成脚本() {
+    页面生成脚本 = await 小红狐.页面.获取页面生成脚本(页面名);
+}
+
+function 渲染页面生成脚本() {
+    const 页面生成脚本容器元素 = document.querySelector("#页面生成脚本容器");
+    const 当前页面生成脚本span = document.createElement("span");
+    当前页面生成脚本span.textContent = 
+        导入脚本信息字典?.[页面生成脚本?.脚本模块名]?.页面生成?.[页面生成脚本?.页面生成脚本名].名称 ||
+        页面生成脚本?.页面生成脚本名 || "获取页面生成脚本失败！";
+    页面生成脚本容器元素.appendChild(当前页面生成脚本span);
+}
+
+function 刷新页面生成脚本() {
+    // 发起两个 GET 请求，并在都完成后渲染
+    Promise.all([
+        更新导入脚本信息字典(),
+        更新页面生成脚本(),
+    ])
+        .then(() => {
+            // 调用渲染函数
+            渲染页面生成脚本();
+        })
+        .catch(error => {
+            console.error("获取页面生成脚本失败:", error);
+            document.querySelector("#当前页面生成脚本").textContent = "获取页面脚本脚本失败" + error;
+        });
+}
+
 
 function 渲染页面操作脚本表格() {
     let 页面操作脚本表格元素 = document.querySelector("#页面操作脚本表格");
@@ -155,22 +186,19 @@ function 渲染页面操作脚本表格() {
 }
 
 function 刷新页面操作脚本表格() {
-    // 发起两个 GET 请求，并在都完成后渲染
+    // 发起多个 GET 请求，并在都完成后渲染
     Promise.all([
         更新导入脚本信息字典(),
         更新页面操作自动开启脚本(),
         更新页面操作开启脚本(),
     ])
         .then(() => {
-            console.log(导入脚本信息字典);
-            console.log(页面操作自动开启脚本);
-            console.log(页面操作开启脚本);
             // 调用渲染函数
             渲染页面操作脚本表格();
         })
         .catch(error => {
-            console.error("页面操作脚本表格失败:", error);
-            document.querySelector("#页面操作脚本表格").textContent = "页面操作脚本表格失败" + error;
+            console.error("获取页面操作脚本失败:", error);
+            document.querySelector("#页面操作脚本表格").textContent = "获取页面操作脚本失败" + error;
         });
 }
 
@@ -180,5 +208,6 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector("#页面名").textContent = 页面名;
     // 显示配置名
     document.querySelector("#配置名").textContent = 配置名;
+    刷新页面生成脚本();
     刷新页面操作脚本表格();
 });
