@@ -1,18 +1,51 @@
-#启用脚本表格 {
-    width: 100%;
+#页面操作脚本表格 {
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    overflow: auto;
     border-collapse: collapse;
     border-spacing: 0;
 }
 
-#启用脚本表格 .模块名 {
-    font-size: 0.8rem;
-    color: darkgray;
+#页面操作脚本表格 th,
+#页面操作脚本表格 td {
+    padding: 0.2rem 0.4rem;
+    border: 1px solid;
+    empty-cells: show;
 }
 
-#启用脚本表格 .模块名::before {
-    content: "(";
+#页面操作脚本表格 .页面操作脚本:hover {
+    cursor: pointer;
+    text-decoration: underline;
 }
 
-#启用脚本表格 .模块名::after {
-    content: ")";
+#页面操作脚本表格 .页面操作脚本状态 {
+    display: inline-block;
+    border-radius: 0.4rem;
+    padding: 0.1rem 0.2rem;
+}
+
+#页面操作脚本表格 .页面操作脚本状态:hover {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#页面操作脚本表格 .页面操作脚本状态.开启 {
+    color: green;
+    border: 1px solid green;
+}
+
+#页面操作脚本表格 .页面操作脚本状态.开启:hover {
+    background-color: green;
+    color: white;
+}
+
+#页面操作脚本表格 .页面操作脚本状态.关闭 {
+    color: red;
+    border: 1px solid red;
+}
+
+#页面操作脚本表格 .页面操作脚本状态.关闭:hover {
+    background-color: red;
+    color: white;
 }
