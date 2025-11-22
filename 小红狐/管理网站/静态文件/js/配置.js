@@ -30,7 +30,9 @@ function 页面配置标签页() {
                 标签页元素.appendChild(li);
             }
             // 打开第一个标签页
-            document.querySelector("ul#标签页>li>a").click();
+            if (配置标签页 && 配置标签页.length > 0) {
+                document.querySelector("ul#标签页>li>a").click();
+            }
             // 显示标签页
             document.querySelector("#header").style.display = "block";
             // 隐藏加载
