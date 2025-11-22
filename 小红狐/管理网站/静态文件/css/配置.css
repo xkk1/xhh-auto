@@ -1,3 +1,21 @@
+:root {
+    /* 🌞 浅色主题 */
+    color-scheme: light;
+
+    /* 标签页边框颜色 */
+    --标签页边框颜色: #ccc;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* 🌙 深色主题 */
+        color-scheme: dark;
+
+        /* 标签页边框颜色 */
+        --标签页边框颜色: #666;
+    }
+}
+
 body {
     display: flex;
     flex-direction: column;
@@ -19,35 +37,33 @@ ul#标签页 {
 ul#标签页>li.拖拽 {
     background: transparent;
     color: transparent;
-    border: 1px dashed #ccc;
+    border: 1px dashed var(--标签页边框颜色);
 }
 
 ul#标签页>li>a {
   display: block;
   padding: 0.2rem 0.4rem;
   text-decoration: none;
-  background: #f5f5f5;
-  border: 1px solid #ccc;
+  border: 1px solid var(--标签页边框颜色);
   border-right: none;
   border-radius: 0.2rem 0.2rem 0 0;
   white-space: nowrap;
 }
 
 ul#标签页>li:last-child>a {
-    border-right: 1px solid #ccc;
+    border-right: 1px solid var(--标签页边框颜色);
 }
 
 /* 填充剩余空间，实现标签栏下边框 */
 ul#标签页::after {
     content: "";
     flex: 1;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid var(--标签页边框颜色);
 }
 
 ul#标签页>li>a.选中 {
-  background: #fff;
   border-bottom: none;
-  color: #000;
+  color: inherit;
 }
 
 #main {
