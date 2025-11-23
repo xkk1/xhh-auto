@@ -32,7 +32,7 @@
 
 #页面操作脚本表格 .页面操作脚本状态.开启 {
     color: green;
-    border: 1px solid green;
+    border: 0.1rem solid green;
 }
 
 #页面操作脚本表格 .页面操作脚本状态.开启:hover {
@@ -42,10 +42,39 @@
 
 #页面操作脚本表格 .页面操作脚本状态.关闭 {
     color: red;
-    border: 1px solid red;
+    border: 0.1rem solid red;
 }
 
 #页面操作脚本表格 .页面操作脚本状态.关闭:hover {
     background-color: red;
     color: white;
 }
+
+#页面操作脚本表格 .页面操作脚本状态.加载中 {
+    color: orange;
+    border: 0.1rem solid orange;
+}
+
+#页面操作脚本表格 .页面操作脚本状态.加载中:hover {
+    cursor: wait;
+    background-color: orange;
+}
+
+#页面操作脚本表格 .自动开启多选.加载中 {
+    cursor: wait;
+}
+
+#页面操作脚本表格 .自动开启多选.加载中::after {
+    content: "切换中";
+}
+
+#刷新页面生成脚本按钮.加载中,
+#刷新页面操作脚本按钮.加载中 {
+    cursor: wait;
+}
+
+#刷新页面生成脚本按钮.加载中::after,
+#刷新页面操作脚本按钮.加载中::after {
+    content: " 加载中…";
+}
+

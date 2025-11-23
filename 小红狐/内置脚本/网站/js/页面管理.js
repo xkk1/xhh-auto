@@ -36,6 +36,8 @@ function 渲染页面生成脚本() {
 }
 
 function 刷新页面生成脚本() {
+    const 刷新页面生成脚本按钮 = document.querySelector("#刷新页面生成脚本按钮");
+    刷新页面生成脚本按钮.classList.add("加载中");
     // 发起两个 GET 请求，并在都完成后渲染
     Promise.all([
         更新导入脚本信息字典(),
@@ -48,6 +50,9 @@ function 刷新页面生成脚本() {
         .catch(error => {
             console.error("获取页面生成脚本失败:", error);
             document.querySelector("#当前页面生成脚本").textContent = "获取页面脚本脚本失败" + error;
+        })
+        .finally(() => {
+            刷新页面生成脚本按钮.classList.remove("加载中");
         });
 }
 
@@ -113,6 +118,8 @@ function 渲染页面操作脚本表格() {
                 span.title = "点击开启脚本";
             }
             span.addEventListener("click", function () {
+                this.classList.add("加载中");
+                const 页面操作脚本状态span = this;
                 if (this.classList.contains("开启")) {
                     // 若已开启则关闭
                     小红狐.页面.关闭页面操作脚本(页面名, 脚本模块名, 页面操作脚本名)
@@ -120,52 +127,63 @@ function 渲染页面操作脚本表格() {
                             // 关闭成功
                             if (window !== parent && parent.删除标签页) {
                                 小红狐.页面.获取页面操作配置页面(页面名, 脚本模块名, 页面操作脚本名)
-                                    .then(function (页面操作配置页面) { 
+                                    .then((页面操作配置页面) => { 
                                         for (const [URL, 标题] of Object.entries(页面操作配置页面)) {
                                             parent.删除标签页(URL);
                                         }
-                                        刷新页面操作脚本表格();
+                                        刷新页面操作脚本();
                                     });
                             } else {
-                                刷新页面操作脚本表格();
+                                刷新页面操作脚本();
                             }
                         })
-                        .catch(function (错误) {
+                        .catch((错误) => {
                             console.error(错误);
                             alert("关闭失败\n信息：" + 错误.信息);
+                            页面操作脚本状态span.classList.remove("加载中");
                         });
                 } else {
                     // 若未开启则开启
                     小红狐.页面.开启页面操作脚本(页面名, 脚本模块名, 页面操作脚本名)
-                        .then(() => {
+                        .then(() =>{
                             // 开启成功
-                            刷新页面操作脚本表格();
+                            刷新页面操作脚本();
                         })
-                        .catch(function (错误) {
+                        .catch((错误) => {
                             console.error(错误);
                             alert("开启失败\n信息：" + 错误.信息);
+                            页面操作脚本状态span.classList.remove("加载中");
                         });
                 }
             });
             td.appendChild(span);
             td.append(" / ");
             // 自动开启 多选
+            let label = document.createElement("label");
+            label.classList.add("自动开启多选");
             let input = document.createElement("input");
             input.type = "checkbox";
             input.checked = Boolean(页面操作自动开启脚本?.[脚本模块名]?.includes(页面操作脚本名));
-            input.addEventListener("change", function () {
-                const 脚本模块名 = this.parentElement.parentElement.dataset.脚本模块名;
-                const 页面操作脚本名 = this.parentElement.parentElement.dataset.页面操作脚本名;
-                if (this.checked) {
-                    // 若选中则添加页面操作脚本
+            input.addEventListener("change", function (事件) {
+                this.checked = !this.checked;
+                const label = this.parentElement;
+                label.classList.add("加载中");
+                const 脚本模块名 = label.parentElement.parentElement.dataset.脚本模块名;
+                const 页面操作脚本名 = label.parentElement.parentElement.dataset.页面操作脚本名;
+                if (!this.checked) {
+                    // 若未选中则添加页面操作脚本
                     小红狐.页面.添加页面操作自动开启脚本(页面名, 脚本模块名 ,页面操作脚本名)
                         .then(() => {
                             // 添加成功
+                            this.checked = true;
                         })
                         .catch((e) => {
                             // 添加失败
                             this.checked = false;
                             alert(`添加失败：${e}`);
+                        })
+                        .finally(() => {
+                            label.classList.remove("加载中");
                         });
                 } else {
                     if (脚本模块名 === "小红狐" && 页面操作脚本名 === "页面管理") {
@@ -174,21 +192,27 @@ function 渲染页面操作脚本表格() {
                         if (输入 !== "取消启用小红狐页面管理") {
                             // 选中多选
                             this.checked = true;
+                            label.classList.remove("加载中");
                             return;
                         }
                     }
                     小红狐.页面.删除页面操作自动开启脚本(页面名, 脚本模块名, 页面操作脚本名)
                         .then(() => {
                             // 删除成功
+                            this.checked = false;
                         })
                         .catch((e) => {
                             // 删除失败
                             this.checked = true;
                             alert(`删除失败：${e}`);
+                        })
+                        .finally(() => {
+                            label.classList.remove("加载中");
                         });
                 }
             });
-            td.appendChild(input);
+            label.appendChild(input);
+            td.appendChild(label);
             tr.appendChild(td);
             表体.appendChild(tr);
         }
@@ -212,8 +236,10 @@ function 渲染页面操作脚本表格() {
     }
 }
 
-function 刷新页面操作脚本表格() {
-    // 发起多个 GET 请求，并在都完成后渲染
+function 刷新页面操作脚本() {
+    const 刷新页面操作脚本按钮 = document.querySelector("#刷新页面操作脚本按钮");
+    刷新页面操作脚本按钮.classList.add("加载中");
+    // 刷新页面操作脚本表格
     Promise.all([
         更新导入脚本信息字典(),
         更新页面操作自动开启脚本(),
@@ -226,6 +252,9 @@ function 刷新页面操作脚本表格() {
         .catch(error => {
             console.error("获取页面操作脚本失败:", error);
             document.querySelector("#页面操作脚本表格").textContent = "获取页面操作脚本失败" + error;
+        })
+        .finally(() => {
+            刷新页面操作脚本按钮.classList.remove("加载中");
         });
 }
 
@@ -236,5 +265,5 @@ document.addEventListener("DOMContentLoaded", function () {
     // 显示配置名
     document.querySelector("#配置名").textContent = 配置名;
     刷新页面生成脚本();
-    刷新页面操作脚本表格();
+    刷新页面操作脚本();
 });
