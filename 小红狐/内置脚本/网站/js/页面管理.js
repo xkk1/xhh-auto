@@ -28,11 +28,88 @@ async function 更新页面生成脚本() {
 function 渲染页面生成脚本() {
     const 页面生成脚本容器元素 = document.querySelector("#页面生成脚本容器");
     页面生成脚本容器元素.innerHTML = "";
-    const 当前页面生成脚本span = document.createElement("span");
-    当前页面生成脚本span.textContent = 
-        导入脚本信息字典?.[页面生成脚本?.脚本模块名]?.页面生成?.[页面生成脚本?.页面生成脚本名].名称 ||
-        页面生成脚本?.页面生成脚本名 || "获取页面生成脚本失败！";
-    页面生成脚本容器元素.appendChild(当前页面生成脚本span);
+
+    // const 当前页面生成脚本span = document.createElement("span");
+    // 当前页面生成脚本span.textContent = 
+    //     导入脚本信息字典?.[页面生成脚本?.脚本模块名]?.页面生成?.[页面生成脚本?.页面生成脚本名].名称 ||
+    //     页面生成脚本?.页面生成脚本名 || "获取页面生成脚本失败！";
+    // 页面生成脚本容器元素.appendChild(当前页面生成脚本span);
+
+    const 页面生成脚本下拉列表 = document.createElement("select");
+    页面生成脚本下拉列表.id = "页面生成脚本下拉列表";
+    for (const [脚本模块名, 导入脚本信息] of Object.entries(导入脚本信息字典)) {
+        // 跳过渲染没有页面生成的脚本
+        if (Object.prototype.toString.call(导入脚本信息.页面生成) !== "[object Object]") continue;
+        const 名称 = 导入脚本信息.名称;
+        for (const [页面生成脚本名, 页面生成脚本信息] of Object.entries(导入脚本信息.页面生成)) {
+            // 跳过渲染非法页面生成的脚本
+            if (Object.prototype.toString.call(页面生成脚本信息) !== "[object Object]") continue;
+            const 脚本名称 = 页面生成脚本信息.名称 || 页面生成脚本名;
+            const 选项 = document.createElement("option");
+            选项.value = 脚本模块名 + "/" + 页面生成脚本名;
+            选项.textContent = `${脚本名称} (${脚本模块名}/${页面生成脚本名})`;
+            if (脚本模块名 === 页面生成脚本?.脚本模块名 && 页面生成脚本名 === 页面生成脚本?.页面生成脚本名) {
+                选项.textContent = "[当前] " + 选项.textContent;
+                选项.selected = true;
+            }
+            页面生成脚本下拉列表.appendChild(选项);
+        }
+    }
+    页面生成脚本容器元素.appendChild(页面生成脚本下拉列表);
+
+    const 页面生成脚本操作容器 = document.createElement("div");
+    const 详细信息按钮 = document.createElement("button");
+    详细信息按钮.type = "button";
+    详细信息按钮.id = "详细信息按钮";
+    详细信息按钮.textContent = "详细信息";
+    详细信息按钮.addEventListener("click", function () {
+        const [脚本模块名, 页面生成脚本名] = 页面生成脚本下拉列表.value.split("/");
+        const 脚本名称 = 导入脚本信息字典?.[脚本模块名]?.名称;
+        const 脚本简介 = 导入脚本信息字典?.[脚本模块名]?.简介;
+        const 页面生成脚本名称 = 导入脚本信息字典?.[脚本模块名]?.页面生成?.[页面生成脚本名]?.名称;
+        const 页面生成脚本简介 = 导入脚本信息字典?.[脚本模块名]?.页面生成?.[页面生成脚本名]?.简介;
+        let 信息 = "";
+        if (页面生成脚本名称) 信息 += `页面生成脚本名称：${页面生成脚本名称}\n`;
+        信息 += `页面生成脚本名：${页面生成脚本名}\n`;
+        if (页面生成脚本简介) 信息 += `页面生成脚本简介：\n${页面生成脚本简介}\n`;
+        信息 += "\n所属脚本信息\n";
+        if (脚本名称) 信息 += `脚本名称：${脚本名称}\n`;
+        信息 += `脚本模块名：${脚本模块名}\n`
+        if (脚本简介) 信息 += `脚本简介：\n${脚本简介}\n`;
+        alert(信息);
+    });
+    页面生成脚本操作容器.appendChild(详细信息按钮);
+    const 设置为当前页面生成脚本按钮 = document.createElement("button");
+    设置为当前页面生成脚本按钮.type = "button";
+    设置为当前页面生成脚本按钮.id = "设置为当前页面生成脚本按钮";
+    设置为当前页面生成脚本按钮.textContent = "设置为当前页面生成脚本";
+    设置为当前页面生成脚本按钮.addEventListener("click", function () {
+        const [脚本模块名, 页面生成脚本名] = 页面生成脚本下拉列表.value.split("/");
+        if (confirm(`确定要设置为当前页面生成脚本吗？\n脚本模块名：${脚本模块名}\n页面生成脚本名：${页面生成脚本名}`)) {
+            小红狐.页面.修改页面生成脚本(页面名, 脚本模块名, 页面生成脚本名)
+                .then(() => {
+                    刷新页面生成脚本();
+                })
+                .catch(error => {})
+        }
+    });
+    设置为当前页面生成脚本按钮.style.display = "none";
+    页面生成脚本操作容器.appendChild(设置为当前页面生成脚本按钮);
+    页面生成脚本容器元素.appendChild(页面生成脚本操作容器);
+
+    页面生成脚本下拉列表.addEventListener("change", function () {
+        const [脚本模块名, 页面生成脚本名] = this.value.split("/");
+        if (!脚本模块名 || !页面生成脚本名) {
+            return;
+        }
+        if (页面生成脚本?.脚本模块名 === 脚本模块名 && 页面生成脚本?.页面生成脚本名 === 页面生成脚本名) {
+            设置为当前页面生成脚本按钮.style.display = "none";
+        } else {
+            设置为当前页面生成脚本按钮.dataset.脚本模块名 = 脚本模块名;
+            设置为当前页面生成脚本按钮.dataset.页面生成脚本名 = 页面生成脚本名;
+            设置为当前页面生成脚本按钮.style.display = "inline-block";
+        }
+    })
 }
 
 function 刷新页面生成脚本() {
