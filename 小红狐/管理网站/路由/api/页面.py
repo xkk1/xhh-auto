@@ -217,7 +217,7 @@ def 开启页面操作脚本路由(page_name, package_name, page_script_name):
         return jsonify(标准化(开启页面操作脚本(页面名=页面名, 脚本模块名=脚本模块名, 页面操作脚本名=页面操作脚本名)))
     except Exception as e:
         日志.警告(f"开启页面操作脚本失败，页面：“{页面名}”，脚本模块名：“{脚本模块名}”，页面操作脚本名“{页面操作脚本名}”: {e}")
-        return jsonify({"错误": "开启页面操作脚本失败", "信息": str(e)}), 504
+        return jsonify({"错误": "开启页面操作脚本失败", "信息": str(e)}), 500
 
 @页面蓝图.route("/关闭页面操作脚本/<page_name>/<package_name>/<page_script_name>", methods=["GET"])
 def 关闭页面操作脚本路由(page_name, package_name, page_script_name):
@@ -228,4 +228,4 @@ def 关闭页面操作脚本路由(page_name, package_name, page_script_name):
         return jsonify(标准化(关闭页面操作脚本(页面名=页面名, 脚本模块名=脚本模块名, 页面操作脚本名=页面操作脚本名)))
     except Exception as e:
         日志.警告(f"关闭页面操作脚本失败，页面：“{页面名}”，脚本模块名：“{脚本模块名}”，页面操作脚本名“{页面操作脚本名}”: {e}")
-        return jsonify({"错误": "关闭页面操作脚本失败", "信息": str(e)}), 504
+        return jsonify({"错误": "关闭页面操作脚本失败", "信息": str(e)}), 500
