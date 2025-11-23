@@ -64,11 +64,17 @@ body {
 #侧边栏容器.收起 #侧边栏 {
     transform: translateX(-20rem)
 }
+#移动切换侧边栏按钮 {
+    display: none;
+}
 /* 移动端样式 */
 @media (max-width: 768px) {
     /* 设置值使 js 可以判断当前是否为移动端 */
     :root {
         --是否移动端: 1;
+    }
+    #移动切换侧边栏按钮 {
+        display: initial;
     }
     /* 侧边栏 */
     #侧边栏容器 {
