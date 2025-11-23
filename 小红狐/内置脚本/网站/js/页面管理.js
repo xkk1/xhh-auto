@@ -27,6 +27,7 @@ async function 更新页面生成脚本() {
 
 function 渲染页面生成脚本() {
     const 页面生成脚本容器元素 = document.querySelector("#页面生成脚本容器");
+    页面生成脚本容器元素.innerHTML = "";
     const 当前页面生成脚本span = document.createElement("span");
     当前页面生成脚本span.textContent = 
         导入脚本信息字典?.[页面生成脚本?.脚本模块名]?.页面生成?.[页面生成脚本?.页面生成脚本名].名称 ||
