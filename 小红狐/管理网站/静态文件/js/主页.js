@@ -1,45 +1,48 @@
 // 检查是否为移动端
-function isMobile() {
-    // 获取根元素的 CSS 变量 --is-mobile 的值
+function 是否移动端() {
+    // 获取根元素的 CSS 变量 --是否移动端 的值
     const rootStyles = getComputedStyle(document.documentElement);
-    const isMobileValue = rootStyles.getPropertyValue('--is-mobile').trim(); // 得到 "0" 或 "1"
+    const 是否移动端值 = rootStyles.getPropertyValue('--是否移动端').trim(); // 得到 "0" 或 "1"
     
-    const isMobile = isMobileValue === '1'; // 转为布尔值
-    return isMobile;
+    const 是否移动端 = 是否移动端值 === '1'; // 转为布尔值
+    return 是否移动端;
 }
 
 // DOM 加载完成时执行
 document.addEventListener('DOMContentLoaded', function () {
     // 侧边栏切换
-    const toggleBtn = document.getElementById('toggle-nav-btn');
-    const navWrap = document.getElementById('nav-wrap');
-    const nav = document.getElementById('nav');
-    let toggleNav = function () {
-        navWrap.classList.toggle('collapsed');  // 切换 collapsed 类
+    const 切换侧边栏按钮 = document.getElementById('切换侧边栏按钮');
+    const 侧边栏容器 = document.getElementById('侧边栏容器');
+    const 侧边栏 = document.getElementById('侧边栏');
+    let 切换侧边栏 = function () {
+        侧边栏容器.classList.toggle('收起');  // 切换 收起 类
         // 可选：根据状态更改按钮文字
-        if (navWrap.classList.contains('collapsed')) {
-            toggleBtn.textContent = '展开侧边栏';
+        if (侧边栏容器.classList.contains('收起')) {
+            切换侧边栏按钮.textContent = '展开侧边栏';
         } else {
-            toggleBtn.textContent = '收起侧边栏';
+            切换侧边栏按钮.textContent = '收起侧边栏';
         }
     };
-    toggleBtn.addEventListener('click', toggleNav);
+    // 暴露 切换侧边栏 函数
+    window.切换侧边栏 = 切换侧边栏;
+    // 绑定点击事件
+    切换侧边栏按钮.addEventListener('click', 切换侧边栏);
     // 侧边栏 wrap 点击收起
-    navWrap.addEventListener('click', function (event) {
-        if (event.target === navWrap) {
-            toggleNav();
+    侧边栏容器.addEventListener('click', function (event) {
+        if (event.target === 侧边栏容器) {
+            切换侧边栏();
         }
     });
 
     // 多页面
-    window.多页面 = 小红狐工具.获取多页面(document.getElementById('content-iframe'));
+    window.多页面 = 小红狐工具.获取多页面(document.getElementById('iframe容器'));
     function 打开页面(页面名) {
         多页面.打开页面(页面名);
-        if (isMobile()) {
-            toggleNav(); // 在移动端时，点击链接后自动收起侧边栏
+        if (是否移动端()) {
+            切换侧边栏(); // 在移动端时，点击链接后自动收起侧边栏
         }
     }
-    小红狐工具.多页面切换(nav, 打开页面);
+    小红狐工具.多页面切换(侧边栏, 打开页面);
 
     // 更新显示所有页面名
     let 页面列表元素 = document.querySelector('ul#页面列表');
