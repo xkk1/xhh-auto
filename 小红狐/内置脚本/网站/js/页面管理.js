@@ -25,15 +25,20 @@ async function 更新页面生成脚本() {
     页面生成脚本 = await 小红狐.页面.获取页面生成脚本(页面名);
 }
 
+function 对话框元素添加关闭按钮(对话框元素) {
+    const 对话框表单 = document.createElement("form");
+    对话框表单.method = "dialog";
+    对话框表单.style.textAlign = "center";
+    const 关闭按钮 = document.createElement('button');
+    关闭按钮.textContent = "关闭";
+    对话框表单.appendChild(关闭按钮);
+    对话框元素.appendChild(对话框表单);
+}
+
+
 function 渲染页面生成脚本() {
     const 页面生成脚本容器元素 = document.querySelector("#页面生成脚本容器");
-    页面生成脚本容器元素.innerHTML = "";
-
-    // const 当前页面生成脚本span = document.createElement("span");
-    // 当前页面生成脚本span.textContent = 
-    //     导入脚本信息字典?.[页面生成脚本?.脚本模块名]?.页面生成?.[页面生成脚本?.页面生成脚本名].名称 ||
-    //     页面生成脚本?.页面生成脚本名 || "获取页面生成脚本失败！";
-    // 页面生成脚本容器元素.appendChild(当前页面生成脚本span);
+    页面生成脚本容器元素.replaceChildren();
 
     const 页面生成脚本下拉列表 = document.createElement("select");
     页面生成脚本下拉列表.id = "页面生成脚本下拉列表";
@@ -63,20 +68,56 @@ function 渲染页面生成脚本() {
     详细信息按钮.id = "详细信息按钮";
     详细信息按钮.textContent = "详细信息";
     详细信息按钮.addEventListener("click", function () {
+        const 对话框元素 = document.querySelector("#对话框");
+        对话框元素.replaceChildren();
         const [脚本模块名, 页面生成脚本名] = 页面生成脚本下拉列表.value.split("/");
         const 脚本名称 = 导入脚本信息字典?.[脚本模块名]?.名称;
         const 脚本简介 = 导入脚本信息字典?.[脚本模块名]?.简介;
         const 页面生成脚本名称 = 导入脚本信息字典?.[脚本模块名]?.页面生成?.[页面生成脚本名]?.名称;
         const 页面生成脚本简介 = 导入脚本信息字典?.[脚本模块名]?.页面生成?.[页面生成脚本名]?.简介;
+        const 信息元素 = document.createElement("p");
+        信息元素.style.whiteSpace = "pre-wrap";
         let 信息 = "";
         if (页面生成脚本名称) 信息 += `页面生成脚本名称：${页面生成脚本名称}\n`;
         信息 += `页面生成脚本名：${页面生成脚本名}\n`;
         if (页面生成脚本简介) 信息 += `页面生成脚本简介：\n${页面生成脚本简介}\n`;
-        信息 += "\n所属脚本信息\n";
+        信息元素.append(信息);
+        const 标签页容器 = document.createElement("span")
+        信息元素.appendChild(标签页容器);
+        信息 = "\n所属脚本信息\n";
         if (脚本名称) 信息 += `脚本名称：${脚本名称}\n`;
         信息 += `脚本模块名：${脚本模块名}\n`
         if (脚本简介) 信息 += `脚本简介：\n${脚本简介}\n`;
-        alert(信息);
+        信息元素.append(信息);
+        对话框元素.appendChild(信息元素);
+        对话框元素添加关闭按钮(对话框元素);
+        对话框元素.showModal();
+        小红狐.页面.获取页面生成配置页面(页面名, 脚本模块名, 页面生成脚本名)
+            .then((页面生成配置页面) => {
+                if (Object.entries(页面生成配置页面).length > 0) {
+                    标签页容器.append("页面生成配置页面：");
+                    标签页容器.append(document.createElement("br"));
+                    for (const [URL, 标题] of Object.entries(页面生成配置页面)) {
+                        const a = document.createElement("a");
+                        a.href = URL;
+                        a.textContent = 标题;
+                        a.target = "_blank";
+                        标签页容器.appendChild(a);
+                        标签页容器.appendChild(document.createElement("br"));
+                    }
+                    // 事件委托重写 a 标签的点击事件
+                    if (window !== parent && parent.添加标签页) {
+                        标签页容器.addEventListener("click", function (e) {
+                            if (e.target.tagName === "A") {
+                                e.preventDefault();
+                                const 标题 = e.target.textContent;
+                                const URL = e.target.getAttribute("href");
+                                parent.添加标签页(URL, 标题, true);
+                            }
+                        })
+                    }
+                }
+            });
     });
     页面生成脚本操作容器.appendChild(详细信息按钮);
     const 设置为当前页面生成脚本按钮 = document.createElement("button");
@@ -88,9 +129,26 @@ function 渲染页面生成脚本() {
         if (confirm(`确定要设置为当前页面生成脚本吗？\n脚本模块名：${脚本模块名}\n页面生成脚本名：${页面生成脚本名}`)) {
             小红狐.页面.修改页面生成脚本(页面名, 脚本模块名, 页面生成脚本名)
                 .then(() => {
-                    刷新页面生成脚本();
+                    if (window !== parent && parent.删除标签页) {
+                        小红狐.页面.获取页面生成配置页面(页面名, 页面生成脚本?.脚本模块名, 页面生成脚本?.页面生成脚本名)
+                            .then(function (页面生成配置页面) {
+                                for (const [URL, 标题] of Object.entries(页面生成配置页面)) {
+                                    parent.删除标签页(URL);
+                                }
+                            })
+                            .catch(function (错误) {
+                                console.error(错误);
+                            })
+                            .finally(() => {
+                                刷新页面生成脚本();
+                            });
+                    } else {
+                        刷新页面生成脚本();
+                    }
                 })
-                .catch(error => {})
+                .catch(错误 => {
+                    console.error(错误);
+                })
         }
     });
     设置为当前页面生成脚本按钮.style.display = "none";
@@ -109,7 +167,20 @@ function 渲染页面生成脚本() {
             设置为当前页面生成脚本按钮.dataset.页面生成脚本名 = 页面生成脚本名;
             设置为当前页面生成脚本按钮.style.display = "inline-block";
         }
-    })
+    });
+
+    // 添加页面生成开启脚本的标签页
+    if (window !== parent && parent.添加标签页) {
+        小红狐.页面.获取页面生成配置页面(页面名, 页面生成脚本?.脚本模块名, 页面生成脚本?.页面生成脚本名)
+            .then(function (页面生成配置页面) {
+                for (const [URL, 标题] of Object.entries(页面生成配置页面)) {
+                    parent.添加标签页(URL, 标题);
+                }
+            })
+            .catch(function (错误) {
+                console.error(错误);
+            });
+    }
 }
 
 function 刷新页面生成脚本() {
@@ -136,7 +207,7 @@ function 刷新页面生成脚本() {
 
 function 渲染页面操作脚本表格() {
     let 页面操作脚本表格元素 = document.querySelector("#页面操作脚本表格");
-    页面操作脚本表格元素.innerHTML = "";
+    页面操作脚本表格元素.replaceChildren();
     // 创建表头元素
     表头 = document.createElement("thead");
     ["页面操作脚本", "状态 / 自动开启"].forEach(function (标题) {
@@ -208,6 +279,8 @@ function 渲染页面操作脚本表格() {
                                         for (const [URL, 标题] of Object.entries(页面操作配置页面)) {
                                             parent.删除标签页(URL);
                                         }
+                                    })
+                                    .finally(() => {
                                         刷新页面操作脚本();
                                     });
                             } else {
@@ -216,7 +289,7 @@ function 渲染页面操作脚本表格() {
                         })
                         .catch((错误) => {
                             console.error(错误);
-                            alert("关闭失败\n信息：" + 错误.信息);
+                            alert("关闭失败\n信息：" + 错误.信息 || 错误);
                             页面操作脚本状态span.classList.remove("加载中");
                         });
                 } else {
@@ -302,7 +375,7 @@ function 渲染页面操作脚本表格() {
                 小红狐.页面.获取页面操作配置页面(页面名, 脚本模块名, 页面操作脚本名)
                     .then(function (页面操作配置页面) {
                         for (const [URL, 标题] of Object.entries(页面操作配置页面)) {
-                            parent.添加标签页(标题, URL);
+                            parent.添加标签页(URL, 标题);
                         }
                     })
                     .catch(function (错误) {

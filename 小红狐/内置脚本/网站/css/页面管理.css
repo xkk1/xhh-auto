@@ -78,3 +78,9 @@
     content: " 加载中…";
 }
 
+#对话框 {
+    padding: 0.4rem;
+    border-width: 0.1rem;
+    border-radius: 0.4rem;
+}
+

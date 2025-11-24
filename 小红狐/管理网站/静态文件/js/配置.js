@@ -43,13 +43,12 @@ function 页面配置标签页() {
         });
 }
 
-function 添加标签页(标题, url) {
+function 添加标签页(url, 标题, 打开页面=false) {
     let 标签页元素 = document.querySelector("ul#标签页");
     if (!标签页元素) return false;
     let 旧a = 标签页元素.querySelector("a[href='" + url + "']");
     if (旧a) {
         旧a.textContent = 标题;
-        return true;
     } else {
         let a = document.createElement("a");
         a.href = url;
@@ -60,8 +59,11 @@ function 添加标签页(标题, url) {
         li.appendChild(a);
         li.role = "none";
         标签页元素.appendChild(li);
-        return true;
     }
+    if (打开页面) {
+        标签页元素.querySelector("a[href='" + url + "']").click();
+    }
+    return true;
 }
 
 function 删除标签页(url) {
@@ -152,7 +154,7 @@ function 初始化拖拽标签页() {
         let 标题 = window.prompt(url + "\n请输入标签页标题：");
         if (标题) {
             // 添加标签页
-            添加标签页(标题, url);
+            添加标签页(url, 标题);
         }
     };
 }
