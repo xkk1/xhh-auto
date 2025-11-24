@@ -238,21 +238,57 @@ function 渲染页面操作脚本表格() {
             td.textContent = 脚本名称;
             td.classList.add("页面操作脚本");
             td.addEventListener("click", function () {
+                const 对话框元素 = document.querySelector("#对话框");
+                对话框元素.replaceChildren();
                 const 脚本模块名 = this.parentElement.dataset.脚本模块名;
                 const 页面操作脚本名 = this.parentElement.dataset.页面操作脚本名;
                 const 脚本名称 = 导入脚本信息字典?.[脚本模块名]?.名称;
                 const 脚本简介 = 导入脚本信息字典?.[脚本模块名]?.简介;
                 const 页面操作脚本名称 = 导入脚本信息字典?.[脚本模块名]?.页面操作?.[页面操作脚本名]?.名称;
                 const 页面操作脚本简介 = 导入脚本信息字典?.[脚本模块名]?.页面操作?.[页面操作脚本名]?.简介;
+                const 信息元素 = document.createElement("p");
+                信息元素.style.whiteSpace = "pre-wrap";
                 let 信息 = "";
                 if (页面操作脚本名称) 信息 += `页面操作脚本名称：${页面操作脚本名称}\n`;
                 信息 += `页面操作脚本名：${页面操作脚本名}\n`;
                 if (页面操作脚本简介) 信息 += `页面操作脚本简介：\n${页面操作脚本简介}\n`;
-                信息 += "\n所属脚本信息\n";
+                信息元素.append(信息);
+                const 标签页容器 = document.createElement("span")
+                信息元素.appendChild(标签页容器);
+                信息 = "\n所属脚本信息\n";
                 if (脚本名称) 信息 += `脚本名称：${脚本名称}\n`;
                 信息 += `脚本模块名：${脚本模块名}\n`
                 if (脚本简介) 信息 += `脚本简介：\n${脚本简介}\n`;
-                alert(信息);
+                信息元素.append(信息);
+                对话框元素.appendChild(信息元素);
+                对话框元素添加关闭按钮(对话框元素);
+                对话框元素.showModal();
+                小红狐.页面.获取页面操作配置页面(页面名, 脚本模块名, 页面操作脚本名)
+                    .then((页面操作配置页面) => {
+                        if (Object.entries(页面操作配置页面).length > 0) {
+                            标签页容器.append("页面操作配置页面：");
+                            标签页容器.append(document.createElement("br"));
+                            for (const [URL, 标题] of Object.entries(页面操作配置页面)) {
+                                const a = document.createElement("a");
+                                a.href = URL;
+                                a.textContent = 标题;
+                                a.target = "_blank";
+                                标签页容器.appendChild(a);
+                                标签页容器.appendChild(document.createElement("br"));
+                            }
+                            // 事件委托重写 a 标签的点击事件
+                            if (window !== parent && parent.添加标签页) {
+                                标签页容器.addEventListener("click", function (e) {
+                                    if (e.target.tagName === "A") {
+                                        e.preventDefault();
+                                        const 标题 = e.target.textContent;
+                                        const URL = e.target.getAttribute("href");
+                                        parent.添加标签页(URL, 标题, true);
+                                    }
+                                })
+                            }
+                        }
+                    });
             });
             tr.appendChild(td);
             td = document.createElement("td");
