@@ -127,6 +127,7 @@ function 渲染页面生成脚本() {
     设置为当前页面生成脚本按钮.addEventListener("click", function () {
         const [脚本模块名, 页面生成脚本名] = 页面生成脚本下拉列表.value.split("/");
         if (confirm(`确定要设置为当前页面生成脚本吗？\n脚本模块名：${脚本模块名}\n页面生成脚本名：${页面生成脚本名}`)) {
+            设置为当前页面生成脚本按钮.classList.add("加载中");
             小红狐.页面.修改页面生成脚本(页面名, 脚本模块名, 页面生成脚本名)
                 .then(() => {
                     if (window !== parent && parent.删除标签页) {
@@ -148,6 +149,8 @@ function 渲染页面生成脚本() {
                 })
                 .catch(错误 => {
                     console.error(错误);
+                    alert("修改页面生成脚本失败，错误信息：\n" + 错误);
+                    设置为当前页面生成脚本按钮.classList.remove("加载中");
                 })
         }
     });
