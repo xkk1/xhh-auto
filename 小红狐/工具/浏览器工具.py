@@ -1,5 +1,5 @@
 import pathlib
-from typing import Literal
+from typing import Any, Literal
 
 from playwright.async_api import Playwright, Browser, BrowserType, BrowserContext, Page, Mouse, Keyboard
 from playwright.async_api import async_playwright
@@ -11,8 +11,10 @@ async def 获取Playwright异步上下文管理器() -> Playwright:
 async def 获取Playwright异步浏览器(
         异步上下文管理器: Playwright,
         浏览器类型: Literal['chromium', 'chromium_headless_shell', 'firefox', 'webkit'] = 'chromium',
-        *args, **kwargs
+        args: tuple = (), kwargs: dict[str, Any] | None = None
 ) -> Browser:
+    if kwargs is None:
+            kwargs = {}
     match 浏览器类型:
         case 'chromium':
             浏览器类型 = 异步上下文管理器.chromium
@@ -31,13 +33,17 @@ async def 获取Playwright异步浏览器(
     浏览器: BrowserType = await 浏览器类型.launch(*args, **kwargs)
     return 浏览器
 
-async def 获取Playwright异步浏览器上下文(异步浏览器: Browser, *args, **kwargs) -> BrowserContext:
+async def 获取Playwright异步浏览器上下文(异步浏览器: Browser, args: tuple = (), kwargs: dict[str, Any] | None = None) -> BrowserContext:
+    if kwargs is None:
+            kwargs = {}
     浏览器上下文 = await 异步浏览器.new_context(*args, **kwargs)
     return 浏览器上下文
 
-async def 获取Playwright异步页面(异步浏览器: Browser, *args, **kwargs) -> Page:
-    页面 = await 异步浏览器.new_page(*args, **kwargs)
-    return 页面
+async def 获取Playwright异步页面(异步浏览器: Browser, args: tuple = (), kwargs: dict[str, Any] | None = None) -> Page:
+    if kwargs is None:
+            kwargs = {}
+    异步页面 = await 异步浏览器.new_page(*args, **kwargs)
+    return 异步页面
 
 
 class 页面类:
@@ -56,7 +62,7 @@ class 页面类:
         """
         return self.page.bring_to_front()
     
-    def 关闭(self, 原因: str | None=None, 卸载前执行: bool | None=None) -> None:
+    def 关闭(self, 原因: str | None = None, 卸载前执行: bool | None = None) -> None:
         """关闭页面
 
         关闭当前页面
@@ -97,7 +103,7 @@ class 页面类:
     def 截图(
             self,
             区域: dict[str, float] | None = None,
-            缩放: Literal['css', '设备'] | None=None,
+            缩放: Literal['css', '设备'] | None = None,
             *args, **kwargs
     ) -> bytes:
         """截图
@@ -149,7 +155,7 @@ class 页面类:
         """
         return self.page.set_viewport_size({"width": 宽度, "height": 高度})
     
-    def 添加初始化脚本(self, 路径: str | pathlib.Path | None=None, 脚本: str | None=None) -> None:
+    def 添加初始化脚本(self, 路径: str | pathlib.Path | None = None, 脚本: str | None = None) -> None:
         """添加初始化脚本
 
         添加初始化脚本，在每个页面的每个导航中都会执行。
@@ -345,4 +351,3 @@ class 键盘类:
             >>> await page.keyboard.type("World", delay=100)
         """
         return self.keyboard.type(文本, delay=延迟)
-
