@@ -39,7 +39,7 @@ async def 获取Playwright异步浏览器上下文(异步浏览器: Browser, arg
     浏览器上下文 = await 异步浏览器.new_context(*args, **kwargs)
     return 浏览器上下文
 
-async def 获取Playwright异步页面(异步浏览器: Browser, args: tuple = (), kwargs: dict[str, Any] | None = None) -> Page:
+async def 获取Playwright异步页面(异步浏览器: Browser | BrowserContext, args: tuple = (), kwargs: dict[str, Any] | None = None) -> Page:
     if kwargs is None:
             kwargs = {}
     异步页面 = await 异步浏览器.new_page(*args, **kwargs)
