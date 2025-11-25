@@ -26,12 +26,9 @@ def 新建账号路由():
     json = request.get_json(silent=True)
     if json is None:
         return jsonify({"错误": "无效的 JSON 格式，请检查请求体"}), 400
-    # 判断 json 是否为字符串
-    if isinstance(json, str):
-        账号名: str = json
-    else:
-        return jsonify({"错误": "无效的 JSON 格式，请检查请求体"}), 400
-    账号名 = json
+    if not isinstance(json, str):
+        return jsonify({"错误": "必须是字符串"}), 400
+    账号名: str = json
     try:
         新建账号(账号名)
         return jsonify({"信息": "账号新建成功"})
