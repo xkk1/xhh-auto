@@ -24,7 +24,8 @@ def 检测端口占用(端口: int) -> bool:
         try:
             s.bind(("0.0.0.0", 端口))  # 或者使用 "127.0.0.1" 仅本地
             return False
-        except OSError:
+        except OSError as e:
+            日志.信息(f"检测端口 {端口} 占用，错误：{e}")
             return True  # 端口已被占用
 
 async def 浏览器打开管理网站(端口: int):
@@ -50,13 +51,12 @@ def 主函数():
     网站.register_blueprint(api蓝图)
     
     if 检测端口占用(端口):
-        日志.严重(f"❌端口 {端口} 已被占用，请选择其他端口")
-        raise Exception(f"端口 {端口} 已被占用")
+        raise Exception(f"❌端口 {端口} 已被占用，请选择其他端口")
     日志.信息(f"🔨管理网站启动中，端口：{端口}，调试：{调试}")
     if 自动打开管理网站:
         异步任务管理器.启动任务(任务名称="浏览器打开管理网站", 异步函数=浏览器打开管理网站, kwargs={"端口": 端口})
     if 调试:
-        # 不启用 debug=True ，启用会导致浏览器重开多开
-        网站.run(host="0.0.0.0", port=端口)
+        # 不启用 use_reloader=True，重载会导致浏览器重开多开
+        网站.run(host="0.0.0.0", port=端口, debug=True, use_reloader=False)
     else:
         serve(网站, host="0.0.0.0", port=端口)
