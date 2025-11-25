@@ -123,6 +123,7 @@ function 渲染页面生成脚本() {
     const 设置为当前页面生成脚本按钮 = document.createElement("button");
     设置为当前页面生成脚本按钮.type = "button";
     设置为当前页面生成脚本按钮.id = "设置为当前页面生成脚本按钮";
+    设置为当前页面生成脚本按钮.classList.add("刷新按钮");
     设置为当前页面生成脚本按钮.textContent = "设置为当前页面生成脚本";
     设置为当前页面生成脚本按钮.addEventListener("click", function () {
         const [脚本模块名, 页面生成脚本名] = 页面生成脚本下拉列表.value.split("/");
