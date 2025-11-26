@@ -4,7 +4,7 @@ from flask import Blueprint, jsonify, request
 from .... import __package__ as 小红狐模块名
 from ....工具.日志工具 import 获取日志记录器
 from ....核心 import 页面
-from ....核心.页面 import 修改标签页URL排序, 修改页面生成脚本, 修改页面配置名, 关闭页面操作脚本, 删除页面操作自动开启脚本, 开启页面操作脚本, 添加页面操作自动开启脚本, 获取标签页URL排序, 获取页面操作开启脚本, 获取页面操作自动开启脚本, 获取页面生成脚本, 获取页面配置名
+from ....核心.页面 import 修改标签页URL排序, 修改页面生成脚本, 修改页面账号名, 修改页面配置名, 关闭页面操作脚本, 删除页面操作自动开启脚本, 开启页面操作脚本, 添加页面操作自动开启脚本, 获取标签页URL排序, 获取页面操作开启脚本, 获取页面操作自动开启脚本, 获取页面生成脚本, 获取页面账号名, 获取页面配置名
 from ....核心.脚本 import 小红狐脚本信息, 获取导入脚本信息字典, 获取脚本
 from ....小红狐脚本 import 默认启用页面生成脚本名
 from .脚本 import 标准化
@@ -240,3 +240,37 @@ def 关闭页面操作脚本路由(page_name, package_name, page_script_name):
     except Exception as e:
         日志.警告(f"关闭页面操作脚本失败，页面：“{页面名}”，脚本模块名：“{脚本模块名}”，页面操作脚本名“{页面操作脚本名}”: {e}")
         return jsonify({"错误": "关闭页面操作脚本失败", "信息": str(e)}), 500
+
+@页面蓝图.route("/账号名/<page_name>", methods=["GET"])
+def 获取页面账号名路由(page_name):
+    页面名: str = page_name
+    账号名: str = 获取页面账号名(页面名=页面名)
+    return jsonify(账号名)
+
+# 修改
+@页面蓝图.route("/账号名/<page_name>", methods=["PUT"])
+def 修改页面账号名路由(page_name):
+    页面名: str = page_name
+    if not request.is_json:
+        return jsonify({"错误": "请求头 Content-Type 必须是 application/json"}), 400
+    json = request.get_json(silent=True)
+    if json is None:
+        return jsonify({"错误": "无效的 JSON 格式，请检查请求体"}), 400
+    if not isinstance(json, str):
+        return jsonify({"错误": "必须是字符串"}), 400
+    账号名: str = json
+    修改页面账号名(页面名=页面名, 账号名=账号名)
+    return jsonify({"状态": "成功"})
+
+@页面蓝图.route("/新建页面/<page_name>", methods=["GET"])
+def 新建页面路由(page_name):
+    页面名: str = page_name
+    from traceback import format_exc #用于精准的获取错误异常
+    try:
+        页面生成脚本: dict[str, str] = 获取页面生成脚本(页面名=页面名)
+        脚本模块: 小红狐脚本信息 = 获取脚本(模块名=页面生成脚本["脚本模块名"])
+        脚本模块["页面生成"][页面生成脚本["页面生成脚本名"]]["新建页面"](页面名=页面名)
+        return jsonify({"状态": "成功"})
+    except Exception as e:
+        日志.警告(f"打开页面失败，页面名：{页面名}: {format_exc()}")
+        return jsonify({"错误": "打开页面失败", "信息": format_exc()}), 500
