@@ -56,7 +56,7 @@ def 复制账号(账号名: str, 新账号名: str):
 
 def 获取账号浏览器存储状态文件(账号名: str) -> pathlib.Path:
     if 账号名 not in 获取全部账号名():
-        raise FileNotFoundError(f"账号 {账号名} 不存在")
+        新建账号(账号名=账号名)
     浏览器存储状态文件: pathlib.Path = 获取账号目录(账号名=账号名, 脚本模块名=模块名) / 浏览器存储状态文件名
     if not 浏览器存储状态文件.exists():
         shutil.copy(默认浏览器存储状态文件, 浏览器存储状态文件)
