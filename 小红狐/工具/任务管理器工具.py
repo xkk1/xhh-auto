@@ -17,15 +17,14 @@ class 异步任务管理器类:
         self.任务结果字典: Dict[str, Any] = {}
 
         # asyncio 事件循环
-        self.事件循环 = self.获取或创建事件循环(事件循环, 使用全局事件循环)
+        self.事件循环 = self._获取或创建事件循环(事件循环, 使用全局事件循环)
+        print(self.事件循环)
     
     def __del__(self):
         # 停止并删除所有任务
         self.停止所有任务(删除任务=True)
-        # 停止事件循环
-        self.事件循环.close()
 
-    def 获取或创建事件循环(self, 事件循环: asyncio.AbstractEventLoop, 使用全局事件循环: bool) -> asyncio.AbstractEventLoop:
+    def _获取或创建事件循环(self, 事件循环: asyncio.AbstractEventLoop, 使用全局事件循环: bool) -> asyncio.AbstractEventLoop:
         if 事件循环:
             return 事件循环
         
@@ -59,6 +58,9 @@ class 异步任务管理器类:
             _事件循环线程 = threading.Thread(target=启动事件循环, args=(事件循环,), daemon=True)
             _事件循环线程.start()
             return 事件循环
+
+    def 获取事件循环(self) -> asyncio.AbstractEventLoop:
+        return self.事件循环
 
     def 启动任务(
             self,
@@ -218,6 +220,7 @@ class 异步任务管理器类:
 
 
 异步任务管理器 = 异步任务管理器类()
+异步任务管理器类()
 
 def main():
     异步任务管理器 = 异步任务管理器类()
