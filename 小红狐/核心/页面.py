@@ -160,8 +160,8 @@ def 获取页面(页面名: str = "默认页面六个字") -> Page | None:
     页面: Page | None = 脚本模块["页面生成"][页面生成脚本["页面生成脚本名"]]["获取页面"](页面名=页面名)
     return 页面
 
-def 获取页面状态(页面名: str = "默认页面六个字") -> bool:
+def 获取页面状态(页面名: str = "默认页面六个字") -> bool | None:
     页面: Page | None = 获取页面(页面名=页面名)
     if not 页面:
-        return False
+        return None
     return not 页面.is_closed()
