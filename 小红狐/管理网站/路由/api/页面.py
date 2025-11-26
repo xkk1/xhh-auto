@@ -1,10 +1,12 @@
 from typing import Any, Callable
 from flask import Blueprint, jsonify, request
 
+from playwright.async_api import Page
+
 from .... import __package__ as 小红狐模块名
 from ....工具.日志工具 import 获取日志记录器
 from ....核心 import 页面
-from ....核心.页面 import 修改标签页URL排序, 修改页面生成脚本, 修改页面账号名, 修改页面配置名, 关闭页面操作脚本, 删除页面操作自动开启脚本, 开启页面操作脚本, 添加页面操作自动开启脚本, 获取标签页URL排序, 获取页面操作开启脚本, 获取页面操作自动开启脚本, 获取页面生成脚本, 获取页面账号名, 获取页面配置名
+from ....核心.页面 import 修改标签页URL排序, 修改页面生成脚本, 修改页面账号名, 修改页面配置名, 新建页面, 关闭页面, 获取页面, 关闭页面操作脚本, 删除页面操作自动开启脚本, 开启页面操作脚本, 添加页面操作自动开启脚本, 获取标签页URL排序, 获取页面操作开启脚本, 获取页面操作自动开启脚本, 获取页面生成脚本, 获取页面账号名, 获取页面配置名
 from ....核心.脚本 import 小红狐脚本信息, 获取导入脚本信息字典, 获取脚本
 from ....小红狐脚本 import 默认启用页面生成脚本名
 from .脚本 import 标准化
@@ -24,7 +26,7 @@ def 获取所有页面():
 
 # 新建页面 post
 @页面蓝图.route("/页面名", methods=["POST"])
-def 新建页面():
+def 新建页面名路由():
     if not request.is_json:
         return jsonify({"错误": "请求头 Content-Type 必须是 application/json"}), 400
     json = request.get_json(silent=True)
@@ -266,9 +268,7 @@ def 修改页面账号名路由(page_name):
 def 新建页面路由(page_name):
     页面名: str = page_name
     try:
-        页面生成脚本: dict[str, str] = 获取页面生成脚本(页面名=页面名)
-        脚本模块: 小红狐脚本信息 = 获取脚本(模块名=页面生成脚本["脚本模块名"])
-        脚本模块["页面生成"][页面生成脚本["页面生成脚本名"]]["新建页面"](页面名=页面名)
+        新建页面(页面名=页面名)
         return jsonify({"状态": "成功"})
     except Exception as e:
         日志.警告(f"打开页面失败，页面名：{页面名}: {e}")
@@ -279,9 +279,7 @@ def 新建页面路由(page_name):
 def 关闭页面路由(page_name):
     页面名: str = page_name
     try:
-        页面生成脚本: dict[str, str] = 获取页面生成脚本(页面名=页面名)
-        脚本模块: 小红狐脚本信息 = 获取脚本(模块名=页面生成脚本["脚本模块名"])
-        脚本模块["页面生成"][页面生成脚本["页面生成脚本名"]]["关闭页面"](页面名=页面名)
+        关闭页面(页面名=页面名)
         return jsonify({"状态": "成功"})
     except Exception as e:
         日志.警告(f"关闭页面失败，页面名：{页面名}: {e}")
@@ -292,10 +290,7 @@ def 关闭页面路由(page_name):
 def 获取页面路由(page_name):
     页面名: str = page_name
     try:
-        页面生成脚本: dict[str, str] = 获取页面生成脚本(页面名=页面名)
-        脚本模块: 小红狐脚本信息 = 获取脚本(模块名=页面生成脚本["脚本模块名"])
-        页面 = 脚本模块["页面生成"][页面生成脚本["页面生成脚本名"]]["获取页面"](页面名=页面名)
-        return jsonify(标准化(页面))
+        return jsonify(标准化(获取页面(页面名=页面名)))
     except Exception as e:
         日志.警告(f"获取页面失败，页面名：{页面名}: {e}")
         return jsonify({"错误": "获取页面失败", "信息": e}), 500
