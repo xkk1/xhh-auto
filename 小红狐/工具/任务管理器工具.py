@@ -1,7 +1,7 @@
 import asyncio
 import time
 import traceback
-from typing import Any, Dict, Callable, Optional
+from typing import Any, Coroutine, Dict, Callable, Optional
 import threading
 
 from .日志工具 import 获取日志记录器
@@ -188,6 +188,13 @@ class 异步任务管理器类:
             日志.警告(f"任务 '{任务名称}' 不存在")
             return None
         return not self.任务字典.get(任务名称).done()
+
+    def 运行(self, 协程对象: Coroutine):
+        # return self.事件循环.run_until_complete(协程对象)
+        # 在运行中的事件循环中安全地运行协程并获取结果
+        future = asyncio.run_coroutine_threadsafe(协程对象, self.事件循环)
+        return future.result()  # 阻塞当前线程，直到协程完成并返回结果
+
 
 异步任务管理器 = 异步任务管理器类()
 
