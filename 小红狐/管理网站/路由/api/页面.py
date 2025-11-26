@@ -265,12 +265,24 @@ def 修改页面账号名路由(page_name):
 @页面蓝图.route("/新建页面/<page_name>", methods=["GET"])
 def 新建页面路由(page_name):
     页面名: str = page_name
-    from traceback import format_exc #用于精准的获取错误异常
     try:
         页面生成脚本: dict[str, str] = 获取页面生成脚本(页面名=页面名)
         脚本模块: 小红狐脚本信息 = 获取脚本(模块名=页面生成脚本["脚本模块名"])
         脚本模块["页面生成"][页面生成脚本["页面生成脚本名"]]["新建页面"](页面名=页面名)
         return jsonify({"状态": "成功"})
     except Exception as e:
-        日志.警告(f"打开页面失败，页面名：{页面名}: {format_exc()}")
-        return jsonify({"错误": "打开页面失败", "信息": format_exc()}), 500
+        日志.警告(f"打开页面失败，页面名：{页面名}: {e}")
+        return jsonify({"错误": "打开页面失败", "信息": e}), 500
+
+# 关闭页面
+@页面蓝图.route("/关闭页面/<page_name>", methods=["GET"])
+def 关闭页面路由(page_name):
+    页面名: str = page_name
+    try:
+        页面生成脚本: dict[str, str] = 获取页面生成脚本(页面名=页面名)
+        脚本模块: 小红狐脚本信息 = 获取脚本(模块名=页面生成脚本["脚本模块名"])
+        脚本模块["页面生成"][页面生成脚本["页面生成脚本名"]]["关闭页面"](页面名=页面名)
+        return jsonify({"状态": "成功"})
+    except Exception as e:
+        日志.警告(f"关闭页面失败，页面名：{页面名}: {e}")
+        return jsonify({"错误": "关闭页面失败", "信息": e}), 500
