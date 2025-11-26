@@ -14,6 +14,7 @@ class 异步任务管理器类:
     def __init__(self, 事件循环: asyncio.AbstractEventLoop = None, 使用全局事件循环 = True):
         # 任务字典：任务名称 → asyncio.Task
         self.任务字典: Dict[str, asyncio.Task] = {}
+        self.任务结果字典: Dict[str, Any] = {}
 
         # asyncio 事件循环
         self.事件循环 = self.获取或创建事件循环(事件循环, 使用全局事件循环)
@@ -61,8 +62,7 @@ class 异步任务管理器类:
 
     def 启动任务(
             self,
-            任务名称: str, 异步函数: Callable[..., None],
-            args: tuple = (), kwargs: dict[str, Any] | None = None,
+            任务名称: str, 协程: Coroutine,
             超时: float | None = None
         ) -> bool:
         """
@@ -72,13 +72,11 @@ class 异步任务管理器类:
         if 任务名称 in self.任务字典:
             日志.警告(f"任务 '{任务名称}' 已经存在")
             return False
-        
-        if kwargs is None:
-            kwargs = {}
+    
         # 包装成一个可以被 asyncio 运行的协程
-        async def 包装后的任务(*args, **kwargs):
+        async def 包装后的任务():
             try:
-                await 异步函数(*args, **kwargs)
+                self.任务结果字典[任务名称] = await 协程
             except asyncio.CancelledError:
                 日志.信息(f"任务 '{任务名称}' 已被用户停止")
             except Exception as 错误:
@@ -89,7 +87,7 @@ class 异步任务管理器类:
         已启动 = threading.Event()
 
         def 安排任务(任务名称):
-            任务对象 = self.事件循环.create_task(包装后的任务(*args, **kwargs), name=任务名称)
+            任务对象 = self.事件循环.create_task(包装后的任务(), name=任务名称)
             self.任务字典[任务名称] = 任务对象
             日志.信息(f"已启动任务：'{任务名称}'")
             已启动.set()
@@ -103,6 +101,20 @@ class 异步任务管理器类:
             return False
 
         return True
+    
+    def 启动异步函数任务(
+            self,
+            任务名称: str, 异步函数: Callable[..., None],
+            args: tuple = (), kwargs: dict[str, Any] | None = None,
+            超时: float | None = None
+        ) -> bool:
+        """
+        启动一个异步任务，并确认已成功添加到事件循环。
+        """
+        if kwargs is None:
+            kwargs = {}
+        协程: Coroutine = 异步函数(*args, **kwargs)
+        return self.启动任务(任务名称, 协程, 超时)
 
     def 停止任务(self, 任务名称: str, 超时: float | None = None, 删除任务: bool = False) -> bool:
         """
@@ -132,6 +144,7 @@ class 异步任务管理器类:
         
         if 删除任务:
             del self.任务字典[任务名称]
+            self.任务结果字典.pop(任务名称, None)
 
         return True
     
@@ -188,11 +201,19 @@ class 异步任务管理器类:
             日志.警告(f"任务 '{任务名称}' 不存在")
             return None
         return not self.任务字典.get(任务名称).done()
+    
+    def 获取任务结果(self, 任务名称: str, 默认: Any = None) -> Any:
+        """
+        获取一个任务字典里任务的结果
+        """
+        if 任务名称 not in self.任务结果字典:
+            日志.警告(f"任务 '{任务名称}' 不存在")
+            return 默认
+        return self.任务结果字典.get(任务名称, 默认)
 
-    def 运行(self, 协程对象: Coroutine):
-        # return self.事件循环.run_until_complete(协程对象)
+    def 运行(self, 协程: Coroutine):
         # 在运行中的事件循环中安全地运行协程并获取结果
-        future = asyncio.run_coroutine_threadsafe(协程对象, self.事件循环)
+        future = asyncio.run_coroutine_threadsafe(协程, self.事件循环)
         return future.result()  # 阻塞当前线程，直到协程完成并返回结果
 
 
@@ -208,9 +229,9 @@ def main():
             日志.信息(f"任务1 正在运行 {i = }")
             await asyncio.sleep(1)
 
-    if 异步任务管理器.启动任务("任务1", foo):
+    if 异步任务管理器.启动任务("任务1", foo()):
         日志.信息("任务1 已确认启动成功")
-    if 异步任务管理器.启动任务("任务2", foo, 超时=0.001):
+    if 异步任务管理器.启动异步函数任务("任务2", foo, 超时=0.001):
         日志.信息("任务2 已确认启动成功")
 
     time.sleep(3)
