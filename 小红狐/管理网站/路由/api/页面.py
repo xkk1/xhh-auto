@@ -286,3 +286,16 @@ def 关闭页面路由(page_name):
     except Exception as e:
         日志.警告(f"关闭页面失败，页面名：{页面名}: {e}")
         return jsonify({"错误": "关闭页面失败", "信息": e}), 500
+
+# 获取页面
+@页面蓝图.route("/获取页面/<page_name>", methods=["GET"])
+def 获取页面路由(page_name):
+    页面名: str = page_name
+    try:
+        页面生成脚本: dict[str, str] = 获取页面生成脚本(页面名=页面名)
+        脚本模块: 小红狐脚本信息 = 获取脚本(模块名=页面生成脚本["脚本模块名"])
+        页面 = 脚本模块["页面生成"][页面生成脚本["页面生成脚本名"]]["获取页面"](页面名=页面名)
+        return jsonify(标准化(页面))
+    except Exception as e:
+        日志.警告(f"获取页面失败，页面名：{页面名}: {e}")
+        return jsonify({"错误": "获取页面失败", "信息": e}), 500
