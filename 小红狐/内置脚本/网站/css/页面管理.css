@@ -43,8 +43,9 @@
     empty-cells: show;
 }
 
+#页面操作脚本表格 #自动开启:hover,
 #页面操作脚本表格 .页面操作脚本:hover {
-    cursor: pointer;
+    cursor: help;
     text-decoration: underline;
 }
 

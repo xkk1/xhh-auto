@@ -10,6 +10,17 @@ let 页面操作开启脚本 = {};
 let 页面生成脚本 = {};
 let 页面状态 = null;
 
+
+function 对话框元素添加关闭按钮(对话框元素) {
+    const 对话框表单 = document.createElement("form");
+    对话框表单.method = "dialog";
+    对话框表单.style.textAlign = "center";
+    const 关闭按钮 = document.createElement('button');
+    关闭按钮.textContent = "关闭";
+    对话框表单.appendChild(关闭按钮);
+    对话框元素.appendChild(对话框表单);
+}
+
 async function 更新导入脚本信息字典() {
     导入脚本信息字典 = await 小红狐.脚本.获取导入脚本信息字典();
 }
@@ -60,6 +71,7 @@ function 渲染页面管理() {
         this.classList.add("加载中");
         小红狐.页面.新建页面(页面名)
             .then(() => {
+                小红狐.页面.开启页面操作自动开启脚本(页面名).then();
                 刷新页面管理();
             })
             .catch(error => {
@@ -80,6 +92,7 @@ function 渲染页面管理() {
         this.classList.add("加载中");
         小红狐.页面.关闭页面(页面名)
             .then(() => {
+                小红狐.页面.关闭页面操作自动开启脚本(页面名).then();
                 刷新页面管理();
             })
             .catch(error => {
@@ -108,18 +121,6 @@ function 刷新页面管理() {
             刷新页面管理按钮.classList.remove("加载中");
         });
 }
-
-function 对话框元素添加关闭按钮(对话框元素) {
-    const 对话框表单 = document.createElement("form");
-    对话框表单.method = "dialog";
-    对话框表单.style.textAlign = "center";
-    const 关闭按钮 = document.createElement('button');
-    关闭按钮.textContent = "关闭";
-    对话框表单.appendChild(关闭按钮);
-    对话框元素.appendChild(对话框表单);
-}
-
-
 function 渲染页面生成脚本() {
     const 页面生成脚本容器元素 = document.querySelector("#页面生成脚本容器");
     页面生成脚本容器元素.replaceChildren();
@@ -298,12 +299,66 @@ function 渲染页面操作脚本表格() {
     页面操作脚本表格元素.replaceChildren();
     // 创建表头元素
     表头 = document.createElement("thead");
-    ["页面操作脚本", "状态 / 自动开启"].forEach(function (标题) {
+    ["页面操作脚本", "状态 / <span id='自动开启'>自动开启</span>"].forEach(function (标题) {
         let th = document.createElement("th");
         th.innerHTML = 标题;
         表头.appendChild(th);
     });
     页面操作脚本表格元素.appendChild(表头);
+    const 自动开启元素 = document.querySelector("#自动开启");
+    自动开启元素.addEventListener("click", function () {
+        const 对话框元素 = document.querySelector("#对话框");
+        对话框元素.replaceChildren();
+        const 自动开启介绍元素 = document.createElement("p");
+        自动开启介绍元素.textContent = "自动开启功能：新建页面时自动开启脚本，页面关闭时停止自动开启脚本。";
+        对话框元素.appendChild(自动开启介绍元素);
+        const 自动开启操作容器 = document.createElement("div");
+        const 批量开启按钮 = document.createElement("button");
+        批量开启按钮.id = "批量开启";
+        批量开启按钮.classList.add("加载按钮");
+        批量开启按钮.type = "button";
+        批量开启按钮.textContent = "批量开启";
+        批量开启按钮.addEventListener("click", function () {
+            this.classList.add("加载中");
+            小红狐.页面.开启页面操作自动开启脚本(页面名)
+                .then(function (结果) {
+                    批量开启按钮.classList.remove("加载中");
+                    alert("批量开启脚本成功");
+                    刷新页面操作脚本();
+                })
+                .catch(function (错误) {
+                    批量开启按钮.classList.remove("加载中");
+                    console.error(错误);
+                    alert("批量开启脚本失败，错误信息：\n" + 错误);
+                });
+        });
+        自动开启操作容器.appendChild(批量开启按钮);
+        自动开启操作容器.style.textAlign = "center";
+        自动开启操作容器.style.paddingBottom = "1rem";
+        const 批量关闭按钮 = document.createElement("button");
+        批量关闭按钮.id = "批量关闭";
+        批量关闭按钮.classList.add("加载按钮");
+        批量关闭按钮.type = "button";
+        批量关闭按钮.textContent = "批量关闭";
+        批量关闭按钮.addEventListener("click", function () {
+            this.classList.add("加载中");
+            小红狐.页面.关闭页面操作自动开启脚本(页面名)
+                .then(function (结果) {
+                    批量关闭按钮.classList.remove("加载中");
+                    alert("批量关闭脚本成功");
+                    刷新页面操作脚本();
+                })
+                .catch(function (错误) {
+                    批量关闭按钮.classList.remove("加载中");
+                    console.error(错误);
+                    alert("批量关闭脚本失败，错误信息：\n" + 错误);
+                });
+        });
+        自动开启操作容器.appendChild(批量关闭按钮);
+        对话框元素.appendChild(自动开启操作容器);
+        对话框元素添加关闭按钮(对话框元素);
+        对话框元素.showModal();
+        });
     // 创建表体
     表体 = document.createElement("tbody");
     for (const [脚本模块名, 导入脚本信息] of Object.entries(导入脚本信息字典)) {
