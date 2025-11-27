@@ -15,7 +15,7 @@ from ....核心.账号 import 新建账号, 获取全部账号名
 )
 
 @账号蓝图.route("/账号名", methods=["GET"])
-def 获取全部账号名():
+def 获取全部账号名路由():
     return jsonify(获取全部账号名())
 
 # 新建账号
