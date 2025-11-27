@@ -59,10 +59,7 @@ async def 保存浏览器上下文账号(账号名: str, indexed_db=True):
 async def 获取页面(页面名: str) -> Page | None:
     if 页面名 in playwright异步页面字典:
         playwright异步页面 = playwright异步页面字典[页面名]
-        if playwright异步页面.is_closed():
-            playwright异步页面字典.pop(页面名)
-        else:
-            return playwright异步页面
+        return playwright异步页面
     return None
 
 async def 新建页面(
