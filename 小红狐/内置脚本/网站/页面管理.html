@@ -13,7 +13,10 @@
 <body>
     <main id="main">
         <div>
-            页面：<span id="页面名">页面名六个字</span><br />
+            <button type="button" id="刷新页面" class="加载按钮" onclick="this.classList.add('加载中');location.reload();">刷新页面</button>
+            <br />
+            页面：<span id="页面名">页面名六个字</span>
+            <br />
             配置：<span id="配置名">默认</span>
         </div>
         <h2>页面管理<button id="刷新页面管理按钮" class="加载按钮" type="button" onclick="刷新页面管理()">刷新</button></h2>
