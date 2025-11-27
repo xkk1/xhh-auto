@@ -59,4 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     更新页面名();
     window.更新页面名 = 更新页面名;
+
+    const 总控链接元素 = document.querySelector('#总控链接');
+    总控链接元素?.click();
 });
