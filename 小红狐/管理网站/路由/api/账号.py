@@ -36,7 +36,7 @@ def 新建账号路由():
         日志.警告(f"新建账号失败，账号名：“{账号名}”: {e}")
         return jsonify({"错误": "新建账号失败", "信息": f"账号名：“{账号名}”: {e}"}), 400
 
-@账号蓝图.route("/保存账号状态/<account_name>", methods=["GET", "POST"])
+@账号蓝图.route("/保存账号状态/<account_name>", methods=["GET"])
 def 保存账号状态路由(account_name: str):
     账号名: str = account_name
     try:

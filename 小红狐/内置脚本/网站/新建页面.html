@@ -11,6 +11,14 @@
     <script src="./js/新建页面.js"></script>
 </head>
 <body>
-    小红狐页面生成
+    <main id="main">
+        <div>
+            <button type="button" id="刷新页面按钮" class="加载按钮" onclick="this.classList.add('加载中');location.reload();">刷新页面</button>
+            <br />
+            页面：<span id="页面名">页面名六个字</span>
+        </div>
+        <h2>账号<button id="刷新账号按钮" class="加载按钮" type="button" onclick="刷新账号()">刷新</button></h2>
+        <div id="账号容器"></div>
+    </main>
 </body>
 </html>
