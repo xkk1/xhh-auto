@@ -8,7 +8,7 @@
         获取页面名: function() {
             return 请求.获取(this.api前缀 + "/页面名");
         },
-        新增页面: function(页面名) {
+        新增页面名: function(页面名) {
             return 请求.新增(this.api前缀 + "/页面名", 页面名);
         },
         获取标签页列表: function(页面名="页面名六个字") {
