@@ -4,8 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>小红狐总控</title>
+    <link rel="stylesheet" href="/css/通用样式.css">
+    <script src="/js/小红狐工具.js"></script>
+    <script src="/js/小红狐.js"></script>
 </head>
 <body>
-    小红狐总控
+    <!-- 仅调试使用 -->
+    <button type="button" onclick="新增页面()">新建页面</button>
+    <script>
+function 新增页面() {
+    const 页面名 = prompt('请输入页面名');
+    if (!页面名) {
+        return;
+    }
+    小红狐.页面.新增页面名(页面名)
+        .then(() => {
+            alert('成功');
+        }).catch(error => {
+            alert(error);
+            console.error(error);
+        });
+}
+    </script>
 </body>
 </html>
