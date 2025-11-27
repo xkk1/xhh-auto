@@ -2,9 +2,11 @@ import pathlib
 import shutil
 from typing import Any
 
+
 from .. import __package__ as 模块名
 from ..工具.数据工具 import 数据类, 获取本地数据
 from ..工具.目录工具 import 账号目录
+from ..工具.任务管理器工具 import 异步任务管理器
 
 浏览器存储状态文件名 = "浏览器存储状态.json"
 默认浏览器存储状态文件 = pathlib.Path(__file__).parent / "默认浏览器存储状态.json"
@@ -61,3 +63,7 @@ def 获取账号浏览器存储状态文件(账号名: str) -> pathlib.Path:
     if not 浏览器存储状态文件.exists():
         shutil.copy(默认浏览器存储状态文件, 浏览器存储状态文件)
     return 浏览器存储状态文件
+
+def 保存账号状态(账号名: str):
+    from ..核心.浏览器 import 保存浏览器上下文账号
+    异步任务管理器.运行(保存浏览器上下文账号(账号名=账号名))
