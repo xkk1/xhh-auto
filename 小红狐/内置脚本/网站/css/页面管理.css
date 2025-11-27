@@ -1,3 +1,32 @@
+.加载按钮.加载中 {
+    cursor: wait;
+}
+
+.加载按钮.加载中::before {
+    content: "正在";
+}
+
+.加载按钮.加载中::after {
+    content: "…";
+}
+
+#页面状态 {
+    padding: 0.1rem 0.2rem;
+    border: 0.1rem solid gray;
+    border-radius: 0.4rem;
+    color: gray;
+}
+
+#页面状态.关闭 {
+    border-color: red;
+    color: red;
+}
+
+#页面状态.开启 {
+    border-color: green;
+    color: green;
+}
+
 #页面操作脚本表格 {
     display: block;
     width: max-content;
@@ -68,13 +97,6 @@
     content: "切换中";
 }
 
-.刷新按钮.加载中 {
-    cursor: wait;
-}
-
-.刷新按钮.加载中::after {
-    content: " 加载中…";
-}
 
 #对话框 {
     padding: 0.4rem;

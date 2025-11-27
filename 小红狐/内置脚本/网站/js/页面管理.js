@@ -8,6 +8,7 @@ let 导入脚本信息字典 = {};
 let 页面操作自动开启脚本 = {};
 let 页面操作开启脚本 = {};
 let 页面生成脚本 = {};
+let 页面状态 = null;
 
 async function 更新导入脚本信息字典() {
     导入脚本信息字典 = await 小红狐.脚本.获取导入脚本信息字典();
@@ -23,6 +24,89 @@ async function 更新页面操作开启脚本() {
 
 async function 更新页面生成脚本() {
     页面生成脚本 = await 小红狐.页面.获取页面生成脚本(页面名);
+}
+
+async function 更新页面状态() {
+    页面状态 = await 小红狐.页面.获取页面状态(页面名);
+}
+
+function 渲染页面管理() {
+    const 页面管理容器元素 = document.querySelector("#页面管理容器");
+    页面管理容器元素.replaceChildren();
+
+    页面管理容器元素.append("页面状态：");
+    const 页面状态元素 = document.createElement("span");
+    页面状态元素.id = "页面状态";
+    if (页面状态 === null) {
+        页面状态元素.textContent = "未创建";
+        页面状态元素.classList.add("未创建");
+    } else if (页面状态 === false) {
+        页面状态元素.textContent = "手动关闭";
+        页面状态元素.classList.add("关闭");
+    } else {
+        页面状态元素.textContent = "开启";
+        页面状态元素.classList.add("开启");
+    }
+    页面管理容器元素.appendChild(页面状态元素);
+
+    页面管理容器元素.appendChild(document.createElement("br"));
+    页面管理容器元素.append("页面操作：")
+
+    const 新建页面按钮 = document.createElement("button");
+    新建页面按钮.id = "新建页面按钮";
+    新建页面按钮.classList.add("加载按钮")
+    新建页面按钮.textContent = "新建页面"
+    新建页面按钮.addEventListener("click", function () {
+        this.classList.add("加载中");
+        小红狐.页面.新建页面(页面名)
+            .then(() => {
+                刷新页面管理();
+            })
+            .catch(error => {
+                console.error("新建页面失败:", error);
+                alert("新建页面失败!\n" + error);
+            })
+            .finally(() => {
+                新建页面按钮.classList.remove("加载中");
+            });
+    });
+    页面管理容器元素.appendChild(新建页面按钮);
+
+    const 关闭页面按钮 = document.createElement("button");
+    关闭页面按钮.id = "关闭页面按钮";
+    关闭页面按钮.classList.add("加载按钮")
+    关闭页面按钮.textContent = "关闭页面"
+    关闭页面按钮.addEventListener("click", function () {
+        this.classList.add("加载中");
+        小红狐.页面.关闭页面(页面名)
+            .then(() => {
+                刷新页面管理();
+            })
+            .catch(error => {
+                console.error("关闭页面失败:", error);
+                alert("关闭页面失败!\n" + error);
+            })
+            .finally(() => {
+                关闭页面按钮.classList.remove("加载中");
+            });
+    });
+    页面管理容器元素.appendChild(关闭页面按钮);
+}
+
+function 刷新页面管理() {
+    const 刷新页面管理按钮 = document.querySelector("#刷新页面管理按钮");
+    刷新页面管理按钮.classList.add("加载中");
+    更新页面状态()
+        .then(() => {
+            渲染页面管理();
+        })
+        .catch(error => {
+            console.error("获取页面管理失败:", error);
+            document.querySelector("#页面管理容器").textContent = "获取页面管理失败" + error;
+        })
+        .finally(() => {
+            刷新页面管理按钮.classList.remove("加载中");
+        });
 }
 
 function 对话框元素添加关闭按钮(对话框元素) {
@@ -123,7 +207,7 @@ function 渲染页面生成脚本() {
     const 设置为当前页面生成脚本按钮 = document.createElement("button");
     设置为当前页面生成脚本按钮.type = "button";
     设置为当前页面生成脚本按钮.id = "设置为当前页面生成脚本按钮";
-    设置为当前页面生成脚本按钮.classList.add("刷新按钮");
+    设置为当前页面生成脚本按钮.classList.add("加载按钮");
     设置为当前页面生成脚本按钮.textContent = "设置为当前页面生成脚本";
     设置为当前页面生成脚本按钮.addEventListener("click", function () {
         const [脚本模块名, 页面生成脚本名] = 页面生成脚本下拉列表.value.split("/");
@@ -454,6 +538,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector("#页面名").textContent = 页面名;
     // 显示配置名
     document.querySelector("#配置名").textContent = 配置名;
+    刷新页面管理();
     刷新页面生成脚本();
     刷新页面操作脚本();
 });
