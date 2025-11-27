@@ -6,7 +6,7 @@ from playwright.async_api import Page
 from .... import __package__ as 小红狐模块名
 from ....工具.日志工具 import 获取日志记录器
 from ....核心 import 页面
-from ....核心.页面 import 修改标签页URL排序, 修改页面生成脚本, 修改页面账号名, 修改页面配置名, 新建页面, 关闭页面, 获取页面, 关闭页面操作脚本, 删除页面操作自动开启脚本, 开启页面操作脚本, 添加页面操作自动开启脚本, 获取标签页URL排序, 获取页面操作开启脚本, 获取页面操作自动开启脚本, 获取页面状态, 获取页面生成脚本, 获取页面账号名, 获取页面配置名
+from ....核心.页面 import 修改标签页URL排序, 修改页面生成脚本, 修改页面账号名, 修改页面配置名, 关闭页面操作自动开启脚本, 开启页面操作自动开启脚本, 新建页面, 关闭页面, 获取页面, 关闭页面操作脚本, 删除页面操作自动开启脚本, 开启页面操作脚本, 添加页面操作自动开启脚本, 获取标签页URL排序, 获取页面操作开启脚本, 获取页面操作自动开启脚本, 获取页面状态, 获取页面生成脚本, 获取页面账号名, 获取页面配置名
 from ....核心.脚本 import 小红狐脚本信息, 获取导入脚本信息字典, 获取脚本
 from ....小红狐脚本 import 默认启用页面生成脚本名
 from .脚本 import 标准化
@@ -232,6 +232,15 @@ def 开启页面操作脚本路由(page_name, package_name, page_script_name):
         日志.警告(f"开启页面操作脚本失败，页面：“{页面名}”，脚本模块名：“{脚本模块名}”，页面操作脚本名“{页面操作脚本名}”: {e}")
         return jsonify({"错误": "开启页面操作脚本失败", "信息": str(e)}), 500
 
+@页面蓝图.route("/开启页面操作自动开启脚本/<page_name>", methods=["GET"])
+def 开启页面操作自动开启脚本路由(page_name):
+    页面名: str = page_name
+    try:
+        开启页面操作自动开启脚本(页面名=页面名)
+        return jsonify({"状态": "成功"})
+    except Exception as e:
+        return jsonify(str(e)), 500
+
 @页面蓝图.route("/关闭页面操作脚本/<page_name>/<package_name>/<page_script_name>", methods=["GET"])
 def 关闭页面操作脚本路由(page_name, package_name, page_script_name):
     页面名: str = page_name
@@ -242,6 +251,15 @@ def 关闭页面操作脚本路由(page_name, package_name, page_script_name):
     except Exception as e:
         日志.警告(f"关闭页面操作脚本失败，页面：“{页面名}”，脚本模块名：“{脚本模块名}”，页面操作脚本名“{页面操作脚本名}”: {e}")
         return jsonify({"错误": "关闭页面操作脚本失败", "信息": str(e)}), 500
+
+@页面蓝图.route("/关闭页面操作自动开启脚本/<page_name>", methods=["GET"])
+def 关闭页面操作自动开启脚本路由(page_name):
+    页面名: str = page_name
+    try:
+        关闭页面操作自动开启脚本(页面名=页面名)
+        return jsonify({"状态": "成功"})
+    except Exception as e:
+        return jsonify(str(e)), 500
 
 @页面蓝图.route("/账号名/<page_name>", methods=["GET"])
 def 获取页面账号名路由(page_name):
