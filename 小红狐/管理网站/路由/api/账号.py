@@ -4,7 +4,7 @@ from flask import Blueprint, jsonify, request
 
 from .... import __package__ as 小红狐模块名
 from ....工具.日志工具 import 获取日志记录器
-from ....核心.账号 import 新建账号, 获取全部账号名
+from ....核心.账号 import 保存账号状态, 新建账号, 获取全部账号名
 
 
 日志 = 获取日志记录器(__name__)
@@ -35,3 +35,13 @@ def 新建账号路由():
     except Exception as e:
         日志.警告(f"新建账号失败，账号名：“{账号名}”: {e}")
         return jsonify({"错误": "新建账号失败", "信息": f"账号名：“{账号名}”: {e}"}), 400
+
+@账号蓝图.route("/保存账号状态/<account_name>", methods=["GET", "POST"])
+def 保存账号状态路由(account_name: str):
+    账号名: str = account_name
+    try:
+        保存账号状态(账号名)
+        return jsonify({"信息": "保存账号状态成功"})
+    except Exception as e:
+        日志.警告(f"保存账号状态失败，账号名：“{账号名}”: {e}")
+        return jsonify(f"保存账号状态失败!\n账号名“{账号名}”: {e}"), 500
