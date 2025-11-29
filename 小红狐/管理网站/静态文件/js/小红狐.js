@@ -86,6 +86,12 @@
         修改页面账号名: function(页面名, 账号名) {
             return 请求.修改(this.api前缀 + `/账号名/${页面名}`, 账号名);
         },
+        获取页面初始URL: function(页面名="页面名六个字") {
+            return 请求.获取(this.api前缀 + `/页面初始URL/${页面名}`);
+        },
+        修改页面初始URL: function(页面名, 页面初始URL) {
+            return 请求.修改(this.api前缀 + `/页面初始URL/${页面名}`, 页面初始URL);
+        },
     };
 
     let 脚本 = {
