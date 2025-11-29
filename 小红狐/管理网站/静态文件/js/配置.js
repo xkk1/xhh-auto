@@ -85,6 +85,21 @@ function 删除标签页(url) {
     }
 }
 
+// 非主按钮标签页配置
+function 非主按钮标签页关闭() {
+    let 标签页元素 = document.querySelector("ul#标签页");
+    标签页元素.addEventListener('auxclick', function (event) {
+        if (event.target.tagName === 'A') {
+            // 进一步判断该 <a> 是否包含 class="打开页面"
+            if (event.target.classList.contains('打开页面')) {
+                event.preventDefault(); // 阻止默认跳转行为
+                let url = event.target.getAttribute('href'); // 获取链接地址
+                删除标签页(url);
+            }
+        }
+    });
+}
+
 function 修改标签页URL排序(页面URL排序) {
     小红狐.页面.修改标签页URL排序(页面名, 页面URL排序)
         .then(function (结果) {
@@ -161,22 +176,9 @@ function 初始化拖拽标签页(标签页URL排序更改回调=修改标签页
             添加标签页(url, 标题);
         }
     };
+    非主按钮标签页关闭();
 }
 
-// 非主按钮标签页配置
-function 非主按钮标签页关闭() {
-    let 标签页元素 = document.querySelector("ul#标签页");
-    标签页元素.addEventListener('auxclick', function (event) {
-        if (event.target.tagName === 'A') {
-            // 进一步判断该 <a> 是否包含 class="打开页面"
-            if (event.target.classList.contains('打开页面')) {
-                event.preventDefault(); // 阻止默认跳转行为
-                let url = event.target.getAttribute('href'); // 获取链接地址
-                删除标签页(url);
-            }
-        }
-    });
-}
 
 // DOM 加载完成时执行
 document.addEventListener("DOMContentLoaded", function () {
@@ -185,5 +187,4 @@ document.addEventListener("DOMContentLoaded", function () {
     初始化多页面();
     页面配置标签页();
     初始化拖拽标签页();
-    非主按钮标签页关闭();
 });
