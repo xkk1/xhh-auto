@@ -16,6 +16,8 @@
 - `SCRIPT_PATH` 脚本目录，默认为 `小红狐/脚本`
 - `PLAYWRIGHT_BROWSERS_PATH` Playwright 浏览器目录，默认为 `浏览器`，可以设置为空使用默认 Playwright 浏览器位置
 - `PLAYWRIGHT_BROWSERS_TYPE` 浏览器类型，默认为 `chromium`，可选 `chromium` `firefox` `webkit`
+- `PLAYWRIGHT_BROWSERS_LAUNCH_MODE` 浏览器启动模式，默认为 `launch`，可选 `launch` `connect_over_cdp`
+- `PLAYWRIGHT_BROWSERS_CDP_ENDPOINT_URL` CDP 端点 URL，默认为 `http://127.0.0.1:9222`
 - `MANAGE_SITE_PORT` 管理网站端口，默认为 `44321`
 - `MANAGE_SITE_AUTO_OPEN_BROWSER` 是否自动在浏览器打开管理网站，默认为 `True`
 - `MANAGE_SITE_AUTO_OPEN_DELAY` 自动打开浏览器的延迟时间，默认为 `1`，单位秒

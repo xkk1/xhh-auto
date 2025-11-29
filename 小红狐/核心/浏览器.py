@@ -26,13 +26,17 @@ async def 获取上下文管理器() -> Playwright:
     return playwright异步上下文管理器
 
 async def 获取浏览器(args: tuple = (), kwargs: dict[str, Any] | None = None) -> Browser:
-    from .小红狐配置 import 获取浏览器类型
+    from .小红狐配置 import 获取浏览器类型, 获取浏览器启动方式, 获取浏览器CDP端点URL
     global playwright异步浏览器
     if not playwright异步浏览器:
         if kwargs is None:
             kwargs = {}
         playwright异步上下文管理器 = await 获取上下文管理器()
-        playwright异步浏览器 = await 获取Playwright异步浏览器(playwright异步上下文管理器, 浏览器类型=获取浏览器类型(), args=args, kwargs=kwargs)
+        playwright异步浏览器 = await 获取Playwright异步浏览器(
+            playwright异步上下文管理器,
+            浏览器类型=获取浏览器类型(), 启动方式=获取浏览器启动方式(), CDP端点URL=获取浏览器CDP端点URL(),
+            args=args, kwargs=kwargs
+        )
     return playwright异步浏览器
 
 async def 获取账号浏览器上下文(账号名: str ,args: tuple = (), kwargs: dict[str, Any] | None = None) -> BrowserContext:

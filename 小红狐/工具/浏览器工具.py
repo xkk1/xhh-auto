@@ -11,10 +11,18 @@ async def 获取Playwright异步上下文管理器() -> Playwright:
 async def 获取Playwright异步浏览器(
         异步上下文管理器: Playwright,
         浏览器类型: Literal['chromium', 'chromium_headless_shell', 'firefox', 'webkit'] = 'chromium',
+        启动方式: Literal['launch', 'connect_over_cdp'] = 'launch',
+        CDP端点URL: str = "http://127.0.0.1:9222",
         args: tuple = (), kwargs: dict[str, Any] | None = None
 ) -> Browser:
     if kwargs is None:
         kwargs = {}
+    # 处理 CDP 连接模式
+    if 启动方式 == 'connect_over_cdp':
+        if 浏览器类型 not in ('chromium', 'chromium_headless_shell'):
+            raise ValueError("CDP 连接仅支持 Chromium 类型浏览器")
+        kwargs["endpoint_url"] = kwargs.get("endpoint_url", CDP端点URL)
+        return await 异步上下文管理器.chromium.connect_over_cdp(*args, **kwargs)
     match 浏览器类型:
         case 'chromium':
             浏览器类型 = 异步上下文管理器.chromium

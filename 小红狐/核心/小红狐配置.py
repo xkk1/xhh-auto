@@ -10,6 +10,8 @@ from ..核心.配置 import 获取配置数据
         "SCRIPT_PATH": "小红狐/脚本",
         "PLAYWRIGHT_BROWSERS_PATH": "浏览器",
         "PLAYWRIGHT_BROWSERS_TYPE": "chromium",
+        "PLAYWRIGHT_BROWSERS_LAUNCH_MODE": "launch",
+        "PLAYWRIGHT_BROWSERS_CDP_ENDPOINT_URL": "http://127.0.0.1:9222",
         "MANAGE_SITE_PORT": "44321",
         "MANAGE_SITE_AUTO_OPEN_BROWSER": "True",
         "MANAGE_SITE_AUTO_OPEN_DELAY": "1.0",
@@ -38,11 +40,17 @@ def 判断开关(值: str) -> bool:
 def 获取调试() -> bool:
     return 判断开关(os.environ.get("DEBUG", 配置数据["环境变量"]["DEBUG"]))
 
+def 获取浏览器路径() -> pathlib.Path:
+    return pathlib.Path(os.environ.get("PLAYWRIGHT_BROWSERS_PATH", 配置数据["环境变量"]["PLAYWRIGHT_BROWSERS_PATH"]))
+
 def 获取浏览器类型() -> str:
     return os.environ.get("PLAYWRIGHT_BROWSERS_TYPE", 配置数据["环境变量"]["PLAYWRIGHT_BROWSERS_TYPE"])
 
-def 获取浏览器路径() -> pathlib.Path:
-    return pathlib.Path(os.environ.get("PLAYWRIGHT_BROWSERS_PATH", 配置数据["环境变量"]["PLAYWRIGHT_BROWSERS_PATH"]))
+def 获取浏览器启动方式() -> str:
+    return os.environ.get("PLAYWRIGHT_BROWSERS_LAUNCH_MODE", 配置数据["环境变量"]["PLAYWRIGHT_BROWSERS_LAUNCH_MODE"])
+
+def 获取浏览器CDP端点URL() -> str:
+    return os.environ.get("PLAYWRIGHT_BROWSERS_CDP_ENDPOINT_URL", 配置数据["环境变量"]["PLAYWRIGHT_BROWSERS_CDP_ENDPOINT_URL"])
 
 def 获取管理网站端口() -> int:
     try:
