@@ -23,3 +23,5 @@ from .配置 import 配置蓝图
 api蓝图.register_blueprint(配置蓝图)
 from .账号 import 账号蓝图
 api蓝图.register_blueprint(账号蓝图)
+from .总控 import 总控蓝图
+api蓝图.register_blueprint(总控蓝图)
