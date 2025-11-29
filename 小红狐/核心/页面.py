@@ -195,3 +195,11 @@ def 获取页面状态(页面名: str = "默认页面六个字") -> bool | None:
     if not 页面:
         return None
     return not 页面.is_closed()
+
+def 获取页面初始URL(页面名: str = "默认页面六个字") -> str | None:
+    return 获取页面数据(页面名=页面名, 脚本模块名=小红狐模块名, 默认值={"初始URL": ""})["初始URL"]
+
+def 修改页面初始URL(页面名: str = "默认页面六个字", 初始URL: str = ""):
+    页面数据 = 获取页面数据(页面名=页面名, 脚本模块名=小红狐模块名)
+    页面数据["初始URL"] = 初始URL
+    页面数据.保存()
