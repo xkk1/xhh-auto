@@ -5,6 +5,7 @@ document.title = 页面名 + "-" + document.title;
 
 let 账号名 = "默认";
 let 全部账号名 = ["默认"];
+let 页面初始URL = "";
 
 async function 更新账号名() {
     账号名 = await 小红狐.页面.获取页面账号名(页面名);
@@ -12,6 +13,10 @@ async function 更新账号名() {
 
 async function 更新全部账号名() {
     全部账号名 = await 小红狐.账号.获取全部账号名();
+}
+
+async function 更新页面初始URL() {
+    页面初始URL = await 小红狐.页面.获取页面初始URL(页面名);
 }
 
 function 渲染账号() {
@@ -142,10 +147,68 @@ function 刷新账号() {
         });
 }
 
+function 渲染页面初始() {
+    const 页面容器 = document.querySelector("#页面初始容器");
+    页面容器.replaceChildren();
+
+    页面容器.append("页面初始URL：");
+    if (页面初始URL === "") {
+        页面容器.append("空");
+    } else {
+        const 页面初始URL元素 = document.createElement("a");
+        页面初始URL元素.href = 页面初始URL;
+        页面初始URL元素.textContent = 页面初始URL;
+        页面初始URL元素.target = "_blank";
+        页面容器.appendChild(页面初始URL元素);
+    }
+    const 修改页面初始URL按钮 = document.createElement("button");
+    修改页面初始URL按钮.type = "button";
+    修改页面初始URL按钮.id = "修改页面初始URL按钮";
+    修改页面初始URL按钮.classList.add("加载按钮");
+    修改页面初始URL按钮.textContent = "修改页面初始URL";
+    修改页面初始URL按钮.addEventListener("click", function () {
+        this.classList.add("加载中");
+        const 新页面初始URL = prompt("请输入页面初始URL：", 页面初始URL);
+        if (新页面初始URL === null) {
+            this.classList.remove("加载中");
+            return;
+        }
+        小红狐.页面.修改页面初始URL(页面名, 新页面初始URL)
+            .then(() => {
+                alert("修改页面初始URL成功！");
+                刷新页面初始();
+            })
+            .catch(error => {
+                console.error("修改页面初始URL失败:", error);
+                alert("修改页面初始URL失败!\n" + error);
+            })
+            .finally(() => {
+                修改页面初始URL按钮.classList.remove("加载中");
+            })
+    });
+    页面容器.appendChild(修改页面初始URL按钮);
+}
+
+function 刷新页面初始() {
+    const 刷新页面初始按钮 = document.querySelector("#刷新页面初始按钮");
+    刷新页面初始按钮.classList.add("加载中");
+    更新页面初始URL()
+        .then(() => {
+            渲染页面初始();
+        })
+        .catch(error => {
+            console.error("获取页面初始失败:", error);
+            document.querySelector("#页面初始容器").textContent = "获取页面初始失败：" + error;
+        })
+        .finally(() => {
+            刷新页面初始按钮.classList.remove("加载中");
+        });
+}
 
 // DOM 加载完成时执行
 document.addEventListener("DOMContentLoaded", function () {
     // 显示页面名
     document.querySelector("#页面名").textContent = 页面名;
     刷新账号();
+    刷新页面初始();
 });
