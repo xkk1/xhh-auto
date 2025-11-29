@@ -85,7 +85,17 @@ function 删除标签页(url) {
     }
 }
 
-function 初始化拖拽标签页() {
+function 修改标签页URL排序(页面URL排序) {
+    小红狐.页面.修改标签页URL排序(页面名, 页面URL排序)
+        .then(function (结果) {
+            // console.log(结果);
+        })
+        .catch(function (错误) {
+            console.error(错误);
+        });
+}
+
+function 初始化拖拽标签页(标签页URL排序更改回调=修改标签页URL排序) {
     let 标签页元素 = document.querySelector("ul#标签页");
     let 拖拽元素 = null;
     // 拖拽开始
@@ -125,19 +135,13 @@ function 初始化拖拽标签页() {
     // 拖拽结束
     标签页元素.ondragend = (事件) => {
         事件.target.parentNode.classList.remove("拖拽");
+        拖拽元素 = null;
         const 子元素数组 = Array.from(标签页元素.children);
-        const 配置页面URL排序 = 子元素数组.map(function (元素) {
+        const 页面URL排序 = 子元素数组.map(function (元素) {
             return 元素.querySelector("a").getAttribute('href');
         });
         // console.log(配置页面URL排序);
-        小红狐.页面.修改标签页URL排序(页面名, 配置页面URL排序)
-            .then(function (结果) {
-                // console.log(结果);
-            })
-            .catch(function (错误) {
-                console.error(错误);
-            });
-        拖拽元素 = null;
+        标签页URL排序更改回调(页面URL排序);
     };
     标签页元素.ondrop = (事件) => {
         事件.preventDefault();
