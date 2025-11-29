@@ -5,26 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>小红狐总控</title>
     <link rel="stylesheet" href="/css/通用样式.css">
-    <script src="/js/小红狐工具.js"></script>
-    <script src="/js/小红狐.js"></script>
+    <link rel="stylesheet" href="../css/标签页.css">
+    <script src="../js/小红狐工具.js"></script>
+    <script src="../js/小红狐.js"></script>
+    <script src="../js/标签页.js"></script>
+    <script src="../js/总控.js"></script>
 </head>
 <body>
-    <!-- 仅调试使用 -->
-    <button type="button" onclick="新增页面()">新建页面</button>
-    <script>
-function 新增页面() {
-    const 页面名 = prompt('请输入页面名');
-    if (!页面名) {
-        return;
-    }
-    小红狐.页面.新增页面名(页面名)
-        .then(() => {
-            alert('成功');
-        }).catch(error => {
-            alert(error);
-            console.error(error);
-        });
-}
-    </script>
+    <header id="header">
+        <ul id="标签页" role="tablist"></ul>
+    </header>
+    <main id="main">
+        <div id="加载">
+            加载中…………<br>
+            卡住请 <a target="_self" href="#" onclick="window.location.reload(); return false;">刷新页面</a>
+        </div>
+    </main>
 </body>
 </html>

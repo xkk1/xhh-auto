@@ -10,5 +10,22 @@
 </head>
 <body>
     小红狐自动化总控
+    <!-- 仅调试使用 -->
+    <button type="button" onclick="新增页面()">新建页面</button>
+    <script>
+function 新增页面() {
+    const 页面名 = prompt('请输入页面名');
+    if (!页面名) {
+        return;
+    }
+    小红狐.页面.新增页面名(页面名)
+        .then(() => {
+            alert('成功');
+        }).catch(error => {
+            alert(error);
+            console.error(error);
+        });
+}
+    </script>
 </body>
 </html>
