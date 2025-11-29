@@ -25,7 +25,7 @@ async def 获取上下文管理器() -> Playwright:
         playwright异步上下文管理器 = await 获取Playwright异步上下文管理器()
     return playwright异步上下文管理器
 
-async def 获取浏览器(args: tuple = (), kwargs: dict[str, Any] | None = None) -> Browser:
+async def 获取浏览器(获取上下文管理器=获取上下文管理器, args: tuple = (), kwargs: dict[str, Any] | None = None) -> Browser:
     from .小红狐配置 import 获取浏览器类型, 获取浏览器启动方式, 获取浏览器CDP端点URL
     global playwright异步浏览器
     if not playwright异步浏览器:
@@ -39,7 +39,7 @@ async def 获取浏览器(args: tuple = (), kwargs: dict[str, Any] | None = None
         )
     return playwright异步浏览器
 
-async def 获取账号浏览器上下文(账号名: str ,args: tuple = (), kwargs: dict[str, Any] | None = None) -> BrowserContext:
+async def 获取账号浏览器上下文(账号名: str, 获取浏览器=获取浏览器 ,args: tuple = (), kwargs: dict[str, Any] | None = None) -> BrowserContext:
     if 账号名 in playwright异步浏览器上下文字典:
         playwright异步浏览器上下文 = playwright异步浏览器上下文字典[账号名]
         if not playwright异步浏览器上下文:
@@ -67,7 +67,7 @@ async def 获取页面(页面名: str) -> Page | None:
     return None
 
 async def 新建页面(
-        页面名: str, 账号名: str, 
+        页面名: str, 账号名: str, 获取账号浏览器上下文=获取账号浏览器上下文,
         args: tuple = (), kwargs: dict[str, Any] | None = None,
         args上下文: tuple = (), kwargs上下文: dict[str, Any] | None = None,
         ) -> Page:
