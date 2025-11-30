@@ -23,3 +23,7 @@
 - `MANAGE_SITE_AUTO_OPEN_DELAY` 自动打开浏览器的延迟时间，默认为 `1`，单位秒
 - `MANAGE_SITE_ROOT_REDIRECT_URL` 管理网站根目录重定向地址，默认为 `/小红狐.html`
 - `DEBUG` 是否开启调试模式，默认为 `False`，设置为 `True` 时生效调试模式
+
+## 开发文档
+
+[./脚本/小红狐脚本开发/文档/主页.md](./脚本/小红狐脚本开发/文档/主页.md)
