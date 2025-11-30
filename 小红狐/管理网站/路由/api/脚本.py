@@ -42,10 +42,10 @@ HTTP请求方法 = ["GET", "HEAD", "POST", "PUT", "DELETE", "CONNECT", "OPTIONS"
 
 def 处理路由(脚本模块名, 子路径):
     if 脚本模块名 not in 获取导入脚本模块名列表():
-        return jsonify({"错误": f"脚本模块“{脚本模块名}”不存在"}), 404
+        return jsonify(f"脚本模块“{脚本模块名}”不存在"), 404
     脚本 = 获取脚本(脚本模块名)
     if 脚本["flask路由"] is None:
-        return jsonify({"错误": "脚本未启用 Flask"}), 400
+        return jsonify("脚本未启用 Flask"), 400
     return 脚本["flask路由"](子路径=子路径)
 
 @脚本蓝图.route("/路由/<package>/<path:subpath>", methods=HTTP请求方法)
@@ -54,8 +54,6 @@ def 处理子路径(package, subpath):
 
 @脚本蓝图.route("/路由/<package>/", methods=HTTP请求方法)
 def 处理路径(package):
-    from flask import current_app
-    print("当前模板目录:", current_app.template_folder)
     return 处理路由(脚本模块名=package, 子路径="/")
 
 @脚本蓝图.route("/路由/<package>", methods=HTTP请求方法)
@@ -67,9 +65,9 @@ def 重载指定脚本蓝图(package):
     脚本模块名:str = package
     try:
         重载脚本(脚本模块名)
-        return jsonify({"信息": f"已重载脚本：{脚本模块名}"})
+        return jsonify(f"已重载脚本：{脚本模块名}")
     except ImportError as e:
-        return jsonify({"错误": str(e)}), 404
+        return jsonify(str(e)), 404
 
 @脚本蓝图.route("/重载", methods=["GET"])
 def 重载所有脚本蓝图():
