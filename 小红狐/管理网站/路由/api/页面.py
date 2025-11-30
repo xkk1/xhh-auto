@@ -25,20 +25,20 @@ def 获取所有页面():
 @页面蓝图.route("/页面名", methods=["POST"])
 def 新增页面名路由():
     if not request.is_json:
-        return jsonify({"错误": "请求头 Content-Type 必须是 application/json"}), 400
+        return jsonify("请求头 Content-Type 必须是 application/json"), 400
     json = request.get_json(silent=True)
     if json is None:
-        return jsonify({"错误": "无效的 JSON 格式，请检查请求体"}), 400
+        return jsonify("无效的 JSON 格式，请检查请求体"), 400
     # json 为 str
     if not isinstance(json, str):
-        return jsonify({"错误": "配置格式错误"}), 400
+        return jsonify("配置格式错误"), 400
     页面名: str = json
     try:
         新增页面(页面名=页面名)
-        return jsonify({"状态": "成功"}), 200
+        return jsonify("成功"), 200
     except Exception as e:
         日志.警告(f"新增页面失败，页面名：“{页面名}”: {e}")
-        return jsonify({"错误": "新增页面失败", "信息": f"页面名：“{页面名}”: {e}"}), 500
+        return jsonify(f"页面名：“{页面名}”: {e}"), 500
 
 @页面蓝图.route("/标签页列表/<page_name>", methods=["GET"])
 def 获取标签页列表路由(page_name):
@@ -105,35 +105,35 @@ def 获取页面操作开启脚本路由(page_name):
 def 修改标签页URL排序路由(page_name):
     页面名: str = page_name
     if not request.is_json:
-        return jsonify({"错误": "请求头 Content-Type 必须是 application/json"}), 400
+        return jsonify("请求头 Content-Type 必须是 application/json"), 400
     json = request.get_json(silent=True)
     if json is None:
-        return jsonify({"错误": "无效的 JSON 格式，请检查请求体"}), 400
+        return jsonify("无效的 JSON 格式，请检查请求体"), 400
     if not isinstance(json, list):
-        return jsonify({"错误": "配置格式错误"}), 400
+        return jsonify("配置格式错误"), 400
     标签页URL排序: list[str] = json
     if not isinstance(标签页URL排序, list):
-        return jsonify({"错误": "配置格式错误"}), 400
+        return jsonify("配置格式错误"), 400
     修改标签页URL排序(页面名=页面名, 标签页URL排序=标签页URL排序)
-    return jsonify({"状态": "成功"})
+    return jsonify("成功")
 
 # 给指定页面添加页面操作自动开启脚本
 @页面蓝图.route("/页面操作自动开启脚本/<page_name>", methods=["POST"])
 def 添加页面操作自动开启脚本路由(page_name):
     页面名: str = page_name
     if not request.is_json:
-        return jsonify({"错误": "请求头 Content-Type 必须是 application/json"}), 400
+        return jsonify("请求头 Content-Type 必须是 application/json"), 400
     json = request.get_json(silent=True)
     if json is None:
-        return jsonify({"错误": "无效的 JSON 格式，请检查请求体"}), 400
+        return jsonify("无效的 JSON 格式，请检查请求体"), 400
     if "脚本模块名" not in json:
-        return jsonify({"错误": "缺少脚本模块名"}), 400
+        return jsonify("缺少脚本模块名"), 400
     脚本模块名: str = json["脚本模块名"]
     if "页面操作脚本名" not in json:
-        return jsonify({"错误": "缺少页面操作脚本名"}), 400
+        return jsonify("缺少页面操作脚本名"), 400
     页面操作脚本名: str = request.json["页面操作脚本名"]
     添加页面操作自动开启脚本(页面名=页面名, 脚本模块名=脚本模块名, 页面操作脚本名=页面操作脚本名)
-    return jsonify({"状态": "成功"})
+    return jsonify("成功")
 
 # 删除指定页面的页面操作自动开启脚本
 @页面蓝图.route("/页面操作自动开启脚本/<page_name>/<package_name>/<page_script_name>", methods=["DELETE"])
@@ -142,7 +142,7 @@ def 删除页面操作自动开启脚本路由(page_name, package_name, page_scr
     脚本模块名: str = package_name
     页面操作脚本名: str = page_script_name
     删除页面操作自动开启脚本(页面名=页面名, 脚本模块名=脚本模块名, 页面操作脚本名=页面操作脚本名)
-    return jsonify({"状态": "成功"})
+    return jsonify("成功")
 
 @页面蓝图.route("/页面操作/配置页面/<page_name>/<package_name>/<page_script_name>", methods=["GET"])
 def 获取页面操作配置页面路由(page_name, package_name, page_script_name):
@@ -186,16 +186,16 @@ def 获取页面配置名路由(page_name):
 def 修改页面配置名路由(page_name):
     页面名: str = page_name
     if not request.is_json:
-        return jsonify({"错误": "请求头 Content-Type 必须是 application/json"}), 400
+        return jsonify("请求头 Content-Type 必须是 application/json"), 400
     json = request.get_json(silent=True)
     if json is None:
-        return jsonify({"错误": "无效的 JSON 格式，请检查请求体"}), 400
+        return jsonify("无效的 JSON 格式，请检查请求体"), 400
     # json 为 str
     if not isinstance(json, str):
-        return jsonify({"错误": "配置格式错误"}), 400
+        return jsonify("配置格式错误"), 400
     配置: str = json
     修改页面配置名(页面名=页面名, 配置名=配置)
-    return jsonify({"状态": "成功"})
+    return jsonify("成功")
 
 # 获取页面生成脚本
 @页面蓝图.route("/页面生成脚本/<page_name>", methods=["GET"])
@@ -209,18 +209,18 @@ def 获取页面生成脚本路由(page_name):
 def 修改页面生成脚本路由(page_name):
     页面名: str = page_name
     if not request.is_json:
-        return jsonify({"错误": "请求头 Content-Type 必须是 application/json"}), 400
+        return jsonify("请求头 Content-Type 必须是 application/json"), 400
     json = request.get_json(silent=True)
     if json is None:
-        return jsonify({"错误": "无效的 JSON 格式，请检查请求体"}), 400
+        return jsonify("无效的 JSON 格式，请检查请求体"), 400
     if "脚本模块名" not in json:
-        return jsonify({"错误": "缺少脚本模块名"}), 400
+        return jsonify("缺少脚本模块名"), 400
     脚本模块名: str = json["脚本模块名"]
     if "页面生成脚本名" not in json:
-        return jsonify({"错误": "缺少页面生成脚本名"}), 400
+        return jsonify("缺少页面生成脚本名"), 400
     页面生成脚本名: str = json["页面生成脚本名"]
     修改页面生成脚本(页面名=页面名, 脚本模块名=脚本模块名, 页面生成脚本名=页面生成脚本名)
-    return jsonify({"状态": "成功"})
+    return jsonify("成功")
 
 @页面蓝图.route("/开启页面操作脚本/<page_name>/<package_name>/<page_script_name>", methods=["GET"])
 def 开启页面操作脚本路由(page_name, package_name, page_script_name):
@@ -231,14 +231,14 @@ def 开启页面操作脚本路由(page_name, package_name, page_script_name):
         return jsonify(标准化(开启页面操作脚本(页面名=页面名, 脚本模块名=脚本模块名, 页面操作脚本名=页面操作脚本名)))
     except Exception as e:
         日志.警告(f"开启页面操作脚本失败，页面：“{页面名}”，脚本模块名：“{脚本模块名}”，页面操作脚本名“{页面操作脚本名}”: {e}")
-        return jsonify({"错误": "开启页面操作脚本失败", "信息": str(e)}), 500
+        return jsonify(f"开启页面操作脚本失败，页面：“{页面名}”，脚本模块名：“{脚本模块名}”，页面操作脚本名“{页面操作脚本名}”: {e}"), 500
 
 @页面蓝图.route("/开启页面操作自动开启脚本/<page_name>", methods=["GET"])
 def 开启页面操作自动开启脚本路由(page_name):
     页面名: str = page_name
     try:
         开启页面操作自动开启脚本(页面名=页面名)
-        return jsonify({"状态": "成功"})
+        return jsonify("成功")
     except Exception as e:
         return jsonify(str(e)), 500
 
@@ -251,14 +251,14 @@ def 关闭页面操作脚本路由(page_name, package_name, page_script_name):
         return jsonify(标准化(关闭页面操作脚本(页面名=页面名, 脚本模块名=脚本模块名, 页面操作脚本名=页面操作脚本名)))
     except Exception as e:
         日志.警告(f"关闭页面操作脚本失败，页面：“{页面名}”，脚本模块名：“{脚本模块名}”，页面操作脚本名“{页面操作脚本名}”: {e}")
-        return jsonify({"错误": "关闭页面操作脚本失败", "信息": str(e)}), 500
+        return jsonify(f"关闭页面操作脚本失败，页面：“{页面名}”，脚本模块名：“{脚本模块名}”，页面操作脚本名“{页面操作脚本名}”: {e}"), 500
 
 @页面蓝图.route("/关闭页面操作自动开启脚本/<page_name>", methods=["GET"])
 def 关闭页面操作自动开启脚本路由(page_name):
     页面名: str = page_name
     try:
         关闭页面操作自动开启脚本(页面名=页面名)
-        return jsonify({"状态": "成功"})
+        return jsonify("成功")
     except Exception as e:
         return jsonify(str(e)), 500
 
@@ -273,25 +273,25 @@ def 获取页面账号名路由(page_name):
 def 修改页面账号名路由(page_name):
     页面名: str = page_name
     if not request.is_json:
-        return jsonify({"错误": "请求头 Content-Type 必须是 application/json"}), 400
+        return jsonify("请求头 Content-Type 必须是 application/json"), 400
     json = request.get_json(silent=True)
     if json is None:
-        return jsonify({"错误": "无效的 JSON 格式，请检查请求体"}), 400
+        return jsonify("无效的 JSON 格式，请检查请求体"), 400
     if not isinstance(json, str):
-        return jsonify({"错误": "必须是字符串"}), 400
+        return jsonify("必须是字符串"), 400
     账号名: str = json
     修改页面账号名(页面名=页面名, 账号名=账号名)
-    return jsonify({"状态": "成功"})
+    return jsonify("成功")
 
 @页面蓝图.route("/新建页面/<page_name>", methods=["GET"])
 def 新建页面路由(page_name):
     页面名: str = page_name
     try:
         新建页面(页面名=页面名)
-        return jsonify({"状态": "成功"})
+        return jsonify("成功")
     except Exception as e:
         日志.警告(f"打开页面失败，页面名：{页面名}: {e}")
-        return jsonify({"错误": "打开页面失败", "信息": e}), 500
+        return jsonify(f"打开页面失败，页面名：{页面名}: {e}"), 500
 
 # 关闭页面
 @页面蓝图.route("/关闭页面/<page_name>", methods=["GET"])
@@ -299,10 +299,10 @@ def 关闭页面路由(page_name):
     页面名: str = page_name
     try:
         关闭页面(页面名=页面名)
-        return jsonify({"状态": "成功"})
+        return jsonify("成功")
     except Exception as e:
         日志.警告(f"关闭页面失败，页面名：{页面名}: {e}")
-        return jsonify({"错误": "关闭页面失败", "信息": e}), 500
+        return jsonify(f"关闭页面失败，页面名：{页面名}: {e}"), 500
 
 # 获取页面
 @页面蓝图.route("/获取页面/<page_name>", methods=["GET"])
@@ -312,7 +312,7 @@ def 获取页面路由(page_name):
         return jsonify(标准化(获取页面(页面名=页面名)))
     except Exception as e:
         日志.警告(f"获取页面失败，页面名：{页面名}: {e}")
-        return jsonify({"错误": "获取页面失败", "信息": e}), 500
+        return jsonify(f"获取页面失败，页面名：{页面名}: {e}"), 500
 
 # 获取页面状态
 @页面蓝图.route("/获取页面状态/<page_name>", methods=["GET"])
@@ -322,7 +322,7 @@ def 获取页面状态路由(page_name):
         return jsonify(获取页面状态(页面名=页面名))
     except Exception as e:
         日志.警告(f"获取页面状态失败，页面名：{页面名}: {e}")
-        return jsonify({"错误": "获取页面失败", "信息": e}), 500
+        return jsonify(f"获取页面状态失败，页面名：{页面名}: {e}"), 500
 
 #获取页面初始URL
 @页面蓝图.route("/页面初始URL/<page_name>", methods=["GET"])
@@ -332,19 +332,19 @@ def 获取页面初始URL路由(page_name):
         return jsonify(获取页面初始URL(页面名=页面名))
     except Exception as e:
         日志.警告(f"获取页面初始URL失败，页面名：{页面名}: {e}")
-        return jsonify({"错误": "获取页面初始URL失败", "信息": e}), 500
+        return jsonify(f"获取页面初始URL失败，页面名：{页面名}: {e}"), 500
 
 # 修改页面初始URL
 @页面蓝图.route("/页面初始URL/<page_name>", methods=["PUT"])
 def 修改页面初始URL路由(page_name):
     页面名: str = page_name
     if not request.is_json:
-        return jsonify({"错误": "请求头 Content-Type 必须是 application/json"}), 400
+        return jsonify("请求头 Content-Type 必须是 application/json"), 400
     json = request.get_json(silent=True)
     if json is None:
-        return jsonify({"错误": "无效的 JSON 格式，请检查请求体"}), 400
+        return jsonify("无效的 JSON 格式，请检查请求体"), 400
     if not isinstance(json, str):
-        return jsonify({"错误": "必须是字符串"}), 400
+        return jsonify("请求体 JSON 必须是字符串"), 400
     初始URL: str = json
     修改页面初始URL(页面名=页面名, 初始URL=初始URL)
-    return jsonify({"状态": "成功"})
+    return jsonify("成功")

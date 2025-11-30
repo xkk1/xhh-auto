@@ -24,7 +24,6 @@ def 配置数据(配置名: str = "默认", 脚本模块名: str = 小红狐模�
     json_data = request.get_json(silent=True)  # JSON 请求体，silent=True 避免解析失败报错
     if json_data:
         默认值 = json_data
-        print(默认值)
     return jsonify(获取配置数据(配置名=配置名, 脚本模块名=脚本模块名, 默认值=默认值).数据)
 
 @配置蓝图.route("/数据/<config_name>", methods=["GET"])

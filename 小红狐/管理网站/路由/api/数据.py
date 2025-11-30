@@ -26,10 +26,7 @@ def 创建或更新内存数据():
     数据 = request.get_json()
     # 检查是否成功获取到 JSON（客户端必须设置 Content-Type: application/json）
     if 数据 is None:
-        return jsonify({
-            "状态": "错误",
-            "信息": "请发送有效的 JSON 数据，并设置 Content-Type: application/json"
-        }), 400
+        return jsonify("请发送有效的 JSON 数据，并设置 Content-Type: application/json"), 400
     内存数据 = 获取内存数据(标识)
     内存数据.更新(数据)
     return jsonify(内存数据.数据)
@@ -50,10 +47,7 @@ def 创建或更改本地数据(filename):
     数据 = request.get_json()
     # 检查是否成功获取到 JSON（客户端必须设置 Content-Type: application/json）
     if 数据 is None:
-        return jsonify({
-            "状态": "错误",
-            "信息": "请发送有效的 JSON 数据，并设置 Content-Type: application/json"
-        }), 400
+        return jsonify("请发送有效的 JSON 数据，并设置 Content-Type: application/json"), 400
     本地数据 = 获取本地数据(数据目录 / filename)
     本地数据.数据 = 数据
     # 立刻保存数据
@@ -68,10 +62,7 @@ def 创建或合并本地数据(filename):
     数据 = request.get_json()
     # 检查是否成功获取到 JSON（客户端必须设置 Content-Type: application/json）
     if 数据 is None:
-        return jsonify({
-            "状态": "错误",
-            "信息": "请发送有效的 JSON 数据，并设置 Content-Type: application/json"
-        }), 400
+        return jsonify("请发送有效的 JSON 数据，并设置 Content-Type: application/json"), 400
     本地数据 = 获取本地数据(数据目录 / filename)
     本地数据.合并(数据)
     # 立刻保存数据

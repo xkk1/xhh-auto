@@ -22,26 +22,26 @@ def 获取全部账号名路由():
 @账号蓝图.route("/账号名", methods=["POST"])
 def 新建账号路由():
     if not request.is_json:
-        return jsonify({"错误": "请求头 Content-Type 必须是 application/json"}), 400
+        return jsonify("请求头 Content-Type 必须是 application/json"), 400
     json = request.get_json(silent=True)
     if json is None:
-        return jsonify({"错误": "无效的 JSON 格式，请检查请求体"}), 400
+        return jsonify("无效的 JSON 格式，请检查请求体"), 400
     if not isinstance(json, str):
-        return jsonify({"错误": "必须是字符串"}), 400
+        return jsonify("必须是字符串"), 400
     账号名: str = json
     try:
         新建账号(账号名)
-        return jsonify({"信息": "账号新建成功"})
+        return jsonify("账号新建成功")
     except Exception as e:
         日志.警告(f"新建账号失败，账号名：“{账号名}”: {e}")
-        return jsonify({"错误": "新建账号失败", "信息": f"账号名：“{账号名}”: {e}"}), 400
+        return jsonify(f"新建账号失败，账号名：“{账号名}”: {e}"), 400
 
 @账号蓝图.route("/保存账号状态/<account_name>", methods=["GET"])
 def 保存账号状态路由(account_name: str):
     账号名: str = account_name
     try:
         保存账号状态(账号名)
-        return jsonify({"信息": "保存账号状态成功"})
+        return jsonify("保存账号状态成功")
     except Exception as e:
         日志.警告(f"保存账号状态失败，账号名：“{账号名}”: {e}")
         return jsonify(f"保存账号状态失败!\n账号名“{账号名}”: {e}"), 500
