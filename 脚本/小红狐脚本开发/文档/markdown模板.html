@@ -17,6 +17,9 @@
 {{ markdown内容|safe }}
             </code>
         </pre>
+        <p id="md-url" style="text-align: right;display: none">
+            原 Markdown 文件：<a href="#" id="md-url-a" target="_blank"></a>
+        </p>
     </main>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -28,6 +31,15 @@
             });
             hljs.highlightAll();
         });
+        const currentUrl = new URL(window.location);
+        if (currentUrl.pathname.endsWith('.html')) {
+            currentUrl.pathname = currentUrl.pathname.slice(0, -5) + '.md';
+            const mdUrl = currentUrl.toString();
+            const mdUrlA = document.getElementById('md-url-a');
+            mdUrlA.href = mdUrl;
+            mdUrlA.textContent = decodeURI(mdUrl);
+            document.getElementById('md-url').style.display = 'block';
+        }
     </script>
     <style>
 :root {
