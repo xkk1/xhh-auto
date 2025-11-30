@@ -42,7 +42,7 @@ class 小红狐脚本信息:
         "总控页面": {}, # 总控页面: dict[str, str] = {URL: 标题}
         "页面生成": {}, # 页面生成脚本: dict[str, dict[str, Any]]
         "页面操作": {}, # 页面操作脚本: dict[str, dict[str, Any]]
-        "flask_route": None, # flask 路由 api
+        "flask路由": None, # flask 路由 api
     }
 
     @classmethod

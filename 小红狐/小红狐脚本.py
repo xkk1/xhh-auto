@@ -55,21 +55,18 @@ from .内置脚本.页面操作 import 页面管理
 
 默认启用页面操作脚本名元组: tuple[str, ...] = ("页面管理",)
 
-def flask_route(子路径: str):
+def flask路由(子路径: str):
     import flask
-    # 获取请求方法
-    method = flask.request.method
-
-    # 获取各种参数
-    args = flask.request.args  # GET 参数
-    form = flask.request.form  # POST 表单参数
-    json_data = flask.request.get_json(silent=True)  # JSON 请求体，silent=True 避免解析失败报错
+    请求方法 = flask.request.method  # HTTP 请求方法
+    查询参数 = flask.request.args  # GET 参数
+    表单数据 = flask.request.form  # POST 参数
+    json请求体 = flask.request.get_json(silent=True)  # JSON 请求体，silent=True 避免解析失败报错
 
     所有数据 = {
         "子路径": 子路径,
-        "method": method,
-        "args": args,
-        "form": form,
-        "json_data": json_data
+        "请求方法": 请求方法,
+        "查询参数": 查询参数,
+        "表单数据": 表单数据,
+        "JSON请求体": json请求体
     }
     return flask.jsonify(所有数据), 200

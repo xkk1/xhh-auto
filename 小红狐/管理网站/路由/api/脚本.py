@@ -35,24 +35,25 @@ def 返回导入脚本信息字典() -> dict[str, NoneType | str | int | float |
     导入脚本信息字典: dict[str, dict[str, Any]] = 获取导入脚本信息字典()
     return jsonify(标准化(导入脚本信息字典))
 
-HTTP方法 = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS', 'HEAD']
+# https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Reference/Methods
+HTTP请求方法 = ["GET", "HEAD", "POST", "PUT", "DELETE", "CONNECT", "OPTIONS", "TRACE", "PATCH"]
 
-def 处理接口(脚本模块名, 子路径):
+def 处理路由(脚本模块名, 子路径):
     if 脚本模块名 not in 获取导入脚本模块名列表():
         return jsonify({"错误": f"脚本模块“{脚本模块名}”不存在"}), 404
     脚本 = 获取脚本(脚本模块名)
-    if 脚本["flask_route"] is None:
+    if 脚本["flask路由"] is None:
         return jsonify({"错误": "脚本未启用 Flask"}), 400
-    return 脚本["flask_route"](子路径=子路径)
+    return 脚本["flask路由"](子路径=子路径)
 
-@脚本蓝图.route("/接口/<package>/<path:subpath>", methods=HTTP方法)
+@脚本蓝图.route("/路由/<package>/<path:subpath>", methods=HTTP请求方法)
 def 处理子路径(package, subpath):
-    return 处理接口(脚本模块名=package, 子路径="/"+subpath)
+    return 处理路由(脚本模块名=package, 子路径="/"+subpath)
 
-@脚本蓝图.route("/接口/<package>/", methods=HTTP方法)
+@脚本蓝图.route("/路由/<package>/", methods=HTTP请求方法)
 def 处理路径(package):
-    return 处理接口(脚本模块名=package, 子路径="/")
+    return 处理路由(脚本模块名=package, 子路径="/")
 
-@脚本蓝图.route("/接口/<package>", methods=HTTP方法)
+@脚本蓝图.route("/路由/<package>", methods=HTTP请求方法)
 def 处理模块(package):
-    return 处理接口(脚本模块名=package, 子路径="")
+    return 处理路由(脚本模块名=package, 子路径="")
