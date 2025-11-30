@@ -75,4 +75,5 @@ ul#标签页>li>a.选中 {
     width: 100%;
     height: 100%;
     border: none;
+    display: block; /* 避免 inline 元素底部留白 */
 }
