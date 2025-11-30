@@ -33,7 +33,7 @@ async def 浏览器打开管理网站(端口: int):
     管理网站打开延迟 = 获取管理网站打开延迟()
     日志.信息(f"🚀管理网站已启动，请等待 {管理网站打开延迟} 秒后自动打开浏览器")
     await asyncio.sleep(管理网站打开延迟)
-    webbrowser.open(f"http://localhost:{端口}")
+    webbrowser.open(f"http://127.0.0.1:{端口}")
 
 def 主函数():
     日志.调试(f"🌈红狐管理网站启动中，网站目录：{str(网站目录)}")
