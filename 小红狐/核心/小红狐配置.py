@@ -28,7 +28,7 @@ def 初始化小红狐配置():
     配置数据.保存()
     from ..工具 import 目录工具
     os.environ["小红狐"] = str(目录工具.小红狐目录)
-    目录工具.脚本目录 = pathlib.Path(os.environ.get("SCRIPT_PATH", 配置数据["环境变量"]["SCRIPT_PATH"]))
+    目录工具.脚本目录 = pathlib.Path(os.environ.get("SCRIPT_PATH", 配置数据["环境变量"]["SCRIPT_PATH"])).resolve()
 
 def 判断开关(值: str) -> bool:
     # 判断是否为 true 1 yes on... 首字母
