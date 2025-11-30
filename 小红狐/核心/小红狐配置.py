@@ -7,7 +7,7 @@ from ..核心.配置 import 获取配置数据
 
 默认配置 = {
     "环境变量": {
-        "SCRIPT_PATH": "小红狐/脚本",
+        "SCRIPT_PATH": "脚本",
         "PLAYWRIGHT_BROWSERS_PATH": "浏览器",
         "PLAYWRIGHT_BROWSERS_TYPE": "chromium",
         "PLAYWRIGHT_BROWSERS_LAUNCH_MODE": "launch",
