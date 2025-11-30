@@ -1,16 +1,18 @@
+from pathlib import Path
 from types import NoneType
 from typing import Any
 from flask import Blueprint, jsonify
 
 from ....工具.日志工具 import 获取日志记录器
-from ....核心.脚本 import 获取导入脚本信息字典, 获取导入脚本模块名列表, 获取脚本
+from ....核心.脚本 import 获取导入脚本信息字典, 获取导入脚本模块名列表, 获取脚本, 脚本目录
 
 
 日志 = 获取日志记录器(__name__)
 脚本蓝图 = Blueprint(
     "脚本",
     __name__,
-    url_prefix="/脚本"
+    url_prefix="/脚本",
+    template_folder=脚本目录.resolve(),
 )
 
 
@@ -52,6 +54,8 @@ def 处理子路径(package, subpath):
 
 @脚本蓝图.route("/路由/<package>/", methods=HTTP请求方法)
 def 处理路径(package):
+    from flask import current_app
+    print("当前模板目录:", current_app.template_folder)
     return 处理路由(脚本模块名=package, 子路径="/")
 
 @脚本蓝图.route("/路由/<package>", methods=HTTP请求方法)
