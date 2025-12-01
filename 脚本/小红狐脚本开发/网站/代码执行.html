@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>代码执行</title>
+    <link rel="stylesheet" href="./css/通用样式.css">
+</head>
+<body>
+    <main>
+        <textarea id="code" cols="60" rows="20" autocomplete="off" placeholder="请输入代码"></textarea>
+        <p><button id="run">运行</button></p>
+        <pre id="result"></pre>
+    </main>
+    <script>
+        // 获取当前 URL 的查询字符串部分，并解析
+    const urlParams = new URLSearchParams(window.location.search);
+    const pageName = urlParams.get('页面名') || '页面名';
+    const resultElement = document.getElementById('result');
+    const codeElement = document.getElementById('code');
+    const runButton = document.getElementById('run');
+    let result = "";
+    codeElement.value = `from 小红狐.核心.页面 import 获取页面状态, 获取页面
+from 小红狐.工具.任务管理器工具 import 异步任务管理器
+
+页面名: str = "${pageName}"
+页面状态 = 获取页面状态(页面名=页面名)
+if 页面状态 == None:
+    raise Exception(f"页面“{页面名}”未创建")
+elif 页面状态 == False:
+    raise Exception(f"页面“{页面名}”手动关闭")
+page = 获取页面(页面名=页面名)
+print("页面标题：" + 异步任务管理器.运行(page.title()))`;
+    runButton.onclick = () => {
+        runButton.textContent = "运行中...";
+        const code = codeElement.value;
+        result = "";
+        fetch('/api/脚本/路由/小红狐脚本开发/api/页面操作/代码执行', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(code)
+        })
+        .then(res => {
+            return res.json();
+        })
+        .then(data => {
+            result += data;
+        })
+        .catch(err => {
+            console.error(err);
+            result += `网络请求出错：${err}\n`;
+        })
+        .finally(() => {
+            resultElement.replaceChildren();
+            resultElement.textContent = result;
+            runButton.textContent = "运行";
+        });
+    };
+    </script>
+</body>
+</html>

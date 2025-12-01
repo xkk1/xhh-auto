@@ -13,6 +13,8 @@ from . import __package__ as 模块名
     f"/api/脚本/路由/{模块名}/文档/主页.html": "小红狐脚本开发文档",
 }
 
+from .页面操作 import 代码执行
+
 页面操作: dict[str, dict[str, Any]] = {
     "开发者工具": {  # 页面操作脚本名，唯一
         "入口函数": None,  # 入口函数 (页面名: str)
@@ -21,6 +23,15 @@ from . import __package__ as 模块名
         "配置页面": None,  # 配置页面函数 (页面名: str) -> dict[str, str]
         "名称": "小红狐脚本开发者工具",  # 脚本名称 str
         "简介": "小红狐脚本开发者工具",  # 脚本简介 str
+        "调试": True,  # 仅开启调试模式时启用脚本 bool 默认：False
+    },
+    "代码执行": {  # 页面操作脚本名，唯一
+        "入口函数": 代码执行.入口函数,  # 入口函数 (页面名: str)
+        "关闭函数": 代码执行.关闭函数,  # 关闭函数 (页面名: str | None) 页面名=None->关闭全部
+        "脚本状态": 代码执行.脚本状态,  # 脚本开启状态函数 (页面名: str | None) -> bool
+        "配置页面": 代码执行.配置页面,  # 配置页面函数 (页面名: str) -> dict[str, str]
+        "名称": "小红狐脚本代码执行",  # 脚本名称 str
+        "简介": "小红狐脚本代码执行",  # 脚本简介 str
         "调试": True,  # 仅开启调试模式时启用脚本 bool 默认：False
     },
 }
@@ -32,6 +43,9 @@ def flask路由(子路径: str):
     if 请求方法 == "GET" and 子路径.startswith("/文档"):
         from .文档 import 文档
         return 文档.路由(子路径[3:])
+    if 请求方法 == "POST" and 子路径 == "/api/页面操作/代码执行":
+        from .页面操作 import 代码执行
+        return 代码执行.路由()
     查询参数 = flask.request.args  # GET 参数
     表单数据 = flask.request.form  # POST 参数
     json请求体 = flask.request.get_json(silent=True)  # JSON 请求体，silent=True 避免解析失败报错
