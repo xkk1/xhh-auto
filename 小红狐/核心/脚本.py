@@ -144,7 +144,7 @@ def 重载脚本(模块名: str) -> ModuleType:
     if 模块名 in 导入脚本信息:
         父模块 = importlib.reload(导入脚本信息[模块名].父模块)
         模块 = importlib.reload(导入脚本信息[模块名].模块)
-        导入脚本信息[模块名] = 小红狐脚本信息(模块)
+        导入脚本信息[模块名] = 小红狐脚本信息(模块, 父模块)
         return 导入脚本信息[模块名]
     else:
         raise ImportError(f"无法重载脚本：{模块名}, 脚本未导入")
