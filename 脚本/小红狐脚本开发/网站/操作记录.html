@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+  <title>操作记录</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #1e1e1e;
+      color: white;
+      font-family: 'Courier New', monospace;
+    }
+
+    #log {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 20px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      background-color: rgba(0, 0, 0, 0.5);
+      font-size: 14px;
+      line-height: 1.5;
+      z-index: 1;
+      pointer-events: none;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    #log::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* .event {
+      margin-bottom: 6px;
+    } */
+
+    .key-down { color: #4caf50; }
+    .key-up   { color: #f44336; }
+    .mouse-down { color: #2196f3; }
+    .mouse-up   { color: #ff9800; }
+    .mouse-wheel { color: #e91e63; }
+    .touch-start { color: #9c27b0; } /* 触屏按下：紫色 */
+    .touch-end   { color: #673ab7; } /* 触屏抬起：深紫色 */
+
+    /* Canvas */
+    #trailCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: auto;
+    }
+
+    /* 控制按钮 */
+    #controlButtons {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      gap: 12px;
+      z-index: 10;
+      pointer-events: auto;
+    }
+
+    #controlButtons button {
+      padding: 10px 16px;
+      font-size: 14px;
+      font-family: 'Courier New', monospace;
+      background-color: rgba(30, 30, 30, 0.8);
+      color: white;
+      border: 1px solid #555;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    #controlButtons button:hover {
+      background-color: rgba(50, 50, 50, 0.9);
+    }
+
+    #controlButtons button:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body>
+
+<div id="log"></div>
+<canvas id="trailCanvas"></canvas>
+
+<!-- 隐藏输入框：用于唤起键盘 -->
+<input id="keyboardInput" type="text" style="position: absolute; left: -9999px; opacity: 0;" />
+
+<!-- 操作按钮 -->
+<div id="controlButtons">
+  <button id="clearBtn">清空</button>
+  <button id="keyboardBtn">键盘</button>
+</div>
+
+<script>
+  const logEl = document.getElementById('log');
+  const canvas = document.getElementById('trailCanvas');
+  const ctx = canvas.getContext('2d');
+
+  let strokes = [];
+  let currentStroke = null;
+  let isPointerDown = false;
+  const dpr = 1 || window.devicePixelRatio || 1;
+  logEl.textContent = '[设备像素比(DPR)] ' + window.devicePixelRatio;
+
+
+  
+  function resizeCanvas() {
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+    ctx.scale(dpr, dpr);
+    redrawAllStrokes();
+  }
+
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  function getLocalTimestamp() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    const ms = String(now.getMilliseconds()).padStart(3, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${ms}`;
+  }
+
+  function addLog(message, className) {
+    const timestamp = getLocalTimestamp();
+    const fullMessage = `${message}    [${timestamp}]`;
+    const el = document.createElement('div');
+    el.className = `event ${className}`;
+    el.textContent = fullMessage;
+    logEl.appendChild(el);
+
+    if (logEl.children.length > 300) {
+      logEl.removeChild(logEl.firstElementChild);
+    }
+
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+
+  // === 键盘事件 ===
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      clearAll();
+      return;
+    }
+    const key = e.key === ' ' ? 'Space' : e.key;
+    addLog(`[键盘按下] ${key} (code: ${e.code})`, 'key-down');
+  });
+
+  window.addEventListener('keyup', (e) => {
+    const key = e.key === ' ' ? 'Space' : e.key;
+    addLog(`[键盘抬起] ${key} (code: ${e.code})`, 'key-up');
+  });
+
+  // === 坐标转换函数（逻辑像素 → 物理像素）===
+  function toPhysical(clientX, clientY) {
+    return {
+      x: clientX * dpr,
+      y: clientY * dpr
+    };
+  }
+
+  // === 统一的轨迹控制函数 ===
+  function startStroke(clientX, clientY, source = '鼠标') {
+    isPointerDown = true;
+    currentStroke = [];
+    const { x, y } = toPhysical(clientX, clientY);
+    currentStroke.push({ x, y });
+    addLog(`[${source}按下] (${Math.round(clientX)}, ${Math.round(clientY)})`, 
+           source === '鼠标' ? 'mouse-down' : 'touch-start');
+  }
+
+  function continueStroke(clientX, clientY) {
+    if (!isPointerDown) return;
+    const { x, y } = toPhysical(clientX, clientY);
+    currentStroke.push({ x, y });
+    drawCurrentStroke();
+  }
+
+  function endStroke(clientX, clientY, source = '鼠标') {
+    if (!isPointerDown) return;
+    isPointerDown = false;
+    const { x, y } = toPhysical(clientX, clientY);
+    currentStroke.push({ x, y });
+    addLog(`[${source}抬起] (${Math.round(clientX)}, ${Math.round(clientY)})`, 
+           source === '鼠标' ? 'mouse-up' : 'touch-end');
+    strokes.push([...currentStroke]);
+    currentStroke = null;
+    redrawAllStrokes();
+  }
+
+  // === 鼠标事件 ===
+  canvas.addEventListener('mousedown', (e) => {
+    startStroke(e.clientX, e.clientY, '鼠标');
+  });
+
+  canvas.addEventListener('mousemove', (e) => {
+    continueStroke(e.clientX, e.clientY);
+  });
+
+  canvas.addEventListener('mouseup', (e) => {
+    endStroke(e.clientX, e.clientY, '鼠标');
+  });
+
+  // === 触摸事件 ===
+  canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    startStroke(touch.clientX, touch.clientY, '触屏');
+  }, { passive: false });
+
+  canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    continueStroke(touch.clientX, touch.clientY);
+  }, { passive: false });
+
+  canvas.addEventListener('touchend', (e) => {
+    const touch = e.changedTouches[0];
+    endStroke(touch.clientX, touch.clientY, '触屏');
+  }, { passive: false });
+
+  // === 滚轮事件 ===
+  canvas.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const { deltaX, deltaY } = e;
+    const vDir = deltaY < 0 ? '向上' : deltaY > 0 ? '向下' : '—';
+    const hDir = deltaX < 0 ? '向左' : deltaX > 0 ? '向右' : '';
+    let msg = `[滚轮] 垂直: ${vDir}`;
+    if (hDir) msg += `, 水平: ${hDir}`;
+    msg += ` (Δx=${Math.round(deltaX)}, Δy=${Math.round(deltaY)})`;
+    addLog(msg, 'mouse-wheel');
+  }, { passive: false });
+
+  canvas.addEventListener('contextmenu', e => e.preventDefault());
+
+  // === 绘图函数 ===
+  function drawStroke(stroke, color = '#4fc3f7', width = 2) {
+    if (stroke.length < 2) return;
+    ctx.beginPath();
+    ctx.moveTo(stroke[0].x, stroke[0].y);
+    for (let i = 1; i < stroke.length; i++) {
+      ctx.lineTo(stroke[i].x, stroke[i].y);
+    }
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+  }
+
+  function drawStartEndPoints(stroke) {
+    if (stroke.length === 0) return;
+    const start = stroke[0];
+    const end = stroke[stroke.length - 1];
+    if (stroke.length === 1 || (end.x === start.x && end.y === start.y)) {
+      ctx.beginPath();
+      ctx.arc(start.x, start.y, 5, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffeb3b'; // yellow
+      ctx.fill();
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    } else {
+      ctx.beginPath();
+      ctx.arc(start.x, start.y, 5, 0, Math.PI * 2);
+      ctx.fillStyle = '#4caf50'; // green
+      ctx.fill();
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(end.x, end.y, 5, 0, Math.PI * 2);
+      ctx.fillStyle = '#f44336'; // red
+      ctx.fill();
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+  }
+
+  function drawCurrentStroke() {
+    const displayWidth = canvas.width / dpr;
+    const displayHeight = canvas.height / dpr;
+    ctx.clearRect(0, 0, displayWidth, displayHeight);
+    redrawAllStrokes();
+    if (currentStroke && currentStroke.length >= 1) {
+      drawStroke(currentStroke, '#ff5252', 2);
+      drawStartEndPoints(currentStroke);
+    }
+  }
+
+  function redrawAllStrokes() {
+    const displayWidth = canvas.width / dpr;
+    const displayHeight = canvas.height / dpr;
+    ctx.clearRect(0, 0, displayWidth, displayHeight);
+    strokes.forEach(stroke => {
+      drawStroke(stroke);
+      drawStartEndPoints(stroke);
+    });
+  }
+
+  function getMouseButton(button) {
+    return button === 0 ? '左键' : button === 1 ? '中键' : button === 2 ? '右键' : `按钮${button}`;
+  }
+
+  // === 新增：控制按钮功能 ===
+  const clearBtn = document.getElementById('clearBtn');
+  const keyboardBtn = document.getElementById('keyboardBtn');
+  const keyboardInput = document.getElementById('keyboardInput');
+
+  function clearAll() {
+    strokes = [];
+    currentStroke = null;
+    isPointerDown = false;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    logEl.innerHTML = '';
+    addLog('[提示] 所有日志与轨迹已清空', 'key-up');
+  }
+
+  clearBtn.addEventListener('click', clearAll);
+
+  keyboardBtn.addEventListener('click', () => {
+    keyboardInput.focus();
+    addLog('[提示] 已尝试唤起键盘（请在输入框中打字）', 'key-down');
+  });
+
+  keyboardInput.addEventListener('input', (e) => {
+    if (e.target.value) {
+      addLog(`[键盘输入] "${e.target.value}"`, 'key-down');
+      e.target.value = ''; // 清空
+    }
+  });
+</script>
+
+</body>
+</html>

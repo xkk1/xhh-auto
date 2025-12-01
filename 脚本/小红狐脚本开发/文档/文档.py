@@ -4,7 +4,6 @@ from flask import render_template, send_from_directory
 
 
 from .. import __package__ as 模块名
-from . import __package__ as 文档模块名
 文档路径 = Path(__file__).parent.resolve()
 
 
