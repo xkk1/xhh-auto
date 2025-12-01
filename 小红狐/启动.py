@@ -21,6 +21,8 @@ def 主函数():
     except Exception as e:
         import traceback
         日志.严重(f"❌小红狐灾难性故障：{e}\n{traceback.format_exc()}")
+        from . import 错误
+        错误.显示错误(错误=e, 标题="小红狐灾难性故障", 内容="小红狐灾难性故障！\n错误信息：")
         raise e
 
 
