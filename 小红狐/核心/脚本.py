@@ -82,8 +82,9 @@ class 小红狐脚本信息:
                 del 信息字典["页面操作"][调试页面操作脚本名]
         return 信息字典
     
-    def __init__(self, 模块: ModuleType):
+    def __init__(self, 模块: ModuleType, 父模块: ModuleType | None = None):
         self.模块: ModuleType = 模块
+        self.父模块: ModuleType | None = 父模块
         self.脚本信息字典: dict[str, Any] = self.获取脚本信息(模块)
     
     def __getitem__(self, 键):
@@ -141,6 +142,7 @@ class 小红狐脚本信息:
 
 def 重载脚本(模块名: str) -> ModuleType:
     if 模块名 in 导入脚本信息:
+        父模块 = importlib.reload(导入脚本信息[模块名].父模块)
         模块 = importlib.reload(导入脚本信息[模块名].模块)
         导入脚本信息[模块名] = 小红狐脚本信息(模块)
         return 导入脚本信息[模块名]
@@ -151,8 +153,9 @@ def 导入脚本(模块名: str) -> 小红狐脚本信息 | None | ImportError:
     if 模块名 in 导入脚本信息:
         return 重载脚本(模块名)
     try:
+        父模块 = importlib.import_module(模块名)
         模块 = importlib.import_module(模块名 + ".小红狐脚本")
-        脚本信息 = 小红狐脚本信息(模块)
+        脚本信息 = 小红狐脚本信息(模块, 父模块)
         if 脚本信息["调试"] == True and not 调试:
             return None  # 仅开启调试模式时启用脚本
         导入脚本信息[模块名] = 脚本信息
