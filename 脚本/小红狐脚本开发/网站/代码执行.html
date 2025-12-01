@@ -30,7 +30,11 @@ if 页面状态 == None:
 elif 页面状态 == False:
     raise Exception(f"页面“{页面名}”手动关闭")
 page = 获取页面(页面名=页面名)
-print("页面标题：" + 异步任务管理器.运行(page.title()))`;
+
+async def 异步函数():
+    print("页面标题：" + await page.title())
+
+异步任务管理器.运行(异步函数())`;
     runButton.onclick = () => {
         runButton.textContent = "运行中...";
         const code = codeElement.value;
