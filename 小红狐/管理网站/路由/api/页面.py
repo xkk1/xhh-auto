@@ -68,7 +68,7 @@ def 删除页面路由():
         return jsonify(f"页面名：“{json}”: {e}"), 500
 
 # 复制页面
-@页面蓝图.route("/复制", methods=["PUT"])
+@页面蓝图.route("/复制", methods=["POST"])
 def 复制页面路由():
     if not request.is_json:
         return jsonify("请求头 Content-Type 必须是 application/json"), 400

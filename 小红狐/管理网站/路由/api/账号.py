@@ -75,7 +75,7 @@ def 删除账号路由(account_name: str):
         return jsonify(f"删除账号失败!\n账号名“{账号名}”: {e}"), 500
 
 # 复制账号
-@账号蓝图.route("/复制", methods=["PUT"])
+@账号蓝图.route("/复制", methods=["POST"])
 def 复制账号路由():
     if not request.is_json:
         return jsonify("请求头 Content-Type 必须是 application/json"), 400
