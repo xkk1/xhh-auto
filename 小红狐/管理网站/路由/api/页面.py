@@ -5,7 +5,7 @@ from playwright.async_api import Page
 
 from .... import __package__ as 小红狐模块名
 from ....工具.日志工具 import 获取日志记录器
-from ....核心.页面 import 修改标签页URL排序, 修改页面初始URL, 修改页面名, 修改页面生成脚本, 修改页面账号名, 修改页面配置名, 关闭页面操作自动开启脚本, 开启页面操作自动开启脚本, 新增页面, 新建页面, 关闭页面, 获取全部页面名, 获取页面, 关闭页面操作脚本, 删除页面操作自动开启脚本, 开启页面操作脚本, 添加页面操作自动开启脚本, 获取标签页URL排序, 获取页面初始URL, 获取页面操作开启脚本, 获取页面操作自动开启脚本, 获取页面状态, 获取页面生成脚本, 获取页面账号名, 获取页面配置名
+from ....核心.页面 import 修改标签页URL排序, 修改页面初始URL, 修改页面名, 修改页面生成脚本, 修改页面账号名, 修改页面配置名, 关闭页面操作自动开启脚本, 删除页面, 开启页面操作自动开启脚本, 新增页面, 新建页面, 关闭页面, 获取全部页面名, 获取页面, 关闭页面操作脚本, 删除页面操作自动开启脚本, 开启页面操作脚本, 添加页面操作自动开启脚本, 获取标签页URL排序, 获取页面初始URL, 获取页面操作开启脚本, 获取页面操作自动开启脚本, 获取页面状态, 获取页面生成脚本, 获取页面账号名, 获取页面配置名
 from ....核心.脚本 import 小红狐脚本信息, 获取脚本
 from .脚本 import 标准化
 
@@ -48,6 +48,24 @@ def 修改页面名路由():
     except Exception as e:
         日志.警告(f"修改页面名失败，页面名：“{页面名}”，新页面名“{新页面名}”: {e}")
         return jsonify(f"页面名：页面名：“{页面名}”，新页面名“{新页面名}”: {e}"), 500
+
+# 删除页面
+@页面蓝图.route("/页面", methods=["DELETE"])
+def 删除页面路由():
+    if not request.is_json:
+        return jsonify("请求头 Content-Type 必须是 application/json"), 400
+    json = request.get_json(silent=True)
+    if json is None:
+        return jsonify("无效的 JSON 格式，请检查请求体"), 400
+    if not isinstance(json, str):
+        return jsonify("配置格式错误"), 400
+    页面名: str = json
+    try:
+        删除页面(页面名=页面名)
+        return jsonify("成功"), 200
+    except Exception as e:
+        日志.警告(f"删除页面失败，页面名：“{json}”: {e}")
+        return jsonify(f"页面名：“{json}”: {e}"), 500
 
 @页面蓝图.route("/页面名", methods=["POST"])
 def 新增页面名路由():

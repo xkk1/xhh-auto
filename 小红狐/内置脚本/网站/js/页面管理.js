@@ -913,14 +913,7 @@ function 渲染页面名() {
         小红狐.页面.关闭页面(页面名)
             .then(() => {
                 小红狐.页面.修改页面名(页面名, 新页面名)
-                    .then((响应) => {
-                        if (!响应.ok) {
-                            响应.json().then(error => {
-                                console.error("修改页面名失败:", error);
-                                alert("修改页面名失败!\n" + error);
-                            });
-                            return;
-                        }
+                    .then((结果) => {
                         alert("修改页面账号成功！\n即将关闭管理页面！");
                         if (window !== parent) {
                             // 刷新页面列表
@@ -936,8 +929,8 @@ function 渲染页面名() {
                         window.close();
                     })
                     .catch(error => {
-                        console.error("因为网络修改页面账号失败:", error);
-                        alert("因为网络修改页面账号失败!\n" + error);
+                        console.error("修改页面账号失败:", error);
+                        alert("页面账号失败!\n" + error);
                     })
                     .finally(() => {
                         修改页面名按钮.classList.remove("加载中");
@@ -950,6 +943,52 @@ function 渲染页面名() {
             });
     });
     页面名容器.appendChild(修改页面名按钮);
+
+    const 删除页面名按钮 = document.createElement("button");
+    删除页面名按钮.type = "button";
+    删除页面名按钮.id = "删除页面名按钮";
+    删除页面名按钮.classList.add("加载按钮");
+    删除页面名按钮.textContent = `删除“${页面名}”页面`;
+    删除页面名按钮.style.color = "red";
+    删除页面名按钮.addEventListener("click", function () {
+        //二次确认
+        if (!confirm(`确定要删除“${页面名}”页面吗？`)) {
+            return;
+        }
+        this.classList.add("加载中");
+        小红狐.页面.关闭页面(页面名)
+            .then(() => {
+                小红狐.页面.删除页面(页面名)
+                    .then((结果) => {
+                        alert("删除页面账号成功！\n即将关闭管理页面！");
+                        if (window !== parent) {
+                            // 刷新页面列表
+                            if (parent.parent.刷新页面列表) {
+                                parent.parent.刷新页面列表();
+                            }
+                            // 关闭管理页面
+                            if (parent.parent?.多页面?.关闭页面) {
+                                parent.parent.多页面.关闭页面(`./html/配置.html?页面名=${页面名}`);
+                            }
+                        }
+                        // 关闭当前页面
+                        window.close();
+                    })
+                    .catch(error => {
+                        console.error("删除页面账失败:", error);
+                        alert("删除页面账失败!\n" + error);
+                    })
+                    .finally(() => {
+                        删除页面名按钮.classList.remove("加载中");
+                    })
+            })
+            .catch(error => {
+                console.error("关闭页面失败:", error);
+                alert("关闭页面失败!无法在关闭页面前删除账号！\n" + error);
+                删除页面名按钮.classList.remove("加载中");
+            });
+    });
+    页面名容器.appendChild(删除页面名按钮);
 }
 
 // DOM 加载完成时执行
