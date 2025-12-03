@@ -989,6 +989,38 @@ function 渲染页面名() {
             });
     });
     页面名容器.appendChild(删除页面名按钮);
+
+    const 复制页面按钮 = document.createElement("button");
+    复制页面按钮.type = "button";
+    复制页面按钮.id = "复制页面按钮";
+    复制页面按钮.classList.add("加载按钮");
+    复制页面按钮.textContent = `复制“${页面名}”页面`;
+    复制页面按钮.addEventListener("click", function () {
+        // 获取新页面名
+        const 新页面名 = prompt("请输入新页面名：", 页面名);
+        if (!新页面名) {
+            return;
+        }
+        if (新页面名 === 页面名) {
+            alert("新页面名不能与原页面名相同！");
+            return;
+        }
+        this.classList.add("加载中");
+        小红狐.页面.复制页面(页面名, 新页面名)
+            .then((结果) => {
+                if (window !== parent) {
+                    // 刷新页面列表
+                    if (parent.parent.刷新页面列表) {
+                        parent.parent.刷新页面列表();
+                    }
+                }
+                alert("复制页面成功！");
+            })
+            .finally(() => {
+                复制页面按钮.classList.remove("加载中");
+            });
+    });
+    页面名容器.appendChild(复制页面按钮);
 }
 
 // DOM 加载完成时执行
