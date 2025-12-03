@@ -193,7 +193,7 @@ function 渲染页面生成脚本() {
             const 脚本名称 = 页面生成脚本信息.名称 || 页面生成脚本名;
             const 选项 = document.createElement("option");
             选项.value = 脚本模块名 + "/" + 页面生成脚本名;
-            选项.textContent = `${脚本名称} (${脚本模块名}/${页面生成脚本名})`;
+            选项.textContent = 脚本名称;
             if (脚本模块名 === 页面生成脚本?.脚本模块名 && 页面生成脚本名 === 页面生成脚本?.页面生成脚本名) {
                 选项.textContent = "[当前] " + 选项.textContent;
                 选项.selected = true;
