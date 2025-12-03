@@ -4,7 +4,7 @@ from typing import Any
 
 
 from .. import __package__ as 模块名
-from ..工具.数据工具 import 数据类, 获取本地数据
+from ..工具.数据工具 import 关闭本地数据, 数据类, 获取本地数据
 from ..工具.目录工具 import 账号目录
 from ..工具.任务管理器工具 import 异步任务管理器
 
@@ -26,6 +26,9 @@ def 获取账号目录(账号名: str | None = None, 脚本模块名: str | None
 def 获取账号数据(账号名: str | None = None, 脚本模块名: str | None = None, 默认值: dict[str, Any] | None = None) -> 数据类:
     return 获取本地数据(获取账号目录(账号名=账号名, 脚本模块名=脚本模块名) / "数据.json", 默认值=默认值)
 
+def 关闭账号数据(账号名: str | None = None, 脚本模块名: str | None = None) -> bool:
+    return 关闭本地数据(获取账号目录(账号名=账号名, 脚本模块名=脚本模块名) / "数据.json")
+
 def 获取全部账号名():
     return [账号名.name for 账号名 in 获取账号目录().iterdir()]
 
@@ -40,6 +43,7 @@ def 新建账号(账号名: str):
 def 删除账号(账号名: str):
     if 账号名 not in 获取全部账号名():
         raise FileNotFoundError(f"账号 {账号名} 不存在")
+    关闭账号数据(账号名=账号名)
     shutil.rmtree(获取账号目录(账号名=账号名))
 
 def 修改账号名(账号名: str, 新账号名: str):
@@ -47,6 +51,7 @@ def 修改账号名(账号名: str, 新账号名: str):
         raise FileExistsError(f"账号 {新账号名} 已经存在")
     if 账号名 not in 获取全部账号名():
         raise FileNotFoundError(f"账号 {账号名} 不存在")
+    关闭账号数据(账号名=账号名)
     shutil.move(获取账号目录(账号名=账号名), 获取账号目录(账号名=新账号名))
 
 def 复制账号(账号名: str, 新账号名: str):

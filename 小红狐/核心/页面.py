@@ -34,8 +34,8 @@ def 获取页面目录(页面名: str | None = None, 脚本模块名: str | None
 def 获取页面数据(页面名: str | None = None, 脚本模块名: str = 小红狐模块名, 默认值: dict[str, Any] | None = None) -> 数据类:
     return 获取本地数据(获取页面目录(页面名=页面名, 脚本模块名=脚本模块名) / "数据.json", 默认值=默认值)
 
-def 关闭页面数据(页面名: str | None = None, 脚本模块名: str = 小红狐模块名) -> None:
-    关闭本地数据(获取页面目录(页面名=页面名, 脚本模块名=脚本模块名) / "数据.json")
+def 关闭页面数据(页面名: str | None = None, 脚本模块名: str = 小红狐模块名) -> bool:
+    return 关闭本地数据(获取页面目录(页面名=页面名, 脚本模块名=脚本模块名) / "数据.json")
 
 def 获取全部页面名():
     return [页面名.name for 页面名 in 获取页面目录().iterdir()]
@@ -47,9 +47,9 @@ def 新增页面(页面名: str) -> pathlib.Path:
     新建页面目录.mkdir()
 
 def 删除页面(页面名: str) -> None:
-    关闭页面数据(页面名=页面名)
     if 页面名 not in 获取全部页面名():
         raise FileNotFoundError(f"页面 {页面名} 不存在")
+    关闭页面数据(页面名=页面名)
     shutil.rmtree(获取页面目录(页面名=页面名))
 
 def 修改页面名(页面名: str, 新页面名: str) -> None:

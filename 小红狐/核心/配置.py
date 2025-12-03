@@ -4,7 +4,7 @@ from typing import Any
 
 from .. import __package__ as 小红狐模块名
 from ..工具.日志工具 import 获取日志记录器
-from ..工具.数据工具 import 数据类, 获取本地数据
+from ..工具.数据工具 import 关闭本地数据, 数据类, 获取本地数据
 from ..工具.目录工具 import 配置目录, 全局配置目录
 from ..小红狐脚本 import 默认启用页面生成脚本名, 默认启用页面操作脚本名元组
 
@@ -27,6 +27,9 @@ def 获取配置目录(配置名: str | None = None, 脚本模块名: str | None
 def 获取配置数据(配置名: str | None = None, 脚本模块名: str | None = None, 默认值: dict[str, Any] | None = None) -> 数据类:
     return 获取本地数据(获取配置目录(配置名=配置名, 脚本模块名=脚本模块名) / "数据.json", 默认值=默认值)
 
+def 关闭配置数据(配置名: str | None = None, 脚本模块名: str | None = None) -> bool:
+    return 关闭本地数据(获取配置目录(配置名=配置名, 脚本模块名=脚本模块名) / "数据.json")
+
 def 获取全部配置名():
     return [配置名.name for 配置名 in 获取配置目录().iterdir()]
 
@@ -39,6 +42,7 @@ def 新建配置(配置名: str) -> pathlib.Path:
 def 删除配置(配置名: str):
     if 配置名 not in 获取全部配置名():
         raise FileNotFoundError(f"配置 {配置名} 不存在")
+    关闭配置数据(配置名=配置名)
     shutil.rmtree(获取配置目录(配置名=配置名))
 
 def 修改配置名(配置名: str, 新配置名: str):
@@ -46,6 +50,7 @@ def 修改配置名(配置名: str, 新配置名: str):
         raise FileExistsError(f"配置 {新配置名} 已经存在")
     if 配置名 not in 获取全部配置名():
         raise FileNotFoundError(f"配置 {配置名} 不存在")
+    关闭配置数据(配置名=配置名)
     shutil.move(获取配置目录(配置名=配置名), 获取配置目录(配置名=新配置名))
 
 def 复制配置(配置名: str, 新配置名: str):
