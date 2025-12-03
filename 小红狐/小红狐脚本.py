@@ -5,7 +5,7 @@ from . import __package__ as 模块名
 
 
 名称: str = "小红狐自动化"  # 脚本名称，默认：__package__
-简介: str = "小红狐自动化管理脚本"  # 脚本简介，默认：__doc__
+简介: str = "小红狐自动化脚本框架"  # 脚本简介，默认：__doc__
 作者: list[str] = [__author__]  # 脚本作者，默认：__author__
 版本: str = __version__  # 脚本版本，默认：[__version__]
 调试: bool = False  # 仅开启调试模式时启用脚本。默认：False
@@ -26,7 +26,7 @@ from .内置脚本.页面生成 import 新建页面
         "获取页面": 新建页面.获取页面,  # 获取页面函数 (页面名: str) -> playwright.async_api.Page | None
         "配置页面": 新建页面.配置页面,  # 配置页面函数 (页面名: str) -> dict[str, str]
         "名称": 新建页面.名称,  # 脚本名称 str
-        "简介": "小红狐页面生成",  # 脚本简介 str
+        "简介": "小红狐新建页面，支持设置默认URL",  # 脚本简介 str
         "调试": False,  # 仅开启调试模式时启用脚本 bool 默认：False
     },
 }
