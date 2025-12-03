@@ -132,7 +132,11 @@ def 关闭本地数据(路径: pathlib.Path | str) -> bool:
     路径 = pathlib.Path(路径)
     路径字符串 = str(路径.resolve())
     if 路径字符串 in 本地数据字典:
+        本地数据: 数据类 = 本地数据字典[路径字符串]
+        本地数据.保存()
+        本地数据.路径 = None
         del 本地数据字典[路径字符串]
+        del 本地数据
         return True
     return False
 
