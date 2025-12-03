@@ -770,8 +770,8 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector("#页面名").textContent = 页面名;
     // 显示配置名
     document.querySelector("#配置名").textContent = 配置名;
-    刷新页面操作脚本();
     刷新页面操作();
-    刷新页面生成脚本();
+    刷新页面操作脚本();
     刷新账号();
+    刷新页面生成脚本();
 });
