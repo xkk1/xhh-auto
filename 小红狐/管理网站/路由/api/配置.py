@@ -3,7 +3,7 @@ from flask import Blueprint, jsonify, request
 
 from .... import __package__ as 小红狐模块名
 from ....工具.日志工具 import 获取日志记录器
-from ....核心.配置 import 删除配置, 新建配置, 获取全部配置名, 获取配置数据
+from ....核心.配置 import 修改配置名, 删除配置, 新建配置, 获取全部配置名, 获取配置数据
 
 
 日志 = 获取日志记录器(__name__)
@@ -41,6 +41,32 @@ def 删除配置名路由(config_name):
     配置名: str = config_name
     try:
         删除配置(配置名=配置名)
+        return jsonify("成功"), 200
+    except Exception as e:
+        return jsonify(str(e)), 400
+
+# 修改配置名
+@配置蓝图.route("/配置名", methods=["PUT"])
+def 修改配置名路由():
+    if not request.is_json:
+        return jsonify("请求头 Content-Type 必须是 application/json"), 400
+    json = request.get_json(silent=True)
+    if json is None:
+        return jsonify("无效的 JSON 格式，请检查请求体"), 400
+    if not isinstance(json, dict):
+        return jsonify("必须是字典"), 400
+    if "配置名" not in json:
+        return jsonify("缺少参数 '配置名'"), 400
+    配置名: str = json["配置名"]
+    if not isinstance(配置名, str):
+        return jsonify("'配置名' 必须是字符串"), 400
+    if "新配置名" not in json:
+        return jsonify("缺少参数 '新配置名'"), 400
+    新配置名: str = json["新配置名"]
+    if not isinstance(新配置名, str):
+        return jsonify("'新配置名' 必须是字符串"), 400
+    try:
+        修改配置名(配置名, 新配置名)
         return jsonify("成功"), 200
     except Exception as e:
         return jsonify(str(e)), 400

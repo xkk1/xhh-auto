@@ -912,6 +912,37 @@ function 渲染配置名() {
             })
     });
     配置名容器.appendChild(设置为当前配置按钮);
+    const 修改配置名按钮 = document.createElement("button");
+    修改配置名按钮.type = "button";
+    修改配置名按钮.id = "修改配置名按钮";
+    修改配置名按钮.classList.add("加载按钮");
+    修改配置名按钮.textContent = "修改配置名";
+    修改配置名按钮.style.display = "none";
+    修改配置名按钮.addEventListener("click", function () {
+        const 当前配置名 = 配置名下拉列表.value;
+        const 新配置名 = prompt("请输入新配置名：", 当前配置名);
+        if (!新配置名) {
+            return;
+        }
+        if (新配置名 === 当前配置名) {
+            alert("配置名未改变！");
+            return;
+        }
+        this.classList.add("加载中");
+        小红狐.配置.修改配置名(当前配置名, 新配置名)
+            .then(() => {
+                alert("修改配置名成功！");
+                刷新配置名();
+            })
+            .catch(error => {
+                console.error("修改配置名失败:", error);
+                alert("修改配置名失败!\n" + error);
+            })
+            .finally(() => {
+                修改配置名按钮.classList.remove("加载中");
+            });
+    });
+    配置名容器.appendChild(修改配置名按钮);
     const 删除配置按钮 = document.createElement("button");
     删除配置按钮.type = "button";
     删除配置按钮.id = "删除配置按钮";
@@ -938,9 +969,11 @@ function 渲染配置名() {
         const 选中配置名 = this.value;
         if (选中配置名 === 配置名) {
             设置为当前配置按钮.style.display = "none";
+            修改配置名按钮.style.display = "none";
             删除配置按钮.style.display = "none";
         } else {
             设置为当前配置按钮.style.display = "inline-block";
+            修改配置名按钮.style.display = "inline-block";
             删除配置按钮.style.display = "inline-block";
         }
     });
