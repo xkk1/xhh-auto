@@ -892,7 +892,58 @@ function 刷新配置名() {
         });
 }
 
+function 渲染页面名() {
+    const 页面名容器 = document.querySelector("#页面名容器");
+    页面名容器.replaceChildren();
+    
+    页面名容器.append(`页面名：${页面名} `);
 
+    const 修改页面名按钮 = document.createElement("button");
+    修改页面名按钮.type = "button";
+    修改页面名按钮.id = "修改页面名按钮";
+    修改页面名按钮.classList.add("加载按钮");
+    修改页面名按钮.textContent = "修改页面名";
+    修改页面名按钮.addEventListener("click", function () {
+        this.classList.add("加载中");
+        const 新页面名 = prompt("请输入新页面名：", 页面名);
+        if (!新页面名) {
+            this.classList.remove("加载中");
+            return;
+        }
+        小红狐.页面.关闭页面(页面名)
+            .then(() => {
+                小红狐.页面.修改页面名(页面名, 新页面名)
+                    .then(() => {
+                        alert("修改页面账号成功！\n即将关闭管理页面！");
+                        if (window !== parent) {
+                            // 刷新页面列表
+                            if (parent.parent.刷新页面列表) {
+                                parent.parent.刷新页面列表();
+                            }
+                            // 关闭管理页面
+                            if (parent.parent?.多页面?.关闭页面) {
+                                parent.parent.多页面.关闭页面(`./html/配置.html?页面名=${页面名}`);
+                            }
+                        }
+                        // 关闭当前页面
+                        window.close();
+                    })
+                    .catch(error => {
+                        console.error("修改页面账号失败:", error);
+                        alert("修改页面账号失败!\n" + error);
+                    })
+                    .finally(() => {
+                        修改账号名按钮.classList.remove("加载中");
+                    })
+            })
+            .catch(error => {
+                console.error("关闭页面失败:", error);
+                alert("关闭页面失败!无法在关闭页面前重命名账号名！\n" + error);
+                修改账号名按钮.classList.remove("加载中");
+            });
+    });
+    页面名容器.appendChild(修改页面名按钮);
+}
 
 // DOM 加载完成时执行
 document.addEventListener("DOMContentLoaded", function () {
@@ -900,6 +951,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector("#页面名").textContent = 页面名;
     刷新页面操作();
     刷新页面操作脚本();
+    渲染页面名();
     刷新账号();
     刷新配置名();
     刷新页面生成脚本();
