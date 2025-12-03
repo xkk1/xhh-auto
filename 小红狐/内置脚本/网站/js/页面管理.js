@@ -747,6 +747,34 @@ function 渲染账号() {
             });
     });
     账号操作容器.appendChild(修改账号名按钮);
+    const 删除账号按钮 = document.createElement("button");
+    删除账号按钮.type = "button";
+    删除账号按钮.id = "删除账号按钮";
+    删除账号按钮.classList.add("加载按钮");
+    删除账号按钮.textContent = "删除账号";
+    删除账号按钮.style.display = "none";
+    删除账号按钮.addEventListener("click", function () {
+        this.classList.add("加载中");
+        const 当前账号名 = 账号下拉列表.value;
+        // 二次确认
+        if (!confirm(`确定要删除账号“${当前账号名}”吗？`)) {
+            this.classList.remove("加载中");
+            return;
+        }
+        小红狐.账号.删除账号(当前账号名)
+            .then(() => {
+                alert("删除账号成功！");
+                刷新账号();
+            })
+            .catch(error => {
+                console.error("删除账号失败:", error);
+                alert("删除账号失败!\n" + error);
+            })
+            .finally(() => {
+                删除账号按钮.classList.remove("加载中");
+            });
+    });
+    账号操作容器.appendChild(删除账号按钮);
     const 新建账号按钮 = document.createElement("button");
     新建账号按钮.type = "button";
     新建账号按钮.id = "新建账号按钮";
@@ -781,10 +809,12 @@ function 渲染账号() {
             保存账号状态按钮.style.display = "inline-block";
             设置为当前账号按钮.style.display = "none";
             修改账号名按钮.style.display = "none";
+            删除账号按钮.style.display = "none";
         } else {
             保存账号状态按钮.style.display = "none";
             设置为当前账号按钮.style.display = "inline-block";
             修改账号名按钮.style.display = "inline-block";
+            删除账号按钮.style.display = "inline-block";
         }
     });
 }
