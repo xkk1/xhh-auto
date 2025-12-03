@@ -7,7 +7,7 @@ from playwright.async_api import  Page
 from .. import __package__ as 小红狐模块名
 from ..工具.日志工具 import 获取日志记录器
 from ..核心.脚本 import 小红狐脚本信息, 获取导入脚本信息字典, 获取脚本
-from ..工具.数据工具 import 关闭本地数据, 数据类, 获取本地数据
+from ..工具.数据工具 import 关闭路径下的所有本地数据, 数据类, 获取本地数据
 from ..工具.目录工具 import 页面目录
 from .配置 import 获取全部配置名, 新建配置
 from .配置 import 获取页面操作自动开启脚本 as 配置_获取页面操作自动开启脚本
@@ -34,8 +34,8 @@ def 获取页面目录(页面名: str | None = None, 脚本模块名: str | None
 def 获取页面数据(页面名: str | None = None, 脚本模块名: str = 小红狐模块名, 默认值: dict[str, Any] | None = None) -> 数据类:
     return 获取本地数据(获取页面目录(页面名=页面名, 脚本模块名=脚本模块名) / "数据.json", 默认值=默认值)
 
-def 关闭页面数据(页面名: str | None = None, 脚本模块名: str = 小红狐模块名) -> bool:
-    return 关闭本地数据(获取页面目录(页面名=页面名, 脚本模块名=脚本模块名) / "数据.json")
+def 关闭页面数据(页面名: str | None = None, 脚本模块名: str = 小红狐模块名) -> None:
+    return 关闭路径下的所有本地数据(获取页面目录(页面名=页面名, 脚本模块名=脚本模块名))
 
 def 获取全部页面名():
     return [页面名.name for 页面名 in 获取页面目录().iterdir()]

@@ -140,6 +140,13 @@ def 关闭本地数据(路径: pathlib.Path | str) -> bool:
         return True
     return False
 
+def 关闭路径下的所有本地数据(父路径: pathlib.Path | str) -> None:
+    """关闭目录下的所有数据"""
+    父路径字符串 = str(pathlib.Path(父路径).resolve())
+    for 路径字符串 in 获取本地数据路径列表():
+        if 路径字符串.startswith(父路径字符串):
+            关闭本地数据(路径字符串)
+
 内存数据字典: dict[str, 数据类] = {}
 
 def 获取内存数据(标识: str, 默认值: dict[str, Any] | None = None) -> 数据类:
