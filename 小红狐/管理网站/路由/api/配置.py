@@ -3,7 +3,7 @@ from flask import Blueprint, jsonify, request
 
 from .... import __package__ as 小红狐模块名
 from ....工具.日志工具 import 获取日志记录器
-from ....核心.配置 import 新建配置, 获取全部配置名, 获取配置数据
+from ....核心.配置 import 删除配置, 新建配置, 获取全部配置名, 获取配置数据
 
 
 日志 = 获取日志记录器(__name__)
@@ -31,6 +31,16 @@ def 新建配置名路由():
     配置名: str = json
     try:
         新建配置(配置名=配置名)
+        return jsonify("成功"), 200
+    except Exception as e:
+        return jsonify(str(e)), 400
+
+# 删除配置名
+@配置蓝图.route("/配置名/<config_name>", methods=["DELETE"])
+def 删除配置名路由(config_name):
+    配置名: str = config_name
+    try:
+        删除配置(配置名=配置名)
         return jsonify("成功"), 200
     except Exception as e:
         return jsonify(str(e)), 400

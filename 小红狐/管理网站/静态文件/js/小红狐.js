@@ -122,6 +122,9 @@
         新建配置: function(配置名) {
             return 请求.新增(this.api前缀 + "/配置名", 配置名);
         },
+        删除配置: function(配置名) {
+            return 请求.删除(this.api前缀 + `/配置名/${配置名}`);
+        },
     }
 
     let 总控 = {

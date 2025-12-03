@@ -812,12 +812,36 @@ function 渲染配置名() {
             })
     });
     配置名容器.appendChild(设置为当前配置按钮);
+    const 删除配置按钮 = document.createElement("button");
+    删除配置按钮.type = "button";
+    删除配置按钮.id = "删除配置按钮";
+    删除配置按钮.classList.add("加载按钮");
+    删除配置按钮.textContent = "删除配置";
+    删除配置按钮.style.display = "none";
+    删除配置按钮.addEventListener("click", function () {
+        this.classList.add("加载中");
+        小红狐.配置.删除配置(配置名下拉列表.value)
+            .then(() => {
+                alert("删除配置成功！");
+                刷新配置名();
+            })
+            .catch(error => {
+                console.error("删除页面失败:", error);
+                alert("删除配置失败!\n" + error);
+            })
+            .finally(() => {
+                删除配置按钮.classList.remove("加载中");
+            });
+    });
+    配置名容器.appendChild(删除配置按钮);
     配置名下拉列表.addEventListener("change", function () {
         const 选中配置名 = this.value;
         if (选中配置名 === 配置名) {
             设置为当前配置按钮.style.display = "none";
+            删除配置按钮.style.display = "none";
         } else {
             设置为当前配置按钮.style.display = "inline-block";
+            删除配置按钮.style.display = "inline-block";
         }
     });
 
