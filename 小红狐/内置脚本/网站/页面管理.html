@@ -12,10 +12,10 @@
 </head>
 <body>
     <main id="main">
-        <div>
-            <button type="button" id="刷新页面按钮" class="加载按钮" onclick="this.classList.add('加载中');location.reload();">刷新页面</button>
-        </div>
-        <h2>页面操作脚本<button id="刷新页面操作脚本按钮" class="加载按钮" type="button" onclick="刷新页面操作脚本()">刷新</button></h2>
+        <h1>页面管理<button type="button" id="刷新页面按钮" class="加载按钮" onclick="this.classList.add('加载中');location.reload();">刷新页面</button></h1>
+        <h2>页面操作<button id="刷新页面操作按钮" class="加载按钮" type="button" onclick="刷新页面操作()">刷新</button></h2>
+        <div id="页面操作容器"></div>
+        <h2>脚本<button id="刷新页面操作脚本按钮" class="加载按钮" type="button" onclick="刷新页面操作脚本()">刷新</button></h2>
         <table id="页面操作脚本表格"></table>
         <div>
             <br />
@@ -23,9 +23,7 @@
             <br />
             配置：<span id="配置名">默认</span>
         </div>
-        <h2>页面管理<button id="刷新页面管理按钮" class="加载按钮" type="button" onclick="刷新页面管理()">刷新</button></h2>
-        <div id="页面管理容器"></div>
-        <h2>页面生成脚本<button id="刷新页面生成脚本按钮" class="加载按钮" type="button" onclick="刷新页面生成脚本()">刷新</button></h2>
+        <h2>页面生成<button id="刷新页面生成脚本按钮" class="加载按钮" type="button" onclick="刷新页面生成脚本()">刷新</button></h2>
         <div id="页面生成脚本容器"></div>
         <h2>账号<button id="刷新账号按钮" class="加载按钮" type="button" onclick="刷新账号()">刷新</button></h2>
         <div id="账号容器"></div>

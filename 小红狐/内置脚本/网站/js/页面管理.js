@@ -52,11 +52,11 @@ async function 更新全部账号名() {
 }
 
 
-function 渲染页面管理() {
-    const 页面管理容器元素 = document.querySelector("#页面管理容器");
-    页面管理容器元素.replaceChildren();
+function 渲染页面操作() {
+    const 页面操作容器元素 = document.querySelector("#页面操作容器");
+    页面操作容器元素.replaceChildren();
 
-    页面管理容器元素.append("页面状态：");
+    页面操作容器元素.append("状态：")
     const 页面状态元素 = document.createElement("span");
     页面状态元素.id = "页面状态";
     if (页面状态 === null) {
@@ -69,10 +69,8 @@ function 渲染页面管理() {
         页面状态元素.textContent = "开启";
         页面状态元素.classList.add("开启");
     }
-    页面管理容器元素.appendChild(页面状态元素);
-
-    页面管理容器元素.appendChild(document.createElement("br"));
-    页面管理容器元素.append("页面操作：")
+    页面操作容器元素.appendChild(页面状态元素);
+    页面操作容器元素.append(" ")
 
     const 新建页面按钮 = document.createElement("button");
     新建页面按钮.id = "新建页面按钮";
@@ -85,7 +83,7 @@ function 渲染页面管理() {
                 小红狐.页面.开启页面操作自动开启脚本(页面名).then(() => {
                     刷新页面操作脚本();
                 });
-                刷新页面管理();
+                刷新页面操作();
             })
             .catch(error => {
                 console.error("新建页面失败:", error);
@@ -95,7 +93,7 @@ function 渲染页面管理() {
                 新建页面按钮.classList.remove("加载中");
             });
     });
-    页面管理容器元素.appendChild(新建页面按钮);
+    页面操作容器元素.appendChild(新建页面按钮);
 
     const 关闭页面按钮 = document.createElement("button");
     关闭页面按钮.id = "关闭页面按钮";
@@ -108,7 +106,7 @@ function 渲染页面管理() {
                 小红狐.页面.关闭页面操作自动开启脚本(页面名).then(() => {
                     刷新页面操作脚本();
                 });
-                刷新页面管理();
+                刷新页面操作();
             })
             .catch(error => {
                 console.error("关闭页面失败:", error);
@@ -118,22 +116,57 @@ function 渲染页面管理() {
                 关闭页面按钮.classList.remove("加载中");
             });
     });
-    页面管理容器元素.appendChild(关闭页面按钮);
+    页面操作容器元素.appendChild(关闭页面按钮);
+
+    const 重启页面按钮 = document.createElement("button");
+    重启页面按钮.id = "重启页面按钮";
+    重启页面按钮.classList.add("加载按钮")
+    重启页面按钮.textContent = "重启页面"
+    重启页面按钮.addEventListener("click", function () {
+        this.classList.add("加载中");
+        小红狐.页面.关闭页面(页面名)
+            .then(() => {
+                小红狐.页面.关闭页面操作自动开启脚本(页面名).then(() => {
+                    小红狐.页面.新建页面(页面名)
+                        .then(() => {
+                            小红狐.页面.开启页面操作自动开启脚本(页面名).then(() => {
+                                刷新页面操作脚本();
+                            });
+                            刷新页面操作();
+                        })
+                        .catch(error => {
+                            console.error("新建页面失败:", error);
+                            alert("新建页面失败!\n" + error);
+                        })
+                        .finally(() => {
+                            新建页面按钮.classList.remove("加载中");
+                        });
+                });
+            })
+            .catch(error => {
+                console.error("关闭页面失败:", error);
+                alert("关闭页面失败!\n" + error);
+            })
+            .finally(() => {
+                关闭页面按钮.classList.remove("加载中");
+            });
+    });
+    页面操作容器元素.appendChild(重启页面按钮);
 }
 
-function 刷新页面管理() {
-    const 刷新页面管理按钮 = document.querySelector("#刷新页面管理按钮");
-    刷新页面管理按钮.classList.add("加载中");
+function 刷新页面操作() {
+    const 刷新页面操作按钮 = document.querySelector("#刷新页面操作按钮");
+    刷新页面操作按钮.classList.add("加载中");
     更新页面状态()
         .then(() => {
-            渲染页面管理();
+            渲染页面操作();
         })
         .catch(error => {
-            console.error("获取页面管理失败:", error);
-            document.querySelector("#页面管理容器").textContent = "获取页面管理失败" + error;
+            console.error("获取页面操作失败:", error);
+            document.querySelector("#页面操作容器").textContent = "获取页面操作失败" + error;
         })
         .finally(() => {
-            刷新页面管理按钮.classList.remove("加载中");
+            刷新页面操作按钮.classList.remove("加载中");
         });
 }
 function 渲染页面生成脚本() {
@@ -738,7 +771,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // 显示配置名
     document.querySelector("#配置名").textContent = 配置名;
     刷新页面操作脚本();
-    刷新页面管理();
+    刷新页面操作();
     刷新页面生成脚本();
     刷新账号();
 });
