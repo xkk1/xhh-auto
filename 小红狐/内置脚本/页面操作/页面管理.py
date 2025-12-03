@@ -36,10 +36,8 @@ def 脚本状态(页面名: str | None = None) -> bool:
         return False
 
 def 配置页面(页面名: str) -> dict[str, str]:
-    from ...核心.页面 import 获取页面配置名
-    配置名: str = 获取页面配置名(页面名)
     页面: dict[str, str] = {
-        f"/api/目录/小红狐/内置脚本/网站/页面管理.html?页面名={页面名}&配置名={配置名}": "页面管理",
+        f"/api/目录/小红狐/内置脚本/网站/页面管理.html?页面名={页面名}": f"{页面名}页面管理",
     }
     if 页面名 in ["小喾苦", "xkk1"]:
         页面.update({

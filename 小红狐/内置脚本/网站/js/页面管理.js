@@ -2,8 +2,6 @@
 const 页面名 = 小红狐工具.获取Get参数("页面名") || "页面名六个字";
 // 标题添加页面名
 document.title = 页面名 + "-" + document.title;
-// 获取配置名
-const 配置名 = 小红狐工具.获取Get参数("配置名") || 页面名;
 let 导入脚本信息字典 = {};
 let 页面操作自动开启脚本 = {};
 let 页面操作开启脚本 = {};
@@ -768,8 +766,6 @@ function 刷新账号() {
 document.addEventListener("DOMContentLoaded", function () {
     // 显示页面名
     document.querySelector("#页面名").textContent = 页面名;
-    // 显示配置名
-    document.querySelector("#配置名").textContent = 配置名;
     刷新页面操作();
     刷新页面操作脚本();
     刷新账号();
