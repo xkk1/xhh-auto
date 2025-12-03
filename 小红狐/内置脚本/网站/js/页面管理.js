@@ -8,7 +8,9 @@ let 页面操作开启脚本 = {};
 let 页面生成脚本 = {};
 let 页面状态 = null;
 let 账号名 = "默认";
-let 全部账号名 = ["默认"];
+let 全部账号名 = [账号名];
+let 配置名 = 页面名;
+let 全部配置名 = [配置名];
 
 
 function 对话框元素添加关闭按钮(对话框元素) {
@@ -47,6 +49,14 @@ async function 更新账号名() {
 
 async function 更新全部账号名() {
     全部账号名 = await 小红狐.账号.获取全部账号名();
+}
+
+async function 更新配置名() {
+    配置名 = await 小红狐.页面.获取页面配置名(页面名);
+}
+
+async function 更新全部配置名() {
+    全部配置名 = await 小红狐.配置.获取全部配置名();
 }
 
 
@@ -761,6 +771,104 @@ function 刷新账号() {
         });
 }
 
+function 渲染配置名() { 
+    const 配置名容器 = document.querySelector("#配置名容器");
+    配置名容器.replaceChildren();
+    const 配置名下拉列表 = document.createElement("select");
+    配置名下拉列表.id = "配置名下拉列表";
+    // 如果配置名不在全部配置名中，则添加
+    if (!全部配置名.includes(配置名)) {
+        全部配置名.push(配置名);
+    }
+    for (const 子配置名 of 全部配置名) {
+        const 配置项 = document.createElement("option");
+        配置项.value = 子配置名;
+        配置项.textContent = 子配置名;
+        if (子配置名 === 配置名) {
+            配置项.textContent = "[当前] " + 配置项.textContent;
+            配置项.selected = true;
+        }
+        配置名下拉列表.appendChild(配置项);
+    }
+    配置名容器.appendChild(配置名下拉列表);
+
+    const 设置为当前配置按钮 = document.createElement("button");
+    设置为当前配置按钮.type = "button";
+    设置为当前配置按钮.id = "设置为当前配置按钮";
+    设置为当前配置按钮.classList.add("加载按钮");
+    设置为当前配置按钮.textContent = "设置为当前配置";
+    设置为当前配置按钮.style.display = "none";
+    设置为当前配置按钮.addEventListener("click", function () {
+        this.classList.add("加载中");
+        const 当前配置名 = 配置名下拉列表.value;
+        小红狐.页面.修改页面配置名(页面名, 当前配置名)
+            .then(() => {
+                alert("修改页面配置成功！\n关闭页面再新建页面后生效！");
+                刷新配置名();
+            })
+            .catch(error => {
+                console.error("修改页面配置失败:", error);
+                alert("修改页面配置失败!\n" + error);
+            })
+    });
+    配置名容器.appendChild(设置为当前配置按钮);
+    配置名下拉列表.addEventListener("change", function () {
+        const 选中配置名 = this.value;
+        if (选中配置名 === 配置名) {
+            设置为当前配置按钮.style.display = "none";
+        } else {
+            设置为当前配置按钮.style.display = "inline-block";
+        }
+    });
+
+    const 新建配置按钮 = document.createElement("button");
+    新建配置按钮.type = "button";
+    新建配置按钮.id = "新建配置按钮";
+    新建配置按钮.classList.add("加载按钮");
+    新建配置按钮.textContent = "新建配置";
+    新建配置按钮.addEventListener("click", function () {
+        this.classList.add("加载中");
+        const 新建配置名 = prompt("请输入配置名：");
+        if (!新建配置名) {
+            this.classList.remove("加载中");
+            return;
+        }
+        小红狐.配置.新建配置(新建配置名)
+            .then(() => {
+                alert("新建页面配置成功！");
+                刷新配置名();
+            })
+            .catch(error => {
+                console.error("新建页面配置失败:", error);
+                alert("新建页面配置失败!\n" + error);
+            })
+            .finally(() => {
+                新建配置按钮.classList.remove("加载中");
+            });
+    });
+    配置名容器.appendChild(新建配置按钮);
+}
+
+function 刷新配置名() {
+    const 刷新配置名按钮 = document.querySelector("#刷新配置名按钮");
+    刷新配置名按钮.classList.add("加载中");
+    Promise.all([
+        更新配置名(),
+        更新全部配置名()
+    ])
+        .then(() => {
+            渲染配置名();
+        })
+        .catch(error => {
+            console.error("获取配置名失败:", error);
+            document.querySelector("#配置名容器").textContent = "获取配置名失败：" + error;
+        })
+        .finally(() => {
+            刷新配置名按钮.classList.remove("加载中");
+        });
+}
+
+
 
 // DOM 加载完成时执行
 document.addEventListener("DOMContentLoaded", function () {
@@ -769,5 +877,6 @@ document.addEventListener("DOMContentLoaded", function () {
     刷新页面操作();
     刷新页面操作脚本();
     刷新账号();
+    刷新配置名();
     刷新页面生成脚本();
 });

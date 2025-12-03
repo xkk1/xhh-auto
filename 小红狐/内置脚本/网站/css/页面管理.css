@@ -10,6 +10,10 @@
     content: "…";
 }
 
+h2 {
+    margin-bottom: 0;
+}
+
 #页面状态 {
     padding: 0.1rem 0.2rem;
     border: 0.1rem solid gray;
