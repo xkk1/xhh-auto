@@ -127,6 +127,15 @@ def 获取本地数据(路径: pathlib.Path | str, 默认值: dict[str, Any] | N
 def 获取本地数据路径列表() -> list[str]:
     return [路径 for 路径 in 本地数据字典.keys()]
 
+def 关闭本地数据(路径: pathlib.Path | str) -> bool:
+    """关闭本地数据"""
+    路径 = pathlib.Path(路径)
+    路径字符串 = str(路径.resolve())
+    if 路径字符串 in 本地数据字典:
+        del 本地数据字典[路径字符串]
+        return True
+    return False
+
 内存数据字典: dict[str, 数据类] = {}
 
 def 获取内存数据(标识: str, 默认值: dict[str, Any] | None = None) -> 数据类:
