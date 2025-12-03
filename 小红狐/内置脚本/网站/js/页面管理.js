@@ -775,32 +775,6 @@ function 渲染账号() {
             });
     });
     账号操作容器.appendChild(删除账号按钮);
-    const 新建账号按钮 = document.createElement("button");
-    新建账号按钮.type = "button";
-    新建账号按钮.id = "新建账号按钮";
-    新建账号按钮.classList.add("加载按钮");
-    新建账号按钮.textContent = "新建账号";
-    新建账号按钮.addEventListener("click", function () {
-        this.classList.add("加载中");
-        const 新建账号名 = prompt("请输入账号名：");
-        if (!新建账号名) {
-            this.classList.remove("加载中");
-            return;
-        }
-        小红狐.账号.新建账号(新建账号名)
-            .then(() => {
-                alert("新建账号成功！");
-                刷新账号();
-            })
-            .catch(error => {
-                console.error("新建账号失败:", error);
-                alert("新建账号失败!\n" + error);
-            })
-            .finally(() => {
-                新建账号按钮.classList.remove("加载中");
-            });
-    });
-    账号操作容器.appendChild(新建账号按钮);
     const 复制账号按钮 = document.createElement("button");
     复制账号按钮.type = "button";
     复制账号按钮.id = "复制账号按钮";
@@ -833,6 +807,32 @@ function 渲染账号() {
             })
     });
     账号操作容器.appendChild(复制账号按钮);
+    const 新建账号按钮 = document.createElement("button");
+    新建账号按钮.type = "button";
+    新建账号按钮.id = "新建账号按钮";
+    新建账号按钮.classList.add("加载按钮");
+    新建账号按钮.textContent = "新建账号";
+    新建账号按钮.addEventListener("click", function () {
+        this.classList.add("加载中");
+        const 新建账号名 = prompt("请输入账号名：");
+        if (!新建账号名) {
+            this.classList.remove("加载中");
+            return;
+        }
+        小红狐.账号.新建账号(新建账号名)
+            .then(() => {
+                alert("新建账号成功！");
+                刷新账号();
+            })
+            .catch(error => {
+                console.error("新建账号失败:", error);
+                alert("新建账号失败!\n" + error);
+            })
+            .finally(() => {
+                新建账号按钮.classList.remove("加载中");
+            });
+    });
+    账号操作容器.appendChild(新建账号按钮);
     账号容器.appendChild(账号操作容器);
 
     账号下拉列表.addEventListener("change", function () {
