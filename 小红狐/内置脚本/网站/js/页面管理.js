@@ -714,6 +714,39 @@ function 渲染账号() {
     });
     设置为当前账号按钮.style.display = "none";
     账号操作容器.appendChild(设置为当前账号按钮);
+    const 修改账号名按钮 = document.createElement("button");
+    修改账号名按钮.type = "button";
+    修改账号名按钮.id = "修改账号名按钮";
+    修改账号名按钮.classList.add("加载按钮");
+    修改账号名按钮.textContent = "修改账号名";
+    修改账号名按钮.style.display = "none";
+    修改账号名按钮.addEventListener("click", function () {
+        this.classList.add("加载中");
+        const 当前账号名 = 账号下拉列表.value;
+        const 新账号名 = prompt("请输入账号名：", 当前账号名);
+        if (!新账号名) {
+            this.classList.remove("加载中");
+            return;
+        }
+        if (新账号名 === 当前账号名) {
+            alert("账号名未改变！");
+            this.classList.remove("加载中");
+            return;
+        }
+        小红狐.账号.修改账号名(当前账号名, 新账号名)
+            .then(() => {
+                alert("修改账号名成功！");
+                刷新账号();
+            })
+            .catch(error => {
+                console.error("修改账号名失败:", error);
+                alert("修改账号名失败!\n" + error);
+            })
+            .finally(() => {
+                修改账号名按钮.classList.remove("加载中");
+            });
+    });
+    账号操作容器.appendChild(修改账号名按钮);
     const 新建账号按钮 = document.createElement("button");
     新建账号按钮.type = "button";
     新建账号按钮.id = "新建账号按钮";
@@ -747,9 +780,11 @@ function 渲染账号() {
         if (选中账号名 === 账号名) {
             保存账号状态按钮.style.display = "inline-block";
             设置为当前账号按钮.style.display = "none";
+            修改账号名按钮.style.display = "none";
         } else {
             保存账号状态按钮.style.display = "none";
             设置为当前账号按钮.style.display = "inline-block";
+            修改账号名按钮.style.display = "inline-block";
         }
     });
 }
