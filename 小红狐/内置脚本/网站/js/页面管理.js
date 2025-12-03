@@ -195,7 +195,7 @@ function 渲染页面生成脚本() {
     }
     页面生成脚本容器元素.appendChild(页面生成脚本下拉列表);
 
-    const 页面生成脚本操作容器 = document.createElement("div");
+    const 页面生成脚本操作容器 = document.createElement("span");
     const 详细信息按钮 = document.createElement("button");
     详细信息按钮.type = "button";
     详细信息按钮.id = "详细信息按钮";
@@ -658,7 +658,7 @@ function 渲染账号() {
     账号下拉列表.value = 账号名;
     账号容器.appendChild(账号下拉列表);
 
-    const 账号操作容器 = document.createElement("div");
+    const 账号操作容器 = document.createElement("span");
     账号操作容器.id = "账号操作容器";
     const 保存账号状态按钮 = document.createElement("button");
     保存账号状态按钮.type = "button";
