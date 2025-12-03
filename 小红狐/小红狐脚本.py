@@ -9,9 +9,12 @@ from . import __package__ as 模块名
 作者: list[str] = [__author__]  # 脚本作者，默认：__author__
 版本: str = __version__  # 脚本版本，默认：[__version__]
 调试: bool = False  # 仅开启调试模式时启用脚本。默认：False
-总控页面: dict[str, str] = {  # 总控页面 {URL: 标题}
-    "/api/目录/小红狐/内置脚本/网站/总控.html": "小红狐总控",
-}
+# 总控页面生成函数 () -> dict[str, str]  {URL: 标题}
+def 总控页面() -> dict[str, str]:
+    页面: dict[str, str] = {
+        "/api/目录/小红狐/内置脚本/网站/总控.html": "小红狐总控",
+    }
+    return 页面
 
 from .内置脚本.页面生成 import 新建页面
 
