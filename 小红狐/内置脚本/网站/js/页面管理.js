@@ -913,7 +913,14 @@ function 渲染页面名() {
         小红狐.页面.关闭页面(页面名)
             .then(() => {
                 小红狐.页面.修改页面名(页面名, 新页面名)
-                    .then(() => {
+                    .then((响应) => {
+                        if (!响应.ok) {
+                            响应.json().then(error => {
+                                console.error("修改页面名失败:", error);
+                                alert("修改页面名失败!\n" + error);
+                            });
+                            return;
+                        }
                         alert("修改页面账号成功！\n即将关闭管理页面！");
                         if (window !== parent) {
                             // 刷新页面列表
@@ -929,17 +936,17 @@ function 渲染页面名() {
                         window.close();
                     })
                     .catch(error => {
-                        console.error("修改页面账号失败:", error);
-                        alert("修改页面账号失败!\n" + error);
+                        console.error("因为网络修改页面账号失败:", error);
+                        alert("因为网络修改页面账号失败!\n" + error);
                     })
                     .finally(() => {
-                        修改账号名按钮.classList.remove("加载中");
+                        修改页面名按钮.classList.remove("加载中");
                     })
             })
             .catch(error => {
                 console.error("关闭页面失败:", error);
                 alert("关闭页面失败!无法在关闭页面前重命名账号名！\n" + error);
-                修改账号名按钮.classList.remove("加载中");
+                修改页面名按钮.classList.remove("加载中");
             });
     });
     页面名容器.appendChild(修改页面名按钮);
