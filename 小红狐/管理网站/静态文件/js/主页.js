@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 更新显示所有页面名
     let 页面列表元素 = document.querySelector('ul#页面列表');
-    function 更新页面名() {
+    function 刷新页面列表() {
         // 请求页面名
         小红狐.页面.获取页面名()
             .then(页面名数组 => {
@@ -57,8 +57,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         );
     }
-    更新页面名();
-    window.更新页面名 = 更新页面名;
+    刷新页面列表();
+    window.刷新页面列表 = 刷新页面列表;
 
     const 总控链接元素 = document.querySelector('#总控链接');
     总控链接元素?.click();
