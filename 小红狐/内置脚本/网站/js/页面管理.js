@@ -266,6 +266,8 @@ function 渲染页面生成脚本() {
     设置为当前页面生成脚本按钮.id = "设置为当前页面生成脚本按钮";
     设置为当前页面生成脚本按钮.classList.add("加载按钮");
     设置为当前页面生成脚本按钮.textContent = "设置为当前页面生成脚本";
+    设置为当前页面生成脚本按钮.style.display = "none";
+    设置为当前页面生成脚本按钮.style.color = "orange";
     设置为当前页面生成脚本按钮.addEventListener("click", function () {
         const [脚本模块名, 页面生成脚本名] = 页面生成脚本下拉列表.value.split("/");
         if (confirm(`确定要设置为当前页面生成脚本吗？\n脚本模块名：${脚本模块名}\n页面生成脚本名：${页面生成脚本名}`)) {
@@ -296,7 +298,6 @@ function 渲染页面生成脚本() {
                 })
         }
     });
-    设置为当前页面生成脚本按钮.style.display = "none";
     页面生成脚本操作容器.appendChild(设置为当前页面生成脚本按钮);
     页面生成脚本容器元素.appendChild(页面生成脚本操作容器);
 
@@ -694,6 +695,7 @@ function 渲染账号() {
     设置为当前账号按钮.id = "设置为当前账号按钮";
     设置为当前账号按钮.classList.add("加载按钮");
     设置为当前账号按钮.textContent = "设置为当前账号";
+    设置为当前账号按钮.style.color = "orange";
     设置为当前账号按钮.addEventListener("click", function () {
         this.classList.add("加载中");
         const 当前账号名 = 账号下拉列表.value;
@@ -798,6 +800,7 @@ function 渲染配置名() {
     设置为当前配置按钮.classList.add("加载按钮");
     设置为当前配置按钮.textContent = "设置为当前配置";
     设置为当前配置按钮.style.display = "none";
+    设置为当前配置按钮.style.color = "orange";
     设置为当前配置按钮.addEventListener("click", function () {
         this.classList.add("加载中");
         const 当前配置名 = 配置名下拉列表.value;
@@ -903,6 +906,7 @@ function 渲染页面名() {
     修改页面名按钮.id = "修改页面名按钮";
     修改页面名按钮.classList.add("加载按钮");
     修改页面名按钮.textContent = "修改页面名";
+    修改页面名按钮.style.color = "red";
     修改页面名按钮.addEventListener("click", function () {
         this.classList.add("加载中");
         const 新页面名 = prompt("请输入新页面名：", 页面名);
