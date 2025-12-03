@@ -19,7 +19,11 @@ function 渲染页面初始() {
     } else {
         const 页面初始URL元素 = document.createElement("a");
         页面初始URL元素.href = 页面初始URL;
-        页面初始URL元素.textContent = 页面初始URL;
+        try {
+            页面初始URL元素.textContent = decodeURI(页面初始URL);
+        } catch (error) {
+            页面初始URL元素.textContent = 页面初始URL;
+        }
         页面初始URL元素.target = "_blank";
         页面容器.appendChild(页面初始URL元素);
     }
