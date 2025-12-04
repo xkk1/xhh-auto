@@ -114,6 +114,12 @@
         获取导入脚本信息字典: function() {
             return 请求.获取(this.api前缀 + "/导入脚本信息字典");
         },
+        重载所有脚本: function() {
+            return 请求.获取(this.api前缀 + "/重载");
+        },
+        重载脚本: function(脚本模块名) {
+            return 请求.获取(this.api前缀 + `/重载/${脚本模块名}`);
+        },
     }
 
     let 账号 = {
