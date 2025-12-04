@@ -1,0 +1,60 @@
+.加载按钮.加载中 {
+    cursor: wait;
+}
+
+.加载按钮.加载中::before {
+    content: "正在";
+}
+
+.加载按钮.加载中::after {
+    content: "…";
+}
+
+#脚本信息容器 {
+    width: 100%;
+    overflow-x: auto;
+}
+
+#脚本信息表格 {
+    display: block;
+    width: max-content;
+    overflow: auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+#脚本信息表格 th,
+#脚本信息表格 td {
+    padding: 0.2rem 0.4rem;
+    border: 1px solid;
+    empty-cells: show;
+}
+
+#脚本信息表格 .脚本名称:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#脚本信息表格 .作者容器 {
+    max-width: 16rem;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+#脚本信息表格 .作者 {
+    margin-right: 0.2rem;
+    padding: 0.1rem 0.2rem;
+    background-color: rgba(128, 128, 128, 0.2);
+    border-radius: 0.4rem;
+}
+
+#脚本信息表格 .作者:last-child {
+  margin-right: 0;
+}
+
+#对话框 {
+    padding: 0.4rem;
+    border-width: 0.1rem;
+    border-radius: 0.4rem;
+}

@@ -5,27 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>小红狐自动化总控</title>
     <link rel="stylesheet" href="/css/通用样式.css">
+    <link rel="stylesheet" href="./css/总控.css">
     <script src="/js/小红狐工具.js"></script>
     <script src="/js/小红狐.js"></script>
+    <script src="./js/总控.js"></script>
 </head>
 <body>
-    小红狐自动化总控
-    <!-- 仅调试使用 -->
-    <button type="button" onclick="新增页面()">新建页面</button>
-    <script>
-function 新增页面() {
-    const 页面名 = prompt('请输入页面名');
-    if (!页面名) {
-        return;
-    }
-    小红狐.页面.新增页面名(页面名)
-        .then(() => {
-            alert('成功');
-        }).catch(error => {
-            alert(error);
-            console.error(error);
-        });
-}
-    </script>
+    <main id="main">
+        <h1>
+            小红狐自动化总控
+            <button type="button" id="刷新页面按钮" class="加载按钮" onclick="this.classList.add('加载中');location.reload();">刷新总控页面</button>
+        </h1>
+        <h2>脚本信息
+            <button id="刷新脚本信息按钮" class="加载按钮" type="button" onclick="刷新脚本信息()">刷新</button>
+            <button id="重载所有脚本按钮" class="加载按钮" type="button" onclick="重载所有脚本()">重载所有脚本</button>
+            <button id="显示加载脚本错误信息按钮" type="button" onclick="显示加载脚本错误信息()">显示加载脚本错误信息</button>
+        </h2>
+        <div id="脚本信息容器"></div>
+    </main>
+    <dialog id="对话框"></dialog>
 </body>
 </html>
