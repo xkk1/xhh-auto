@@ -8,6 +8,61 @@ function 是否移动端() {
     return 是否移动端;
 }
 
+function 刷新页面列表() {
+    const 页面列表元素 = document.getElementById("页面列表");
+    const 刷新页面列表按钮 = document.getElementById("刷新页面列表按钮");
+    刷新页面列表按钮.classList.add("加载中");
+    // 请求页面名
+    小红狐.页面.获取页面名()
+        .then(页面名数组 => {
+            页面列表元素.replaceChildren();
+            if (页面名数组.length > 0) {
+                for (const 页面名 of 页面名数组) {
+                    const li = document.createElement("li");
+                    li.role = "none";
+                    const a = document.createElement("a");
+                    a.href = `./html/配置.html?页面名=${页面名}`;
+                    a.textContent = 页面名;
+                    a.classList.add("打开页面");
+                    a.role = "tab";
+                    li.appendChild(a);
+                    页面列表元素.appendChild(li);
+                }
+            } else {
+                页面列表元素.textContent = "无页面，请先新建页面！";
+            }
+        })
+        .catch(错误 => {
+            console.error('获取页面名失败:', 错误);
+            页面列表元素.textContent = '获取页面列表失败！\n' + 错误;
+        }
+        ).finally(() => {
+            刷新页面列表按钮.classList.remove("加载中");
+        });
+}
+
+// 新建页面
+function 新建页面() {
+    const 新建页面按钮 = document.getElementById('新建页面按钮');
+    const 页面名 = prompt('请输入页面名：');
+    if (!页面名) {
+        return;
+    }
+    新建页面按钮.classList.add("加载中");
+    小红狐.页面.新增页面名(页面名)
+        .then((响应) => {
+            刷新页面列表();
+            alert(响应);
+        })
+        .catch(error => {
+            console.error("新增页面名失败：", error);
+            alert("新增页面名失败：" + error);
+        })
+        .finally(() => {
+            新建页面按钮.classList.remove("加载中");
+        });
+}
+
 // DOM 加载完成时执行
 document.addEventListener('DOMContentLoaded', function () {
     // 侧边栏切换
@@ -45,20 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
     小红狐工具.多页面切换(侧边栏, 打开页面);
 
     // 更新显示所有页面名
-    let 页面列表元素 = document.querySelector('ul#页面列表');
-    function 刷新页面列表() {
-        // 请求页面名
-        小红狐.页面.获取页面名()
-            .then(页面名数组 => {
-                页面列表元素.innerHTML = 页面名数组.map(页面名 => `<li role="none"><a href="./html/配置.html?页面名=${页面名}" class="打开页面" role="tab">${页面名}</a></li>`).join('');
-            })
-            .catch(错误 => {
-                console.error('获取页面名失败:', 错误);
-            }
-        );
-    }
     刷新页面列表();
-    window.刷新页面列表 = 刷新页面列表;
 
     const 总控链接元素 = document.querySelector('#总控链接');
     总控链接元素?.click();

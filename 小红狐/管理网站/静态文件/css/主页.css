@@ -37,6 +37,18 @@ body {
     padding: 0;
 }
 
+.加载按钮.加载中 {
+    cursor: wait;
+}
+
+.加载按钮.加载中::before {
+    content: "正在";
+}
+
+.加载按钮.加载中::after {
+    content: "…";
+}
+
 /* 侧边栏 */
 #侧边栏容器 {
     height: 100%;
