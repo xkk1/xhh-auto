@@ -6,6 +6,7 @@
     color-scheme: light;
 
     --背景色: #f8f9fa;
+    --强调背景色: rgb(203, 203, 203);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -14,6 +15,7 @@
         color-scheme: dark;
 
         --背景色: #1e1e1e;
+        --强调背景色: rgb(62, 62, 62);
     }
 }
 
@@ -66,8 +68,14 @@ body {
     transition: transform 0.3s ease-in-out;
     background-color: var(--背景色);
 }
-#侧边栏 a.选中 {
-    background: #ff4d4d;
+#侧边栏 a.打开页面 {
+    color: inherit;
+    text-decoration: none;
+}
+#侧边栏 a.打开页面.选中 {
+    font-weight: bold;
+    text-decoration: underline;
+    background: var(--强调背景色);
 }
 /* 收起状态 */
 #侧边栏容器.收起 {
