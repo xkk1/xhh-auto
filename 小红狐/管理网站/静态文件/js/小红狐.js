@@ -198,6 +198,9 @@
         修改标签页URL排序: function(标签页URL排序) {
             return 请求.修改(this.api前缀 + "/标签页URL排序", 标签页URL排序);
         },
+        获取脚本配置页面: function(脚本模块名) {
+            return 请求.获取(this.api前缀 + `/配置页面/${脚本模块名}`);
+        },
     };
 
     // 对外暴露的 小红狐 方法
