@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 
 from ....工具.日志工具 import 获取日志记录器
-from ....核心.总控 import 修改标签页URL排序, 获取标签页列表
+from ....核心.总控 import 修改标签页URL排序, 获取标签页列表, 获取脚本配置页面
 
 
 日志 = 获取日志记录器(__name__)
@@ -29,3 +29,12 @@ def 修改标签页URL排序路由():
     标签页URL排序: list[str] = json
     修改标签页URL排序(标签页URL排序=标签页URL排序)
     return jsonify("成功")
+
+# 获取指定脚本总控配置页面
+@总控蓝图.route("/配置页面/<package>", methods=["GET"])
+def 获取脚本配置页面路由(package: str):
+    脚本模块名:str = package
+    try:
+        return jsonify(获取脚本配置页面(脚本模块名=脚本模块名))
+    except Exception as e:
+        return jsonify(f"获取脚本配置页面错误：{e}")

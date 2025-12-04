@@ -17,6 +17,10 @@ def 获取配置页面() -> dict[str, str]:
         配置页面.update(脚本信息.获取总控页面配置页面())
     return 配置页面
 
+def 获取脚本配置页面(脚本模块名: str) -> dict[str, str]:
+    脚本信息: 小红狐脚本信息 = 获取脚本(模块名=脚本模块名)
+    return 脚本信息.获取总控页面配置页面()
+
 def 获取标签页列表() -> list[dict[str, str]]:
     配置页面: dict[str, str] = 获取配置页面()
     标签页URL排序: list[str] = 获取标签页URL排序()
