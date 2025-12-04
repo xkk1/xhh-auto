@@ -120,8 +120,8 @@
         重载脚本: function(脚本模块名) {
             return 请求.获取(this.api前缀 + `/重载/${脚本模块名}`);
         },
-        获取加载错误信息: function() {
-            return 请求.获取(this.api前缀 + "/加载错误信息");
+        获取加载脚本错误信息字典: function() {
+            return 请求.获取(this.api前缀 + "/加载脚本错误信息字典");
         },
     }
 

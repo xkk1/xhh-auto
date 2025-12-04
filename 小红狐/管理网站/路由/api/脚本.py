@@ -73,6 +73,6 @@ def 重载指定脚本蓝图(package):
 def 重载所有脚本蓝图():
     return jsonify(加载所有脚本())
 
-@脚本蓝图.route("/加载错误信息", methods=["GET"])
-def 获取加载错误信息():
+@脚本蓝图.route("/加载脚本错误信息字典", methods=["GET"])
+def 获取加载脚本错误信息字典路由():
     return jsonify(获取加载脚本错误信息字典())
