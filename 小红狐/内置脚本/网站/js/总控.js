@@ -47,8 +47,47 @@ function 渲染脚本信息() {
         td.addEventListener("click", function () {
             const 对话框元素 = document.querySelector("#对话框");
             对话框元素.replaceChildren();
+            const 信息元素 = document.createElement("pre");
+            let 信息 = ""
+            if (导入脚本信息.名称) 信息 += `名称：${脚本名称}\n`;
+            信息 += `脚本模块名：${脚本模块名}\n`;
+            if (导入脚本信息.简介) 信息 += `简介：\n${导入脚本信息.简介}\n`;
+            if (导入脚本信息.作者) 信息 += `作者：${导入脚本信息.作者.join("、")}\n`;
+            if (导入脚本信息.版本) 信息 += `版本：${导入脚本信息.版本}\n`;
+            信息元素.append(信息);
+            信息 = "";
+            const 标签页容器 = document.createElement("span");
+            
+            信息元素.appendChild(标签页容器);
+            对话框元素.appendChild(信息元素);
             对话框元素添加关闭按钮(对话框元素, "确定");
             对话框元素.showModal();
+            小红狐.总控.获取脚本配置页面(脚本模块名)
+                .then(function (配置页面) {
+                    if (Object.entries(配置页面).length > 0) {
+                        标签页容器.append("总控配置页面：");
+                        标签页容器.append(document.createElement("br"));
+                        for (const [URL, 标题] of Object.entries(配置页面)) {
+                            const a = document.createElement("a");
+                            a.href = URL;
+                            a.textContent = 标题;
+                            a.target = "_blank";
+                            标签页容器.appendChild(a);
+                            标签页容器.appendChild(document.createElement("br"));
+                        }
+                        // 事件委托重写 a 标签的点击事件
+                        if (window !== parent && parent.添加标签页) {
+                            标签页容器.addEventListener("click", function (e) {
+                                if (e.target.tagName === "A") {
+                                    e.preventDefault();
+                                    const 标题 = e.target.textContent;
+                                    const URL = e.target.getAttribute("href");
+                                    parent.添加标签页(URL, 标题, true);
+                                }
+                            })
+                        }
+                    }
+                });
         })
         tr.appendChild(td);
         // 作者
