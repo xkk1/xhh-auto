@@ -57,8 +57,22 @@ function 渲染脚本信息() {
             信息元素.append(信息);
             信息 = "";
             const 标签页容器 = document.createElement("span");
-            
             信息元素.appendChild(标签页容器);
+            if (Object.entries(导入脚本信息.页面生成).length > 0) {
+                信息 += "页面生成脚本：\n";
+                for (const [页面生成脚本名, 页面生成脚本信息] of Object.entries(导入脚本信息.页面生成)) {
+                    let 页面生成脚本名称 = 页面生成脚本信息.名称 || 页面生成脚本名;
+                    信息 += `  ${页面生成脚本名称} (${页面生成脚本名})\n`;
+                }
+            }
+            if (Object.entries(导入脚本信息.页面操作).length > 0) {
+                信息 += "页面操作脚本：\n";
+                for (const [页面操作脚本名, 页面操作脚本信息] of Object.entries(导入脚本信息.页面操作)) {
+                    let 页面操作脚本名称 = 页面操作脚本信息.名称 || 页面操作脚本名;
+                    信息 += `  ${页面操作脚本名称} (${页面操作脚本名})\n`;
+                }
+            }
+            信息元素.append(信息);
             对话框元素.appendChild(信息元素);
             对话框元素添加关闭按钮(对话框元素, "确定");
             对话框元素.showModal();
