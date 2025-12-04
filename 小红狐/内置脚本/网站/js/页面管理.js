@@ -13,12 +13,12 @@ let 配置名 = 页面名;
 let 全部配置名 = [配置名];
 
 
-function 对话框元素添加关闭按钮(对话框元素) {
+function 对话框元素添加关闭按钮(对话框元素, 关闭按钮文本="关闭") {
     const 对话框表单 = document.createElement("form");
     对话框表单.method = "dialog";
     对话框表单.style.textAlign = "center";
     const 关闭按钮 = document.createElement('button');
-    关闭按钮.textContent = "关闭";
+    关闭按钮.textContent = 关闭按钮文本;
     对话框表单.appendChild(关闭按钮);
     对话框元素.appendChild(对话框表单);
 }
@@ -413,7 +413,7 @@ function 渲染页面操作脚本表格() {
         });
         自动开启操作容器.appendChild(批量关闭按钮);
         对话框元素.appendChild(自动开启操作容器);
-        对话框元素添加关闭按钮(对话框元素);
+        对话框元素添加关闭按钮(对话框元素, "确定");
         对话框元素.showModal();
         });
     // 创建表体
