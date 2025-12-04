@@ -1,6 +1,7 @@
 import importlib
 import pathlib
 import sys
+import traceback
 from types import ModuleType
 from typing import Any, Callable
 
@@ -139,29 +140,31 @@ class 小红狐脚本信息:
 
 
 导入脚本信息: dict[str, 小红狐脚本信息] = {}
+加载脚本错误信息字典: dict[str, str] = {}
 
 def 重载脚本(模块名: str) -> ModuleType:
     if 模块名 in 导入脚本信息:
-        父模块 = importlib.reload(导入脚本信息[模块名].父模块)
-        模块 = importlib.reload(导入脚本信息[模块名].模块)
-        导入脚本信息[模块名] = 小红狐脚本信息(模块, 父模块)
-        return 导入脚本信息[模块名]
+        try:
+            父模块 = importlib.reload(导入脚本信息[模块名].父模块)
+            模块 = importlib.reload(导入脚本信息[模块名].模块)
+            导入脚本信息[模块名] = 小红狐脚本信息(模块, 父模块)
+            return 导入脚本信息[模块名]
+        except Exception as e:
+            加载脚本错误信息字典[模块名] = str(e) + traceback.format_exc()
+            raise e
     else:
         raise ImportError(f"无法重载脚本：{模块名}, 脚本未导入")
 
-def 导入脚本(模块名: str) -> 小红狐脚本信息 | None | ImportError:
+def 导入脚本(模块名: str) -> 小红狐脚本信息 | None | Exception:
     if 模块名 in 导入脚本信息:
         return 重载脚本(模块名)
-    try:
-        父模块 = importlib.import_module(模块名)
-        模块 = importlib.import_module(模块名 + ".小红狐脚本")
-        脚本信息 = 小红狐脚本信息(模块, 父模块)
-        if 脚本信息["调试"] == True and not 调试:
-            return None  # 仅开启调试模式时启用脚本
-        导入脚本信息[模块名] = 脚本信息
-        return 导入脚本信息[模块名]
-    except ImportError as e:
-        raise ImportError(f"无法导入脚本：{模块名}, 错误信息：{e}")
+    父模块 = importlib.import_module(模块名)
+    模块 = importlib.import_module(模块名 + ".小红狐脚本")
+    脚本信息 = 小红狐脚本信息(模块, 父模块)
+    if 脚本信息["调试"] == True and not 调试:
+        return None  # 仅开启调试模式时启用脚本
+    导入脚本信息[模块名] = 脚本信息
+    return 导入脚本信息[模块名]
 
 def 获取导入脚本模块名列表() -> list[str]:
     return list(导入脚本信息.keys())
@@ -202,17 +205,16 @@ def 获取脚本目录所有模块名() -> list[str]:
         模块名列表.insert(0, 小红狐模块名)
     return 模块名列表
 
-加载脚本错误信息字典: dict[str, ImportError] = {}
-
-def 加载所有脚本() -> dict[str, ImportError]:
-    # 错误信息字典: dict[str, ImportError] = {}
+def 加载所有脚本() -> dict[str, str]:
     加载脚本错误信息字典.clear()
     for 模块名 in 获取脚本目录所有模块名():
         try:
             导入脚本(模块名)
-        except ImportError as e:
-            加载脚本错误信息字典[模块名] = e
+        except Exception as e:
+            错误信息 = traceback.format_exc()
+            日志.错误(f"❌小红狐脚本“{模块名}”导入失败：{e}\n{traceback.format_exc()}")
+            加载脚本错误信息字典[模块名] = str(e) + "\n"+错误信息
     return 加载脚本错误信息字典
 
-def 获取加载脚本错误信息字典() -> dict[str, ImportError]:
+def 获取加载脚本错误信息字典() -> dict[str, str]:
     return 加载脚本错误信息字典
