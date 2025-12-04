@@ -150,7 +150,9 @@ def 重载脚本(模块名: str) -> ModuleType:
             导入脚本信息[模块名] = 小红狐脚本信息(模块, 父模块)
             return 导入脚本信息[模块名]
         except Exception as e:
-            加载脚本错误信息字典[模块名] = str(e) + traceback.format_exc()
+            错误信息 = traceback.format_exc()
+            加载脚本错误信息字典[模块名] = str(e) + 错误信息
+            日志.错误(f"❌小红狐脚本“{模块名}”重载失败：{e}\n{错误信息}")
             raise e
     else:
         raise ImportError(f"无法重载脚本：{模块名}, 脚本未导入")
