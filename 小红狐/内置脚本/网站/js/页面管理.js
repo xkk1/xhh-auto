@@ -525,7 +525,7 @@ function 渲染页面操作脚本表格() {
                         })
                         .catch((错误) => {
                             console.error(错误);
-                            alert("关闭失败\n信息：" + 错误.信息 || 错误);
+                            alert("关闭失败\n" + 错误);
                             页面操作脚本状态span.classList.remove("加载中");
                         });
                 } else {
@@ -537,7 +537,7 @@ function 渲染页面操作脚本表格() {
                         })
                         .catch((错误) => {
                             console.error(错误);
-                            alert("开启失败\n信息：" + 错误.信息);
+                            alert("开启失败\n" + 错误);
                             页面操作脚本状态span.classList.remove("加载中");
                         });
                 }
