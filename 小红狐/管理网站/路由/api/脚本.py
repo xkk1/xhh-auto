@@ -66,7 +66,7 @@ def 重载指定脚本蓝图(package):
     try:
         重载脚本(脚本模块名)
         return jsonify(f"已重载脚本：{脚本模块名}")
-    except ImportError as e:
+    except Exception as e:
         return jsonify(str(e)), 404
 
 @脚本蓝图.route("/重载", methods=["GET"])
