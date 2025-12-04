@@ -4,6 +4,7 @@
 
     /* 标签页边框颜色 */
     --标签页边框颜色: #ccc;
+    --强调背景色: rgba(200, 200, 200, 0.3);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -13,6 +14,7 @@
 
         /* 标签页边框颜色 */
         --标签页边框颜色: #666;
+        --强调背景色: rgba(64, 64, 64, 0.3);
     }
 }
 
@@ -43,6 +45,8 @@ ul#标签页>li.拖拽 {
 ul#标签页>li>a {
   display: block;
   padding: 0.2rem 0.4rem;
+  color: inherit;
+  background-color: var(--强调背景色);
   text-decoration: none;
   border: 1px solid var(--标签页边框颜色);
   border-right: none;
@@ -62,8 +66,9 @@ ul#标签页::after {
 }
 
 ul#标签页>li>a.选中 {
-  border-bottom: none;
-  color: inherit;
+    border-bottom: none;
+    font-weight: bold;
+    background-color: initial;
 }
 
 #main {

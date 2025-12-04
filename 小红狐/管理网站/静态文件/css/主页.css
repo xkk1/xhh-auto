@@ -6,7 +6,7 @@
     color-scheme: light;
 
     --背景色: #f8f9fa;
-    --强调背景色: rgb(203, 203, 203);
+    --强调背景色: rgba(200, 200, 200, 0.6);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -15,7 +15,7 @@
         color-scheme: dark;
 
         --背景色: #1e1e1e;
-        --强调背景色: rgb(62, 62, 62);
+        --强调背景色: rgba(64, 64, 64, 0.6);
     }
 }
 
