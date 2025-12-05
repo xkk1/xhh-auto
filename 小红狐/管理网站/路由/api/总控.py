@@ -38,3 +38,14 @@ def 获取脚本配置页面路由(package: str):
         return jsonify(获取脚本配置页面(脚本模块名=脚本模块名))
     except Exception as e:
         return jsonify(f"获取脚本配置页面错误：{e}")
+
+# 关闭浏览器
+@总控蓝图.route("/关闭浏览器", methods=["GET"])
+def 关闭浏览器():
+    try:
+        from ....核心.浏览器 import 关闭
+        from ....工具.任务管理器工具 import 异步任务管理器
+        异步任务管理器.运行(关闭())
+        return jsonify("成功")
+    except Exception as e:
+        return jsonify(f"关闭浏览器错误：{e}")
