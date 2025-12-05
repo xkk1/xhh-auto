@@ -949,9 +949,15 @@ function 渲染配置名() {
     删除配置按钮.classList.add("加载按钮");
     删除配置按钮.textContent = "删除配置";
     删除配置按钮.style.display = "none";
-    删除配置按钮.addEventListener("click", function () {
+    删除配置按钮.addEventListener("click", async function () {
+        const 当前配置名 = 配置名下拉列表.value;
+        // 二次确认
+        const 确认 = await 小红狐工具.对话框.确认(`确定要删配置“${当前配置名}”吗？`);
+        if (!确认) {
+            return;
+        }
         this.classList.add("加载中");
-        小红狐.配置.删除配置(配置名下拉列表.value)
+        小红狐.配置.删除配置(当前配置名)
             .then(async () => {
                 await 小红狐工具.对话框.提示("删除配置成功！");
                 刷新配置名();
