@@ -42,21 +42,21 @@ function 刷新页面列表() {
 }
 
 // 新建页面
-function 新建页面() {
+async function 新建页面() {
     const 新建页面按钮 = document.getElementById('新建页面按钮');
-    const 页面名 = prompt('请输入页面名：');
+    const 页面名 = await 小红狐工具.对话框.输入('请输入页面名：');
     if (!页面名) {
         return;
     }
     新建页面按钮.classList.add("加载中");
     小红狐.页面.新增页面名(页面名)
-        .then((响应) => {
+        .then(async (响应) => {
             刷新页面列表();
-            alert(响应);
+            await 小红狐工具.对话框.提示(响应);
         })
-        .catch(error => {
+        .catch(async error => {
             console.error("新增页面名失败：", error);
-            alert("新增页面名失败：" + error);
+            await 小红狐工具.对话框.提示("新增页面名失败：" + error);
         })
         .finally(() => {
             新建页面按钮.classList.remove("加载中");
