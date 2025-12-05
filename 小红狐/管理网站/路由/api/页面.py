@@ -2,6 +2,7 @@ import traceback
 from typing import Any, Callable
 from flask import Blueprint, jsonify, request
 
+import playwright
 from playwright.async_api import Page
 
 from .... import __package__ as 小红狐模块名
@@ -362,6 +363,9 @@ def 新建页面路由(page_name):
     try:
         新建页面(页面名=页面名)
         return jsonify("成功")
+    except playwright._impl._errors.TargetClosedError as e:
+        日志.错误(f"建页面失败，页面名：{页面名}\n请尝试在小红狐总控关闭被控浏览器！\n{e}\n{traceback.format_exc()}")
+        return jsonify(f"建页面失败，页面名：{页面名}\n请尝试在小红狐总控关闭被控浏览器！\n{e}"), 500
     except Exception as e:
         日志.错误(f"打开页面失败，页面名：{页面名}: {e}\n{traceback.format_exc()}")
         return jsonify(f"打开页面失败，页面名：{页面名}: {e}"), 500

@@ -224,6 +224,27 @@ function 显示加载脚本错误信息() {
     对话框元素.showModal();
 }
 
+async function 关闭浏览器() {
+    // 二次确认
+    const 确认 = await 小红狐工具.对话框.确认("确定要关闭被控浏览器吗？");
+    if (!确认) {
+        return;
+    }
+    const 关闭浏览器按钮 = document.querySelector("#关闭浏览器按钮");
+    关闭浏览器按钮.classList.add("加载中");
+    小红狐.总控.关闭浏览器()
+        .then(async (信息) => {
+            await 小红狐工具.对话框.提示(信息);
+        })
+        .catch(async error => {
+            console.error("关闭浏览器失败:", error);
+            await 小红狐工具.对话框.提示("关闭浏览器失败!\n" + error);
+        })
+        .finally(() => {
+            关闭浏览器按钮.classList.remove("加载中");
+        })
+}
+
 // DOM 加载完成时执行
 document.addEventListener("DOMContentLoaded", function () {
     刷新脚本信息();
