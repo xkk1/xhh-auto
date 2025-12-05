@@ -16,7 +16,7 @@ from ....核心.账号 import 保存账号状态, 修改账号名, 删除账号,
 
 @账号蓝图.route("/账号名", methods=["GET"])
 def 获取全部账号名路由():
-    return jsonify(获取全部账号名())
+    return jsonify(sorted(获取全部账号名()))
 
 # 新建账号
 @账号蓝图.route("/账号名", methods=["POST"])

@@ -22,7 +22,7 @@ from .脚本 import 标准化
 
 @页面蓝图.route("/页面名", methods=["GET"])
 def 获取所有页面():
-    return jsonify(获取全部页面名())
+    return jsonify(sorted(获取全部页面名()))
 
 # 修改页面名
 @页面蓝图.route("/页面名", methods=["PUT"])
