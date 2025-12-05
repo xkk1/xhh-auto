@@ -70,7 +70,7 @@ class 异步任务管理器类:
         启动一个异步任务，并确认已成功添加到事件循环。
         """
 
-        if 任务名称 in self.任务字典:
+        if 任务名称 in self.任务字典 and not self.任务字典[任务名称].done():
             日志.警告(f"任务 '{任务名称}' 已经存在")
             return False
     
@@ -121,43 +121,46 @@ class 异步任务管理器类:
         """
         停止一个任务字典里的任务（通过取消 asyncio.Task），并确认已取消。
         """
-        if not self.获取任务状态(任务名称=任务名称):
-            任务对象: asyncio.Task = self.任务字典.get(任务名称, None)
-            if not 任务对象:
-                日志.警告(f"任务 '{任务名称}' 不存在")
-                return False
-
-            已停止 = threading.Event()
-
-            def 取消任务():
-                if not 任务对象.done():
-                    任务对象.cancel()
+        任务对象: asyncio.Task = self.任务字典.get(任务名称, None)
+        if not 任务对象:
+            日志.警告(f"任务 '{任务名称}' 不存在")
+            return False
+        已请求取消 = threading.Event()
+        def 取消任务():
+            if not 任务对象.done():
+                任务对象.cancel()
                 日志.信息(f"已发送停止信号给任务：'{任务名称}'")
-                已停止.set()
+            else:
+                日志.信息(f"任务 '{任务名称}' 已完成，无需取消")
+            已请求取消.set()
+        # 调度到 loop 线程执行
+        self.事件循环.call_soon_threadsafe(取消任务)
 
-            # 调度到 loop 线程执行
-            self.事件循环.call_soon_threadsafe(取消任务)
+        # 等待确认停止
+        # if 超时 and (not 已请求取消.wait(timeout=超时)):
+        #     日志.错误(f"任务 '{任务名称}' 取消请求超时")
+        #     return False
 
-            # 等待确认停止
-            if 超时 and (not 已停止.wait(timeout=超时)):
-                日志.错误(f"任务 '{任务名称}' 停止超时")
-                return False
-        
+        # === 等待任务真正完成（关键！）===
+        开始时间 = time.time()
+        while not 任务对象.done():
+            time.sleep(0.01)  # 非阻塞轮询
+            if 超时 is not None and (time.time() - 开始时间) > 超时:
+                日志.警告(f"任务 '{任务名称}' 未在 {超时} 秒内完成取消，停止超时")
+                return False  # 超时，认为未成功停止
+
+        # 到这里，任务一定 done()
+        # 日志.信息(f"任务 '{任务名称}' 已停止")
         if 删除任务:
             del self.任务字典[任务名称]
             self.任务结果字典.pop(任务名称, None)
-
         return True
     
     def 删除任务(self, 任务名称: str):
         """
         删除一个任务字典里的任务
         """
-        if 任务名称 not in self.任务字典:
-            日志.警告(f"任务 '{任务名称}' 不存在")
-            return False
-        self.停止任务(任务名称=任务名称, 删除任务=True)
-        return True
+        return self.停止任务(任务名称=任务名称, 删除任务=True)
     
     def 停止所有任务(self, 超时: float | None = None, 删除任务: bool = False):
         """
