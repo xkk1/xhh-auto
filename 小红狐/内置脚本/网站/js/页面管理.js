@@ -93,9 +93,9 @@ function 渲染页面操作() {
                 });
                 刷新页面操作();
             })
-            .catch(error => {
+            .catch(async error => {
                 console.error("新建页面失败:", error);
-                alert("新建页面失败!\n" + error);
+                await 小红狐工具.对话框.提示("新建页面失败!\n" + error);
             })
             .finally(() => {
                 新建页面按钮.classList.remove("加载中");
@@ -116,9 +116,9 @@ function 渲染页面操作() {
                 });
                 刷新页面操作();
             })
-            .catch(error => {
+            .catch(async error => {
                 console.error("关闭页面失败:", error);
-                alert("关闭页面失败!\n" + error);
+                await 小红狐工具.对话框.提示("关闭页面失败!\n" + error);
             })
             .finally(() => {
                 关闭页面按钮.classList.remove("加载中");
@@ -142,18 +142,18 @@ function 渲染页面操作() {
                             });
                             刷新页面操作();
                         })
-                        .catch(error => {
+                        .catch(async error => {
                             console.error("新建页面失败:", error);
-                            alert("新建页面失败!\n" + error);
+                            await 小红狐工具.对话框.提示("新建页面失败!\n" + error);
                         })
                         .finally(() => {
                             新建页面按钮.classList.remove("加载中");
                         });
                 });
             })
-            .catch(error => {
+            .catch(async error => {
                 console.error("关闭页面失败:", error);
-                alert("关闭页面失败!\n" + error);
+                await 小红狐工具.对话框.提示("关闭页面失败!\n" + error);
             })
             .finally(() => {
                 关闭页面按钮.classList.remove("加载中");
@@ -268,9 +268,9 @@ function 渲染页面生成脚本() {
     设置为当前页面生成脚本按钮.textContent = "设置为当前页面生成脚本";
     设置为当前页面生成脚本按钮.style.display = "none";
     设置为当前页面生成脚本按钮.style.color = "orange";
-    设置为当前页面生成脚本按钮.addEventListener("click", function () {
+    设置为当前页面生成脚本按钮.addEventListener("click", async function () {
         const [脚本模块名, 页面生成脚本名] = 页面生成脚本下拉列表.value.split("/");
-        if (confirm(`确定要设置为当前页面生成脚本吗？\n脚本模块名：${脚本模块名}\n页面生成脚本名：${页面生成脚本名}`)) {
+        if (await 小红狐工具.对话框.确认(`确定要设置为当前页面生成脚本吗？\n脚本模块名：${脚本模块名}\n页面生成脚本名：${页面生成脚本名}`)) {
             设置为当前页面生成脚本按钮.classList.add("加载中");
             小红狐.页面.修改页面生成脚本(页面名, 脚本模块名, 页面生成脚本名)
                 .then(() => {
@@ -291,9 +291,9 @@ function 渲染页面生成脚本() {
                         刷新页面生成脚本();
                     }
                 })
-                .catch(错误 => {
+                .catch(async 错误 => {
                     console.error(错误);
-                    alert("修改页面生成脚本失败，错误信息：\n" + 错误);
+                    await 小红狐工具.对话框.提示("修改页面生成脚本失败，错误信息：\n" + 错误);
                     设置为当前页面生成脚本按钮.classList.remove("加载中");
                 })
         }
@@ -378,15 +378,15 @@ function 渲染页面操作脚本表格() {
         批量开启按钮.addEventListener("click", function () {
             this.classList.add("加载中");
             小红狐.页面.开启页面操作自动开启脚本(页面名)
-                .then(function (结果) {
+                .then(async function (结果) {
                     批量开启按钮.classList.remove("加载中");
-                    alert("批量开启脚本成功");
+                    await 小红狐工具.对话框.提示("批量开启脚本成功");
                     刷新页面操作脚本();
                 })
-                .catch(function (错误) {
+                .catch(async function (错误) {
                     批量开启按钮.classList.remove("加载中");
                     console.error(错误);
-                    alert("批量开启脚本失败，错误信息：\n" + 错误);
+                    await 小红狐工具.对话框.提示("批量开启脚本失败，错误信息：\n" + 错误);
                 });
         });
         自动开启操作容器.appendChild(批量开启按钮);
@@ -400,15 +400,15 @@ function 渲染页面操作脚本表格() {
         批量关闭按钮.addEventListener("click", function () {
             this.classList.add("加载中");
             小红狐.页面.关闭页面操作自动开启脚本(页面名)
-                .then(function (结果) {
+                .then(async function (结果) {
                     批量关闭按钮.classList.remove("加载中");
-                    alert("批量关闭脚本成功");
+                    await 小红狐工具.对话框.提示("批量关闭脚本成功");
                     刷新页面操作脚本();
                 })
-                .catch(function (错误) {
+                .catch(async function (错误) {
                     批量关闭按钮.classList.remove("加载中");
                     console.error(错误);
-                    alert("批量关闭脚本失败，错误信息：\n" + 错误);
+                    await 小红狐工具.对话框.提示("批量关闭脚本失败，错误信息：\n" + 错误);
                 });
         });
         自动开启操作容器.appendChild(批量关闭按钮);
@@ -523,9 +523,9 @@ function 渲染页面操作脚本表格() {
                                 刷新页面操作脚本();
                             }
                         })
-                        .catch((错误) => {
+                        .catch(async (错误) => {
                             console.error(错误);
-                            alert("关闭失败\n" + 错误);
+                            await 小红狐工具.对话框.提示("关闭失败\n" + 错误);
                             页面操作脚本状态span.classList.remove("加载中");
                         });
                 } else {
@@ -535,9 +535,9 @@ function 渲染页面操作脚本表格() {
                             // 开启成功
                             刷新页面操作脚本();
                         })
-                        .catch((错误) => {
+                        .catch(async (错误) => {
                             console.error(错误);
-                            alert("开启失败\n" + 错误);
+                            await 小红狐工具.对话框.提示("开启失败\n" + 错误);
                             页面操作脚本状态span.classList.remove("加载中");
                         });
                 }
@@ -550,7 +550,7 @@ function 渲染页面操作脚本表格() {
             let input = document.createElement("input");
             input.type = "checkbox";
             input.checked = Boolean(页面操作自动开启脚本?.[脚本模块名]?.includes(页面操作脚本名));
-            input.addEventListener("change", function (事件) {
+            input.addEventListener("change", async function (事件) {
                 this.checked = !this.checked;
                 const label = this.parentElement;
                 label.classList.add("加载中");
@@ -563,10 +563,10 @@ function 渲染页面操作脚本表格() {
                             // 添加成功
                             this.checked = true;
                         })
-                        .catch((e) => {
+                        .catch(async (e) => {
                             // 添加失败
                             this.checked = false;
-                            alert(`添加失败：${e}`);
+                            await 小红狐工具.对话框.提示(`添加失败：${e}`);
                         })
                         .finally(() => {
                             label.classList.remove("加载中");
@@ -574,7 +574,7 @@ function 渲染页面操作脚本表格() {
                 } else {
                     if (脚本模块名 === "小红狐" && 页面操作脚本名 === "页面管理") {
                         // 获取输入
-                        let 输入 = prompt("警告：取消启用小红狐页面管理可能会无法管理页面！\n请输入“取消启用小红狐页面管理”确认取消启用小红狐页面管理，输入其他取消本次操作：");
+                        let 输入 = await 小红狐工具.对话框.输入("警告：取消启用小红狐页面管理可能会无法管理页面！\n请输入“取消启用小红狐页面管理”确认取消启用小红狐页面管理，输入其他取消本次操作：");
                         if (输入 !== "取消启用小红狐页面管理") {
                             // 选中多选
                             this.checked = true;
@@ -587,10 +587,10 @@ function 渲染页面操作脚本表格() {
                             // 删除成功
                             this.checked = false;
                         })
-                        .catch((e) => {
+                        .catch(async(e) => {
                             // 删除失败
                             this.checked = true;
-                            alert(`删除失败：${e}`);
+                            await 小红狐工具.对话框.提示(`删除失败：${e}`);
                         })
                         .finally(() => {
                             label.classList.remove("加载中");
@@ -678,12 +678,12 @@ function 渲染账号() {
         this.classList.add("加载中");
         const 当前账号名 = 账号下拉列表.value;
         小红狐.账号.保存账号状态(当前账号名)
-            .then(() => {
-                alert("保存账号状态成功！");
+            .then(async () => {
+                await 小红狐工具.对话框.提示("保存账号状态成功！");
             })
-            .catch(error => {
+            .catch(async error => {
                 console.error("保存账号状态失败:", error);
-                alert("保存账号状态失败!\n" + error);
+                await 小红狐工具.对话框.提示("保存账号状态失败!\n" + error);
             })
             .finally(() => {
                 保存账号状态按钮.classList.remove("加载中");
@@ -700,13 +700,13 @@ function 渲染账号() {
         this.classList.add("加载中");
         const 当前账号名 = 账号下拉列表.value;
         小红狐.页面.修改页面账号名(页面名, 当前账号名)
-            .then(() => {
-                alert("修改页面账号成功！\n关闭页面再新建页面后生效！");
+            .then(async () => {
+                await 小红狐工具.对话框.提示("修改页面账号成功！\n关闭页面再新建页面后生效！");
                 刷新账号();
             })
-            .catch(error => {
+            .catch(async error => {
                 console.error("修改页面账号失败:", error);
-                alert("修改页面账号失败!\n" + error);
+                await 小红狐工具.对话框.提示("修改页面账号失败!\n" + error);
             })
             .finally(() => {
                 设置为当前账号按钮.classList.remove("加载中");
@@ -720,27 +720,27 @@ function 渲染账号() {
     修改账号名按钮.classList.add("加载按钮");
     修改账号名按钮.textContent = "修改账号名";
     修改账号名按钮.style.display = "none";
-    修改账号名按钮.addEventListener("click", function () {
+    修改账号名按钮.addEventListener("click", async function () {
         this.classList.add("加载中");
         const 当前账号名 = 账号下拉列表.value;
-        const 新账号名 = prompt("请输入账号名：", 当前账号名);
+        const 新账号名 = await 小红狐工具.对话框.输入("请输入账号名：", 当前账号名);
         if (!新账号名) {
             this.classList.remove("加载中");
             return;
         }
         if (新账号名 === 当前账号名) {
-            alert("账号名未改变！");
+            await 小红狐工具.对话框.提示("账号名未改变！");
             this.classList.remove("加载中");
             return;
         }
         小红狐.账号.修改账号名(当前账号名, 新账号名)
-            .then(() => {
-                alert("修改账号名成功！");
+            .then(async () => {
+                await 小红狐工具.对话框.提示("修改账号名成功！");
                 刷新账号();
             })
-            .catch(error => {
+            .catch(async error => {
                 console.error("修改账号名失败:", error);
-                alert("修改账号名失败!\n" + error);
+                await 小红狐工具.对话框.提示("修改账号名失败!\n" + error);
             })
             .finally(() => {
                 修改账号名按钮.classList.remove("加载中");
@@ -753,22 +753,22 @@ function 渲染账号() {
     删除账号按钮.classList.add("加载按钮");
     删除账号按钮.textContent = "删除账号";
     删除账号按钮.style.display = "none";
-    删除账号按钮.addEventListener("click", function () {
+    删除账号按钮.addEventListener("click", async function () {
         this.classList.add("加载中");
         const 当前账号名 = 账号下拉列表.value;
         // 二次确认
-        if (!confirm(`确定要删除账号“${当前账号名}”吗？`)) {
+        if (!await 小红狐工具.对话框.确认(`确定要删除账号“${当前账号名}”吗？`)) {
             this.classList.remove("加载中");
             return;
         }
         小红狐.账号.删除账号(当前账号名)
-            .then(() => {
-                alert("删除账号成功！");
+            .then(async () => {
+                await 小红狐工具.对话框.提示("删除账号成功！");
                 刷新账号();
             })
-            .catch(error => {
+            .catch(async error => {
                 console.error("删除账号失败:", error);
-                alert("删除账号失败!\n" + error);
+                await 小红狐工具.对话框.提示("删除账号失败!\n" + error);
             })
             .finally(() => {
                 删除账号按钮.classList.remove("加载中");
@@ -780,27 +780,27 @@ function 渲染账号() {
     复制账号按钮.id = "复制账号按钮";
     复制账号按钮.classList.add("加载按钮");
     复制账号按钮.textContent = "复制账号";
-    复制账号按钮.addEventListener("click", function () {
+    复制账号按钮.addEventListener("click", async function () {
         this.classList.add("加载中");
         const 当前账号名 = 账号下拉列表.value;
-        const 新账号名 = prompt("请输入新账号名：", 当前账号名);
+        const 新账号名 = await 小红狐工具.对话框.输入("请输入新账号名：", 当前账号名);
         if (!新账号名) {
             this.classList.remove("加载中");
             return;
         }
         if (新账号名 === 当前账号名) {
-            alert("账号名未改变！");
+            await 小红狐工具.对话框.提示("账号名未改变！");
             this.classList.remove("加载中");
             return;
         }
         小红狐.账号.复制账号(当前账号名, 新账号名)
-            .then(() => {
-                alert("复制账号成功！");
+            .then(async () => {
+                await 小红狐工具.对话框.提示("复制账号成功！");
                 刷新账号();
             })
-            .catch(error => {
+            .catch(async error => {
                 console.error("复制账号失败:", error);
-                alert("复制账号失败!\n" + error);
+                await 小红狐工具.对话框.提示("复制账号失败!\n" + error);
             })
             .finally(() => {
                 复制账号按钮.classList.remove("加载中");
@@ -812,21 +812,21 @@ function 渲染账号() {
     新建账号按钮.id = "新建账号按钮";
     新建账号按钮.classList.add("加载按钮");
     新建账号按钮.textContent = "新建账号";
-    新建账号按钮.addEventListener("click", function () {
+    新建账号按钮.addEventListener("click", async function () {
         this.classList.add("加载中");
-        const 新建账号名 = prompt("请输入账号名：");
+        const 新建账号名 = await 小红狐工具.对话框.输入("请输入账号名：");
         if (!新建账号名) {
             this.classList.remove("加载中");
             return;
         }
         小红狐.账号.新建账号(新建账号名)
-            .then(() => {
-                alert("新建账号成功！");
+            .then(async () => {
+                await 小红狐工具.对话框.提示("新建账号成功！");
                 刷新账号();
             })
-            .catch(error => {
+            .catch(async error => {
                 console.error("新建账号失败:", error);
-                alert("新建账号失败!\n" + error);
+                await 小红狐工具.对话框.提示("新建账号失败!\n" + error);
             })
             .finally(() => {
                 新建账号按钮.classList.remove("加载中");
@@ -902,13 +902,13 @@ function 渲染配置名() {
         this.classList.add("加载中");
         const 当前配置名 = 配置名下拉列表.value;
         小红狐.页面.修改页面配置名(页面名, 当前配置名)
-            .then(() => {
-                alert("修改页面配置成功！\n关闭页面再新建页面后生效！");
+            .then(async () => {
+                await 小红狐工具.对话框.提示("修改页面配置成功！\n关闭页面再新建页面后生效！");
                 刷新配置名();
             })
-            .catch(error => {
+            .catch(async error => {
                 console.error("修改页面配置失败:", error);
-                alert("修改页面配置失败!\n" + error);
+                await 小红狐工具.对话框.提示("修改页面配置失败!\n" + error);
             })
     });
     配置名容器.appendChild(设置为当前配置按钮);
@@ -918,25 +918,25 @@ function 渲染配置名() {
     修改配置名按钮.classList.add("加载按钮");
     修改配置名按钮.textContent = "修改配置名";
     修改配置名按钮.style.display = "none";
-    修改配置名按钮.addEventListener("click", function () {
+    修改配置名按钮.addEventListener("click", async function () {
         const 当前配置名 = 配置名下拉列表.value;
-        const 新配置名 = prompt("请输入新配置名：", 当前配置名);
+        const 新配置名 = await 小红狐工具.对话框.输入("请输入新配置名：", 当前配置名);
         if (!新配置名) {
             return;
         }
         if (新配置名 === 当前配置名) {
-            alert("配置名未改变！");
+            await 小红狐工具.对话框.提示("配置名未改变！");
             return;
         }
         this.classList.add("加载中");
         小红狐.配置.修改配置名(当前配置名, 新配置名)
-            .then(() => {
-                alert("修改配置名成功！");
+            .then(async () => {
+                await 小红狐工具.对话框.提示("修改配置名成功！");
                 刷新配置名();
             })
-            .catch(error => {
+            .catch(async error => {
                 console.error("修改配置名失败:", error);
-                alert("修改配置名失败!\n" + error);
+                await 小红狐工具.对话框.提示("修改配置名失败!\n" + error);
             })
             .finally(() => {
                 修改配置名按钮.classList.remove("加载中");
@@ -952,13 +952,13 @@ function 渲染配置名() {
     删除配置按钮.addEventListener("click", function () {
         this.classList.add("加载中");
         小红狐.配置.删除配置(配置名下拉列表.value)
-            .then(() => {
-                alert("删除配置成功！");
+            .then(async () => {
+                await 小红狐工具.对话框.提示("删除配置成功！");
                 刷新配置名();
             })
-            .catch(error => {
+            .catch(async error => {
                 console.error("删除页面失败:", error);
-                alert("删除配置失败!\n" + error);
+                await 小红狐工具.对话框.提示("删除配置失败!\n" + error);
             })
             .finally(() => {
                 删除配置按钮.classList.remove("加载中");
@@ -982,25 +982,25 @@ function 渲染配置名() {
     复制配置按钮.id = "复制配置按钮";
     复制配置按钮.classList.add("加载按钮");
     复制配置按钮.textContent = "复制配置";
-    复制配置按钮.addEventListener("click", function () {
+    复制配置按钮.addEventListener("click", async function () {
         const 当前配置名 = 配置名下拉列表.value;
-        const 新配置名 = prompt("请输入新配置名：", 当前配置名);
+        const 新配置名 = await 小红狐工具.对话框.输入("请输入新配置名：", 当前配置名);
         if (!新配置名) {
             return;
         }
         if (当前配置名 === 新配置名) {
-            alert("配置名未改变！");
+            await 小红狐工具.对话框.提示("配置名未改变！");
             return;
         }
         this.classList.add("加载中");
         小红狐.配置.复制配置(当前配置名, 新配置名)
-            .then(() => {
-                alert("复制配置成功！");
+            .then(async () => {
+                await 小红狐工具.对话框.提示("复制配置成功！");
                 刷新配置名();
             })
-            .catch(error => {
+            .catch(async error => {
                 console.error("复制配置失败:", error);
-                alert("复制配置失败!\n" + error);
+                await 小红狐工具.对话框.提示("复制配置失败!\n" + error);
             })
             .finally(() => {
                 复制配置按钮.classList.remove("加载中");
@@ -1012,21 +1012,21 @@ function 渲染配置名() {
     新建配置按钮.id = "新建配置按钮";
     新建配置按钮.classList.add("加载按钮");
     新建配置按钮.textContent = "新建配置";
-    新建配置按钮.addEventListener("click", function () {
+    新建配置按钮.addEventListener("click", async function () {
         this.classList.add("加载中");
-        const 新建配置名 = prompt("请输入配置名：");
+        const 新建配置名 = await 小红狐工具.对话框.输入("请输入配置名：");
         if (!新建配置名) {
             this.classList.remove("加载中");
             return;
         }
         小红狐.配置.新建配置(新建配置名)
-            .then(() => {
-                alert("新建页面配置成功！");
+            .then(async () => {
+                await 小红狐工具.对话框.提示("新建页面配置成功！");
                 刷新配置名();
             })
-            .catch(error => {
+            .catch(async error => {
                 console.error("新建页面配置失败:", error);
-                alert("新建页面配置失败!\n" + error);
+                await 小红狐工具.对话框.提示("新建页面配置失败!\n" + error);
             })
             .finally(() => {
                 新建配置按钮.classList.remove("加载中");
@@ -1066,9 +1066,9 @@ function 渲染页面名() {
     修改页面名按钮.classList.add("加载按钮");
     修改页面名按钮.textContent = "修改页面名";
     修改页面名按钮.style.color = "red";
-    修改页面名按钮.addEventListener("click", function () {
+    修改页面名按钮.addEventListener("click", async function () {
         this.classList.add("加载中");
-        const 新页面名 = prompt("请输入新页面名：", 页面名);
+        const 新页面名 = await 小红狐工具.对话框.输入("请输入新页面名：", 页面名);
         if (!新页面名) {
             this.classList.remove("加载中");
             return;
@@ -1076,8 +1076,8 @@ function 渲染页面名() {
         小红狐.页面.关闭页面(页面名)
             .then(() => {
                 小红狐.页面.修改页面名(页面名, 新页面名)
-                    .then((结果) => {
-                        alert("修改页面账号成功！\n即将关闭管理页面！");
+                    .then(async (结果) => {
+                        await 小红狐工具.对话框.提示("修改页面账号成功！\n即将关闭管理页面！");
                         if (window !== parent) {
                             // 刷新页面列表
                             if (parent.parent.刷新页面列表) {
@@ -1091,17 +1091,17 @@ function 渲染页面名() {
                         // 关闭当前页面
                         window.close();
                     })
-                    .catch(error => {
+                    .catch(async error => {
                         console.error("修改页面账号失败:", error);
-                        alert("页面账号失败!\n" + error);
+                        await 小红狐工具.对话框.提示("页面账号失败!\n" + error);
                     })
                     .finally(() => {
                         修改页面名按钮.classList.remove("加载中");
                     })
             })
-            .catch(error => {
+            .catch(async error => {
                 console.error("关闭页面失败:", error);
-                alert("关闭页面失败!无法在关闭页面前重命名账号名！\n" + error);
+                await 小红狐工具.对话框.提示("关闭页面失败!无法在关闭页面前重命名账号名！\n" + error);
                 修改页面名按钮.classList.remove("加载中");
             });
     });
@@ -1113,17 +1113,17 @@ function 渲染页面名() {
     删除页面名按钮.classList.add("加载按钮");
     删除页面名按钮.textContent = `删除“${页面名}”页面`;
     删除页面名按钮.style.color = "red";
-    删除页面名按钮.addEventListener("click", function () {
+    删除页面名按钮.addEventListener("click", async function () {
         //二次确认
-        if (!confirm(`确定要删除“${页面名}”页面吗？`)) {
+        if (!await 小红狐工具.对话框.确认(`确定要删除“${页面名}”页面吗？`)) {
             return;
         }
         this.classList.add("加载中");
         小红狐.页面.关闭页面(页面名)
             .then(() => {
                 小红狐.页面.删除页面(页面名)
-                    .then((结果) => {
-                        alert("删除页面账号成功！\n即将关闭管理页面！");
+                    .then(async (结果) => {
+                        await 小红狐工具.对话框.提示("删除页面账号成功！\n即将关闭管理页面！");
                         if (window !== parent) {
                             // 刷新页面列表
                             if (parent.parent.刷新页面列表) {
@@ -1137,17 +1137,17 @@ function 渲染页面名() {
                         // 关闭当前页面
                         window.close();
                     })
-                    .catch(error => {
+                    .catch(async error => {
                         console.error("删除页面账失败:", error);
-                        alert("删除页面账失败!\n" + error);
+                        await 小红狐工具.对话框.提示("删除页面账失败!\n" + error);
                     })
                     .finally(() => {
                         删除页面名按钮.classList.remove("加载中");
                     })
             })
-            .catch(error => {
+            .catch(async error => {
                 console.error("关闭页面失败:", error);
-                alert("关闭页面失败!无法在关闭页面前删除账号！\n" + error);
+                await 小红狐工具.对话框.提示("关闭页面失败!无法在关闭页面前删除账号！\n" + error);
                 删除页面名按钮.classList.remove("加载中");
             });
     });
@@ -1158,26 +1158,26 @@ function 渲染页面名() {
     复制页面按钮.id = "复制页面按钮";
     复制页面按钮.classList.add("加载按钮");
     复制页面按钮.textContent = `复制“${页面名}”页面`;
-    复制页面按钮.addEventListener("click", function () {
+    复制页面按钮.addEventListener("click", async function () {
         // 获取新页面名
-        const 新页面名 = prompt("请输入新页面名：", 页面名);
+        const 新页面名 = await 小红狐工具.对话框.输入("请输入新页面名：", 页面名);
         if (!新页面名) {
             return;
         }
         if (新页面名 === 页面名) {
-            alert("新页面名不能与原页面名相同！");
+            await 小红狐工具.对话框.提示("新页面名不能与原页面名相同！");
             return;
         }
         this.classList.add("加载中");
         小红狐.页面.复制页面(页面名, 新页面名)
-            .then((结果) => {
+            .then(async (结果) => {
                 if (window !== parent) {
                     // 刷新页面列表
                     if (parent.parent.刷新页面列表) {
                         parent.parent.刷新页面列表();
                     }
                 }
-                alert("复制页面成功！");
+                await 小红狐工具.对话框.提示("复制页面成功！");
             })
             .finally(() => {
                 复制页面按钮.classList.remove("加载中");
