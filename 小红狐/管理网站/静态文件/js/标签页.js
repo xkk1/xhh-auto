@@ -103,7 +103,7 @@ function 初始化拖拽标签页(标签页URL排序更改回调) {
         // console.log(配置页面URL排序);
         标签页URL排序更改回调(页面URL排序);
     };
-    标签页元素.ondrop = (事件) => {
+    标签页元素.ondrop = async (事件) => {
         事件.preventDefault();
         if (拖拽元素) return;
         url = 事件.dataTransfer.getData("text/plain");
@@ -115,7 +115,7 @@ function 初始化拖拽标签页(标签页URL排序更改回调) {
             return;
         }
         // 请求用户输入添加标签页标题
-        let 标题 = window.prompt(url + "\n请输入标签页标题：");
+        let 标题 = await 小红狐工具.对话框.输入(url + "\n请输入标签页标题：");
         if (标题) {
             // 添加标签页
             添加标签页(url, 标题);
