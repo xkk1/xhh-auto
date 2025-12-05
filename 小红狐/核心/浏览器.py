@@ -95,19 +95,19 @@ async def 关闭页面(页面名: str) -> None:
         playwright异步页面字典.pop(页面名)
 
 async def 关闭():
+    global playwright异步浏览器, playwright异步上下文管理器
     # playwright._impl._errors.TargetClosedError
     for 页面名, playwright异步页面 in playwright异步页面字典.items():
         if playwright异步页面 and not playwright异步页面.is_closed():
             await playwright异步页面.close()
-    playwright异步浏览器上下文字典.clear()
+    playwright异步页面字典.clear()
     for 账号名, playwright异步浏览器上下文 in playwright异步浏览器上下文字典.items():
         if playwright异步浏览器上下文:
             await playwright异步浏览器上下文.close()
     playwright异步浏览器上下文字典.clear()
-    playwright异步页面字典.clear()
     if playwright异步浏览器:
         await playwright异步浏览器.close()
     playwright异步浏览器 = None
     if playwright异步上下文管理器:
-        await playwright异步上下文管理器.close()
+        await playwright异步上下文管理器.stop()
     playwright异步上下文管理器 = None
