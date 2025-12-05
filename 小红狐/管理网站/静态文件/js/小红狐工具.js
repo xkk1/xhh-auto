@@ -258,6 +258,134 @@
         });
     }
 
+    /**
+     * 创建并显示基于 <dialog> 的模态对话框
+     * @param {Object} options - 配置选项
+     * @param {string} options.type - 对话框类型 ('alert', 'confirm', 'prompt')
+     * @param {string} options.message - 显示的消息内容
+     * @param {string} [options.title] - 对话框标题
+     * @param {string} [options.defaultValue] - prompt 类型的默认值
+     * @param {string} [options.confirmText] - 确认按钮文本
+     * @param {string} [options.cancelText] - 取消按钮文本
+     * @returns {Promise} - 返回一个 Promise，解析为用户操作结果
+     */
+    function createDialog(options) {
+        return new Promise((resolve) => {
+            // 创建 dialog 元素
+            const dialog = document.createElement('dialog');
+            dialog.className = '对话框';
+
+            // 创建内容容器
+            const content = document.createElement('div');
+            content.className = '内容容器';
+
+            // 如果提供了标题，则创建并添加标题元素
+            if (options.title) {
+                const title = document.createElement('h3');
+                title.className = '标题';
+                title.textContent = options.title;
+                content.appendChild(title);
+            }
+
+            // 创建并添加消息内容元素
+            const message = document.createElement('pre');
+            message.className = '消息内容';
+            message.textContent = options.message;
+            content.appendChild(message);
+
+            // 如果是 prompt 类型，则创建并添加输入框
+            let input;
+            if (options.type === 'prompt') {
+                input = document.createElement('input');
+                input.className = '输入框';
+                input.type = 'text';
+                input.value = options.defaultValue || '';
+                input.placeholder = '请输入...';
+                content.appendChild(input);
+            }
+
+            // 创建按钮区域容器
+            const buttons = document.createElement('div');
+            buttons.className = '按钮容器';
+
+            // 如果不是 alert 类型（即 confirm 或 prompt），则添加取消按钮
+            if (options.type !== 'alert') {
+                const cancel = document.createElement('button');
+                cancel.textContent = options.cancelText || '取消';
+                cancel.className = '取消按钮';
+                cancel.onclick = () => {
+                    // 关闭对话框，并返回 false（confirm）或 null（prompt）
+                    dialog.close();
+                    resolve(options.type === 'prompt' ? null : false);
+                };
+                buttons.appendChild(cancel);
+            }
+
+            // 创建确认按钮
+            const confirm = document.createElement('button');
+            confirm.textContent = options.confirmText || '确定';
+            confirm.className = '确认按钮';
+            confirm.onclick = () => {
+                // 关闭对话框，并根据类型返回相应结果
+                dialog.close();
+                if (options.type === 'prompt') {
+                    // prompt 类型返回用户输入的值
+                    resolve(input.value);
+                } else {
+                    // alert 类型返回 undefined，confirm 类型返回 true
+                    resolve(options.type === 'alert' ? undefined : true);
+                }
+            };
+            buttons.appendChild(confirm);
+
+            // 将按钮区域添加到内容容器
+            content.appendChild(buttons);
+            // 将内容容器添加到 dialog
+            dialog.appendChild(content);
+
+            // 监听 dialog 关闭事件（例如按 ESC 键）
+            dialog.addEventListener('close', () => {
+                // 如果用户通过 ESC 或点击遮罩层关闭，则返回默认值
+                if (options.type === 'alert') {
+                    resolve(undefined);
+                } else if (options.type === 'confirm') {
+                    resolve(false);
+                } else if (options.type === 'prompt') {
+                    resolve(null);
+                }
+            });
+
+            // 将 dialog 添加到页面 body
+            document.body.appendChild(dialog);
+
+            // 打开模态对话框
+            dialog.showModal();
+
+            // 如果是 prompt 类型，自动聚焦到输入框
+            if (input) {
+                input.focus();
+            } else {
+                // 否则聚焦到确认按钮
+                confirm.focus();
+            }
+        });
+    }
+
+    const 对话框 = {
+        提示: 
+            async function(message, title = '提示') {
+                return await createDialog({ type: 'alert', message, title });
+            },
+        确认:
+            async function(message, title = '确认') {
+                return await createDialog({ type: 'confirm', message, title });
+            },
+        输入:
+            async function(message, defaultValue = '', title = '输入') {
+                return await createDialog({ type: 'prompt', message, defaultValue, title });
+            },
+    }
+
     // 对外暴露的 小红狐工具 方法
     const 小红狐工具 = {
         请求: 请求,
@@ -268,6 +396,7 @@
         节流: 节流,
         获取多页面: 获取多页面,
         多页面切换: 多页面切换,
+        对话框: 对话框,
     };
 
     // 将 小红狐工具 挂载到全局对象上（比如 window），这样外部可直接使用
