@@ -32,21 +32,21 @@ function 渲染页面初始() {
     修改页面初始URL按钮.id = "修改页面初始URL按钮";
     修改页面初始URL按钮.classList.add("加载按钮");
     修改页面初始URL按钮.textContent = "修改页面初始URL";
-    修改页面初始URL按钮.addEventListener("click", function () {
+    修改页面初始URL按钮.addEventListener("click", async function () {
         this.classList.add("加载中");
-        const 新页面初始URL = prompt("请输入页面初始URL：", 页面初始URL);
+        const 新页面初始URL = await 小红狐工具.对话框.输入("请输入页面初始URL：", 页面初始URL);
         if (新页面初始URL === null) {
             this.classList.remove("加载中");
             return;
         }
         小红狐.页面.修改页面初始URL(页面名, 新页面初始URL)
-            .then(() => {
-                alert("修改页面初始URL成功！");
+            .then(async () => {
+                await 小红狐工具.对话框.提示("修改页面初始URL成功！");
                 刷新页面初始();
             })
-            .catch(error => {
+            .catch(async error => {
                 console.error("修改页面初始URL失败:", error);
-                alert("修改页面初始URL失败!\n" + error);
+                await 小红狐工具.对话框.提示("修改页面初始URL失败!\n" + error);
             })
             .finally(() => {
                 修改页面初始URL按钮.classList.remove("加载中");
