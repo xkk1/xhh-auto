@@ -147,6 +147,9 @@ function 渲染脚本信息() {
                     重载脚本按钮.classList.remove("加载中");
                 })
         });
+        if (脚本模块名 === "小红狐") {
+            重载脚本按钮.disabled = true;
+        }
         td.appendChild(重载脚本按钮);
         tr.appendChild(td);
         表体.appendChild(tr);

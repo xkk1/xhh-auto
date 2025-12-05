@@ -143,6 +143,8 @@ class 小红狐脚本信息:
 加载脚本错误信息字典: dict[str, str] = {}
 
 def 重载脚本(模块名: str) -> ModuleType:
+    if 模块名 == 小红狐模块名:
+        return 导入脚本信息[小红狐模块名]
     if 模块名 in 导入脚本信息:
         try:
             需要重载的模块列表 = [
