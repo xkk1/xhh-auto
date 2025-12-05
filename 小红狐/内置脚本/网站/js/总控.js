@@ -127,21 +127,21 @@ function 渲染脚本信息() {
         重载脚本按钮.type = "button";
         重载脚本按钮.classList.add("重载脚本按钮","加载按钮");
         重载脚本按钮.textContent = "重载";
-        重载脚本按钮.addEventListener("click", function () {
-            const 确认 = confirm(`确定要重载“${脚本名称}”吗？`);
+        重载脚本按钮.addEventListener("click", async function () {
+            const 确认 = await 小红狐工具.对话框.确认(`确定要重载“${脚本名称}”吗？`);
             if (!确认) {
                 return;
             }
             this.classList.add("加载中");
             小红狐.脚本.重载脚本(脚本模块名)
-                .then((信息) => {
+                .then(async (信息) => {
                     刷新脚本信息();
-                    alert(信息);
+                    await 小红狐工具.对话框.提示(信息);
                 })
-                .catch(error => {
+                .catch(async error => {
                     更新加载脚本错误信息字典().then();
                     console.error("重载脚本失败:", error);
-                    alert("重载脚本失败!\n" + error);
+                    await 小红狐工具.对话框.提示("重载脚本失败!\n" + error);
                 })
                 .finally(() => {
                     重载脚本按钮.classList.remove("加载中");
@@ -174,25 +174,25 @@ function 刷新脚本信息() {
         });
 }
 
-function 重载所有脚本() {
-    const 确认 = confirm("确定要重载所有脚本吗？");
+async function 重载所有脚本() {
+    const 确认 = await 小红狐工具.对话框.确认("确定要重载所有脚本吗？");
     if (!确认) {
         return;
     }
     const 重载所有脚本按钮 = document.querySelector("#重载所有脚本按钮");
     重载所有脚本按钮.classList.add("加载中");
     小红狐.脚本.重载所有脚本()
-        .then((信息) => {
+        .then(async (信息) => {
             刷新脚本信息();
             if (Object.keys(信息).length === 0) {
-                alert("重载所有脚本成功！");
+                await 小红狐工具.对话框.提示("重载所有脚本成功！");
             } else {
-                alert("重载所有脚本成功！\n但有脚本加载失败，请查看加载脚本错误信息");
+                await 小红狐工具.对话框.提示("重载所有脚本成功！\n但有脚本加载失败，请查看加载脚本错误信息");
             }
         })
-        .catch(error => {
+        .catch(async error => {
             console.error("重载所有脚本失败:", error);
-            alert("重载所有脚本失败!\n" + error);
+            await 小红狐工具.对话框.提示("重载所有脚本失败!\n" + error);
         })
         .finally(() => {
             重载所有脚本按钮.classList.remove("加载中");
