@@ -101,11 +101,3 @@ h2 {
 #页面操作脚本表格 .自动开启多选.加载中::after {
     content: "切换中";
 }
-
-
-#对话框 {
-    padding: 0.4rem;
-    border-width: 0.1rem;
-    border-radius: 0.4rem;
-}
-

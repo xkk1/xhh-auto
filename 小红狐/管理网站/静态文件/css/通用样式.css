@@ -17,3 +17,16 @@ body {
     padding: 0;
     margin: 0;
 }
+
+.对话框,
+#对话框 {
+    padding: 0.4rem;
+    border-width: 0.1rem;
+    border-radius: 0.4rem;
+}
+
+.对话框 .标题,
+.对话框 .消息内容 {
+    margin: 0;
+    padding: 0;
+}
