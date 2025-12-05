@@ -1,3 +1,4 @@
+import traceback
 from typing import Any, Callable
 from flask import Blueprint, jsonify, request
 
@@ -362,7 +363,7 @@ def 新建页面路由(page_name):
         新建页面(页面名=页面名)
         return jsonify("成功")
     except Exception as e:
-        日志.警告(f"打开页面失败，页面名：{页面名}: {e}")
+        日志.错误(f"打开页面失败，页面名：{页面名}: {e}\n{traceback.format_exc()}")
         return jsonify(f"打开页面失败，页面名：{页面名}: {e}"), 500
 
 # 关闭页面
