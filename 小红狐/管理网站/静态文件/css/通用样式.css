@@ -29,4 +29,5 @@ body {
 .对话框 .消息内容 {
     margin: 0;
     padding: 0;
+    white-space: pre-wrap;
 }
