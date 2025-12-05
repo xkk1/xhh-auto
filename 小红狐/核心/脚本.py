@@ -145,8 +145,23 @@ class 小红狐脚本信息:
 def 重载脚本(模块名: str) -> ModuleType:
     if 模块名 in 导入脚本信息:
         try:
-            父模块 = importlib.reload(导入脚本信息[模块名].父模块)
+            需要重载的模块列表 = [
+                导入模块名 for 导入模块名 in sys.modules
+                if 导入模块名.startswith(模块名 + ".")
+            ]
+            需要重载的模块列表.remove(模块名 + ".小红狐脚本")
+            # 按模块层级深度排序：子模块在前，父包在后
+            # 例如：['mypackage.utils', 'mypackage.core.helper', 'mypackage'] 
+            # 排序后：先重载深层子模块，最后重载顶层包
+            需要重载的模块列表.sort(key=lambda x: x.count('.'), reverse=True)
+
+            # 逐个重载
+            for 重载模块名 in 需要重载的模块列表:
+                子模块 = sys.modules.get(重载模块名)
+                if 子模块 is not None:
+                    importlib.reload(子模块)
             模块 = importlib.reload(导入脚本信息[模块名].模块)
+            父模块 = importlib.reload(导入脚本信息[模块名].父模块)
             导入脚本信息[模块名] = 小红狐脚本信息(模块, 父模块)
             return 导入脚本信息[模块名]
         except Exception as e:
