@@ -43,7 +43,25 @@
         if (!startPoint) return;
 
         if (isDragging) {
-            console.log('【拖动】起点:', startPoint, '终点:', { x: e.clientX, y: e.clientY });
+             const endX = e.clientX;
+            const endY = e.clientY;
+
+            // 计算矩形左上角
+            const x = Math.min(startPoint.x, endX);
+            const y = Math.min(startPoint.y, endY);
+            const width = Math.abs(endX - startPoint.x);
+            const height = Math.abs(endY - startPoint.y);
+
+            const region = {
+                x: Math.round(x),
+                y: Math.round(y),
+                width: Math.round(width),
+                height: Math.round(height)
+            };
+            console.log(
+                '【拖动】起点:', startPoint, '终点:', { x: e.clientX, y: e.clientY },
+                '\n【区域截图参数】：\n'+ JSON.stringify(region, null, 4)
+            );
         } else {
             console.log('【点击】位置:', { x: e.clientX, y: e.clientY });
         }
