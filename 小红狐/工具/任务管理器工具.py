@@ -122,7 +122,7 @@ class 异步任务管理器类:
         停止一个任务字典里的任务（通过取消 asyncio.Task），并确认已取消。
         """
         if not self.获取任务状态(任务名称=任务名称):
-            任务对象: asyncio.Task = self.任务字典.get(key=任务名称, default=None)
+            任务对象: asyncio.Task = self.任务字典.get(任务名称, None)
             if not 任务对象:
                 日志.警告(f"任务 '{任务名称}' 不存在")
                 return False
