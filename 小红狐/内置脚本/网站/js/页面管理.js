@@ -109,19 +109,21 @@ function 渲染页面操作() {
     关闭页面按钮.textContent = "关闭页面"
     关闭页面按钮.addEventListener("click", function () {
         this.classList.add("加载中");
-        小红狐.页面.关闭页面(页面名)
-            .then(() => {
-                小红狐.页面.关闭页面操作自动开启脚本(页面名).then(() => {
-                    刷新页面操作脚本();
-                });
-                刷新页面操作();
-            })
-            .catch(async error => {
-                console.error("关闭页面失败:", error);
-                await 小红狐工具.对话框.提示("关闭页面失败!\n" + error);
-            })
+        小红狐.页面.关闭页面操作自动开启脚本(页面名)
+            .then(() => {})
             .finally(() => {
-                关闭页面按钮.classList.remove("加载中");
+                小红狐.页面.关闭页面(页面名)
+                    .then(() => {
+                        刷新页面操作();
+                    })
+                    .catch(async error => {
+                        console.error("关闭页面失败:", error);
+                        await 小红狐工具.对话框.提示("关闭页面失败!\n" + error);
+                    })
+                    .finally(() => {
+                        刷新页面操作脚本();
+                        关闭页面按钮.classList.remove("加载中");
+                    });
             });
     });
     页面操作容器元素.appendChild(关闭页面按钮);
@@ -130,34 +132,25 @@ function 渲染页面操作() {
     重启页面按钮.id = "重启页面按钮";
     重启页面按钮.classList.add("加载按钮")
     重启页面按钮.textContent = "重启页面"
-    重启页面按钮.addEventListener("click", function () {
+    重启页面按钮.addEventListener("click", async function () {
         this.classList.add("加载中");
-        小红狐.页面.关闭页面(页面名)
-            .then(() => {
-                小红狐.页面.关闭页面操作自动开启脚本(页面名).then(() => {
-                    小红狐.页面.新建页面(页面名)
-                        .then(() => {
-                            小红狐.页面.开启页面操作自动开启脚本(页面名).then(() => {
-                                刷新页面操作脚本();
-                            });
-                            刷新页面操作();
-                        })
-                        .catch(async error => {
-                            console.error("新建页面失败:", error);
-                            await 小红狐工具.对话框.提示("新建页面失败!\n" + error);
-                        })
-                        .finally(() => {
-                            新建页面按钮.classList.remove("加载中");
-                        });
-                });
-            })
-            .catch(async error => {
-                console.error("关闭页面失败:", error);
-                await 小红狐工具.对话框.提示("关闭页面失败!\n" + error);
-            })
-            .finally(() => {
-                关闭页面按钮.classList.remove("加载中");
-            });
+        try {
+            await 小红狐.页面.关闭页面操作自动开启脚本(页面名);
+        } catch (error) {}
+        try {
+            await 小红狐.页面.关闭页面(页面名);
+        } catch (error) {}
+        try {
+            await 小红狐.页面.新建页面(页面名);
+            try {
+                await 小红狐.页面.开启页面操作自动开启脚本(页面名);
+            } catch (error) {}
+        } catch (error) {
+            console.error("重启页面失败:", error);
+            await 小红狐工具.对话框.提示("重启页面失败!\n" + error);
+        }
+        刷新页面操作();
+        刷新页面操作脚本();
     });
     页面操作容器元素.appendChild(重启页面按钮);
 }
