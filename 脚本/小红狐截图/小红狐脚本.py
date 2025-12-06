@@ -27,7 +27,7 @@ from .页面操作 import 页面截图
 def flask路由(子路径: str):
     import flask
     请求方法 = flask.request.method  # HTTP 请求方法
-    if 子路径 == "/api/页面操作/页面截图" and 请求方法 == "POST":
+    if 子路径 == "/api/页面操作/页面截图" and 请求方法 == "GET":
         from .页面操作 import 页面截图
         return 页面截图.路由()
     查询参数 = flask.request.args  # GET 参数

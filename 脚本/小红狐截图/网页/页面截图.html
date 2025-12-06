@@ -12,10 +12,11 @@
             <button type="button" id="获取截图">获取<span id="页面名"></span>页面截图</button>
         </p>
         <pre id="错误信息" style="color: red;"></pre>
-        <div>
-             <!-- 空 img 用来接收图片 -->
-            <img src="" alt="页面截图" id="页面截图" style="display: none;"></img>
-        </div>
+        <p>
+            实时截图URL:<a href="#" target="_blank" id="截图URL元素"></a>
+        </p>
+        <!-- 空 img 用来接收图片 -->
+        <img src="" alt="页面截图" id="页面截图" style="display: none;"></img>
     </main>
     <style>
 #获取截图.加载中::before {
@@ -36,18 +37,22 @@ document.getElementById('页面名').textContent = pageName;
 const 错误信息元素 = document.getElementById('错误信息');
 const 获取截图按钮 = document.getElementById('获取截图');
 const 页面截图元素 = document.getElementById('页面截图');
+const 截图URL元素 = document.getElementById('截图URL元素');
+function 获取截图URL() {
+    const baseUrl = '/api/脚本/路由/小红狐截图/api/页面操作/页面截图';
+    const params = new URLSearchParams({
+        "页面名": pageName
+    });
+    const url = baseUrl + '?' + params.toString();
+    截图URL元素.href = url;
+    截图URL元素.textContent = decodeURIComponent(url);
+    return url;
+}
+let 截图URL = 获取截图URL();
 获取截图按钮.onclick = () => {
     获取截图按钮.classList.add('加载中');
     错误信息元素.textContent = '';
-    fetch('/api/脚本/路由/小红狐截图/api/页面操作/页面截图', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            页面名: pageName
-        })
-    })
+    fetch(截图URL)
     .then(res => {
         if (!res.ok) {
             // 显示错误信息

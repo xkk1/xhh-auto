@@ -40,19 +40,10 @@ def 文本响应(string: str):
     )
 
 def 路由():
-    if not request.is_json:
-        return 文本响应("请求头 Content-Type 必须是 application/json"), 400
-    json = request.get_json(silent=True)
-    if json is None:
-        return 文本响应("无效的 JSON 格式，请检查请求体"), 400
-    # json 为 str
-    if not isinstance(json, dict):
-        return 文本响应("配置格式错误"), 400
-    if "页面名" not in json:
-        return 文本响应("json 缺少页面名"), 400
-    页面名: str = json["页面名"]
-    if not isinstance(页面名, str):
-        return 文本响应("页面名必须是字符串"), 400
+    页面名: str = request.args.get('页面名', None)
+    if 页面名 == None:
+        return 文本响应("页面名不能为空"), 400
+    
     页面状态 = 获取页面状态(页面名=页面名)
     if 页面状态 == None:
         return 文本响应(f"页面“{页面名}”未创建"), 404
@@ -71,4 +62,4 @@ def 路由():
             download_name=页面名 + '截图.png'  # Flask 2.0+
         )
     except:
-        return jsonify(f"获取页面截图错误！\n" + traceback.format_exc()), 500
+        return 获取页面(f"获取页面截图错误！\n" + traceback.format_exc()), 500
