@@ -147,6 +147,7 @@ def 重载脚本(模块名: str) -> ModuleType:
         return 导入脚本信息[小红狐模块名]
     if 模块名 in 导入脚本信息:
         try:
+            加载脚本错误信息字典[模块名] = ""
             需要重载的模块列表 = [
                 导入模块名 for 导入模块名 in sys.modules
                 if 导入模块名.startswith(模块名 + ".")
@@ -161,14 +162,21 @@ def 重载脚本(模块名: str) -> ModuleType:
             for 重载模块名 in 需要重载的模块列表:
                 子模块 = sys.modules.get(重载模块名)
                 if 子模块 is not None:
-                    importlib.reload(子模块)
+                    try:
+                        importlib.reload(子模块)
+                    except Exception as e:
+                        错误信息 = f"❌小红狐脚本“{重载模块名}”重载失败：{e}\n" + traceback.format_exc()
+                        加载脚本错误信息字典[模块名] += 错误信息 + "\n"
+                        日志.警告(错误信息)
+            if 加载脚本错误信息字典[模块名] == "":
+                del 加载脚本错误信息字典[模块名]
             模块 = importlib.reload(导入脚本信息[模块名].模块)
             父模块 = importlib.reload(导入脚本信息[模块名].父模块)
             导入脚本信息[模块名] = 小红狐脚本信息(模块, 父模块)
             return 导入脚本信息[模块名]
         except Exception as e:
             错误信息 = traceback.format_exc()
-            加载脚本错误信息字典[模块名] = str(e) + 错误信息
+            加载脚本错误信息字典[模块名] += str(e) + 错误信息
             日志.错误(f"❌小红狐脚本“{模块名}”重载失败：{e}\n{错误信息}")
             raise e
     else:
