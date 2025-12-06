@@ -27,17 +27,17 @@
             });
         },
         获取标签页列表: function(页面名="页面名六个字") {
-            return 请求.获取(this.api前缀 + `/标签页列表/${页面名}`);
+            return 请求.获取(this.api前缀 + `/标签页列表/${encodeURIComponent(页面名)}`);
         },
         获取页面操作开启脚本: function(页面名="页面名六个字") {
-            return 请求.获取(this.api前缀 + `/页面操作开启脚本/${页面名}`);
+            return 请求.获取(this.api前缀 + `/页面操作开启脚本/${encodeURIComponent(页面名)}`);
         },
         获取页面操作自动开启脚本: function(页面名="页面名六个字") {
-            return 请求.获取(this.api前缀 + `/页面操作自动开启脚本/${页面名}`);
+            return 请求.获取(this.api前缀 + `/页面操作自动开启脚本/${encodeURIComponent(页面名)}`);
         },
         添加页面操作自动开启脚本: function(页面名, 脚本模块名, 页面操作脚本名) {
             return 请求.新增(
-                this.api前缀 + `/页面操作自动开启脚本/${页面名}`,
+                this.api前缀 + `/页面操作自动开启脚本/${encodeURIComponent(页面名)}`,
                 {
                     "脚本模块名": 脚本模块名,
                     "页面操作脚本名": 页面操作脚本名,
@@ -45,29 +45,29 @@
             );
         },
         删除页面操作自动开启脚本: function(页面名, 脚本模块名, 页面操作脚本名) {
-            return 请求.删除(this.api前缀 + `/页面操作自动开启脚本/${页面名}/${脚本模块名}/${页面操作脚本名}`);
+            return 请求.删除(this.api前缀 + `/页面操作自动开启脚本/${encodeURIComponent(页面名)}/${encodeURIComponent(脚本模块名)}/${encodeURIComponent(页面操作脚本名)}`);
         },
         获取页面操作配置页面: function(页面名, 脚本模块名, 页面操作脚本名) {
-            return 请求.获取(this.api前缀 + `/页面操作/配置页面/${页面名}/${脚本模块名}/${页面操作脚本名}`);
+            return 请求.获取(this.api前缀 + `/页面操作/配置页面/${encodeURIComponent(页面名)}/${encodeURIComponent(脚本模块名)}/${encodeURIComponent(页面操作脚本名)}`);
         },
         获取页面生成配置页面: function(页面名, 脚本模块名, 页面操作脚本名) {
-            return 请求.获取(this.api前缀 + `/页面生成/配置页面/${页面名}/${脚本模块名}/${页面操作脚本名}`);
+            return 请求.获取(this.api前缀 + `/页面生成/配置页面/${encodeURIComponent(页面名)}/${encodeURIComponent(脚本模块名)}/${encodeURIComponent(页面操作脚本名)}`);
         },
         修改标签页URL排序: function(页面名="页面名六个字", 标签页URL排序) {
-            return 请求.修改(this.api前缀 + `/标签页URL排序/${页面名}`, 标签页URL排序);
+            return 请求.修改(this.api前缀 + `/标签页URL排序/${encodeURIComponent(页面名)}`, 标签页URL排序);
         },
         获取页面配置名: function(页面名="页面名六个字") {
-            return 请求.获取(this.api前缀 + `/配置名/${页面名}`);
+            return 请求.获取(this.api前缀 + `/配置名/${encodeURIComponent(页面名)}`);
         },
         修改页面配置名: function(页面名="页面名六个字", 配置名) {
-            return 请求.修改(this.api前缀 + `/配置名/${页面名}`, 配置名);
+            return 请求.修改(this.api前缀 + `/配置名/${encodeURIComponent(页面名)}`, 配置名);
         },
         获取页面生成脚本: function(页面名="页面名六个字") {
-            return 请求.获取(this.api前缀 + `/页面生成脚本/${页面名}`);
+            return 请求.获取(this.api前缀 + `/页面生成脚本/${encodeURIComponent(页面名)}`);
         },
         修改页面生成脚本: function(页面名, 脚本模块名, 页面生成脚本名) {
             return 请求.修改(
-                this.api前缀 + `/页面生成脚本/${页面名}`,
+                this.api前缀 + `/页面生成脚本/${encodeURIComponent(页面名)}`,
                 {
                     "脚本模块名": 脚本模块名,
                     "页面生成脚本名": 页面生成脚本名,
@@ -75,37 +75,37 @@
             );
         },
         开启页面操作脚本: function(页面名, 脚本模块名, 页面操作脚本名) {
-            return 请求.获取(this.api前缀 + `/开启页面操作脚本/${页面名}/${脚本模块名}/${页面操作脚本名}`);
+            return 请求.获取(this.api前缀 + `/开启页面操作脚本/${encodeURIComponent(页面名)}/${encodeURIComponent(脚本模块名)}/${encodeURIComponent(页面操作脚本名)}`);
         },
         开启页面操作自动开启脚本: function(页面名) {
-            return 请求.获取(this.api前缀 + `/开启页面操作自动开启脚本/${页面名}`);
+            return 请求.获取(this.api前缀 + `/开启页面操作自动开启脚本/${encodeURIComponent(页面名)}`);
         },
         关闭页面操作脚本: function(页面名, 脚本模块名, 页面操作脚本名) {
-            return 请求.获取(this.api前缀 + `/关闭页面操作脚本/${页面名}/${脚本模块名}/${页面操作脚本名}`);
+            return 请求.获取(this.api前缀 + `/关闭页面操作脚本/${encodeURIComponent(页面名)}/${encodeURIComponent(脚本模块名)}/${encodeURIComponent(页面操作脚本名)}`);
         },
         关闭页面操作自动开启脚本: function(页面名) {
-            return 请求.获取(this.api前缀 + `/关闭页面操作自动开启脚本/${页面名}`);
+            return 请求.获取(this.api前缀 + `/关闭页面操作自动开启脚本/${encodeURIComponent(页面名)}`);
         },
         新建页面: function(页面名) {
-            return 请求.获取(this.api前缀 + `/新建页面/${页面名}`);
+            return 请求.获取(this.api前缀 + `/新建页面/${encodeURIComponent(页面名)}`);
         },
         关闭页面: function(页面名) {
-            return 请求.获取(this.api前缀 + `/关闭页面/${页面名}`);
+            return 请求.获取(this.api前缀 + `/关闭页面/${encodeURIComponent(页面名)}`);
         },
         获取页面状态: function(页面名="页面名六个字") {
-            return 请求.获取(this.api前缀 + `/获取页面状态/${页面名}`);
+            return 请求.获取(this.api前缀 + `/获取页面状态/${encodeURIComponent(页面名)}`);
         },
         获取页面账号名: function(页面名="页面名六个字") {
-            return 请求.获取(this.api前缀 + `/账号名/${页面名}`);
+            return 请求.获取(this.api前缀 + `/账号名/${encodeURIComponent(页面名)}`);
         },
         修改页面账号名: function(页面名, 账号名) {
-            return 请求.修改(this.api前缀 + `/账号名/${页面名}`, 账号名);
+            return 请求.修改(this.api前缀 + `/账号名/${encodeURIComponent(页面名)}`, 账号名);
         },
         获取页面初始URL: function(页面名="页面名六个字") {
-            return 请求.获取(this.api前缀 + `/页面初始URL/${页面名}`);
+            return 请求.获取(this.api前缀 + `/页面初始URL/${encodeURIComponent(页面名)}`);
         },
         修改页面初始URL: function(页面名, 页面初始URL) {
-            return 请求.修改(this.api前缀 + `/页面初始URL/${页面名}`, 页面初始URL);
+            return 请求.修改(this.api前缀 + `/页面初始URL/${encodeURIComponent(页面名)}`, 页面初始URL);
         },
     };
 
@@ -118,7 +118,7 @@
             return 请求.获取(this.api前缀 + "/重载");
         },
         重载脚本: function(脚本模块名) {
-            return 请求.获取(this.api前缀 + `/重载/${脚本模块名}`);
+            return 请求.获取(this.api前缀 + `/重载/${encodeURIComponent(脚本模块名)}`);
         },
         获取加载脚本错误信息字典: function() {
             return 请求.获取(this.api前缀 + "/加载脚本错误信息字典");
@@ -143,7 +143,7 @@
             );
         },
         删除账号: function(账号名) {
-            return 请求.删除(this.api前缀 + `/账号名/${账号名}`);
+            return 请求.删除(this.api前缀 + `/账号名/${encodeURIComponent(账号名)}`);
         },
         复制账号: function(账号名, 新账号名) {
             return 请求.新增(
@@ -155,7 +155,7 @@
             );
         },
         保存账号状态: function(账号名) {
-            return 请求.获取(this.api前缀 + `/保存账号状态/${账号名}`);
+            return 请求.获取(this.api前缀 + `/保存账号状态/${encodeURIComponent(账号名)}`);
         },
     };
 
@@ -168,7 +168,7 @@
             return 请求.新增(this.api前缀 + "/配置名", 配置名);
         },
         删除配置: function(配置名) {
-            return 请求.删除(this.api前缀 + `/配置名/${配置名}`);
+            return 请求.删除(this.api前缀 + `/配置名/${encodeURIComponent(配置名)}`);
         },
         修改配置名: function(配置名, 新配置名) {
             return 请求.修改(
@@ -199,7 +199,7 @@
             return 请求.修改(this.api前缀 + "/标签页URL排序", 标签页URL排序);
         },
         获取脚本配置页面: function(脚本模块名) {
-            return 请求.获取(this.api前缀 + `/配置页面/${脚本模块名}`);
+            return 请求.获取(this.api前缀 + `/配置页面/${encodeURIComponent(脚本模块名)}`);
         },
         关闭浏览器: function() {
             return 请求.获取(this.api前缀 + "/关闭浏览器");
