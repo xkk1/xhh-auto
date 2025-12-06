@@ -1084,7 +1084,7 @@ function 渲染页面名() {
                             }
                             // 关闭管理页面
                             if (parent.parent?.多页面?.关闭页面) {
-                                parent.parent.多页面.关闭页面(`./html/配置.html?页面名=${页面名}`);
+                                parent.parent.多页面.关闭页面(`./html/配置.html?页面名=${encodeURIComponent(页面名)}`);
                             }
                         }
                         // 关闭当前页面
@@ -1130,7 +1130,7 @@ function 渲染页面名() {
                             }
                             // 关闭管理页面
                             if (parent.parent?.多页面?.关闭页面) {
-                                parent.parent.多页面.关闭页面(`./html/配置.html?页面名=${页面名}`);
+                                parent.parent.多页面.关闭页面(`./html/配置.html?页面名=${encodeURIComponent(页面名)}`);
                             }
                         }
                         // 关闭当前页面

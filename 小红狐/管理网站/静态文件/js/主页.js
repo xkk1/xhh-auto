@@ -21,7 +21,7 @@ function 刷新页面列表() {
                     const li = document.createElement("li");
                     li.role = "none";
                     const a = document.createElement("a");
-                    a.href = `./html/配置.html?页面名=${页面名}`;
+                    a.href = `./html/配置.html?页面名=${encodeURIComponent(页面名)}`;
                     a.textContent = 页面名;
                     a.classList.add("打开页面");
                     a.role = "tab";
