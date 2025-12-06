@@ -1,7 +1,7 @@
 import io
 import traceback
 
-from flask import jsonify, request, send_file
+from flask import Response, jsonify, request, send_file
 
 from 小红狐.核心.页面 import 获取页面状态, 获取页面
 from 小红狐.工具.任务管理器工具 import 异步任务管理器
@@ -32,25 +32,32 @@ def 配置页面(页面名: str) -> dict[str, str]:
     }
     return 页面
 
+def 文本响应(string: str):
+    return Response(
+        string,
+        mimetype='text/plain',
+        content_type='text/plain; charset=utf-8'  # 显式声明 charset
+    )
+
 def 路由():
     if not request.is_json:
-        return jsonify("请求头 Content-Type 必须是 application/json"), 400
+        return 文本响应("请求头 Content-Type 必须是 application/json"), 400
     json = request.get_json(silent=True)
     if json is None:
-        return jsonify("无效的 JSON 格式，请检查请求体"), 400
+        return 文本响应("无效的 JSON 格式，请检查请求体"), 400
     # json 为 str
     if not isinstance(json, dict):
-        return jsonify("配置格式错误"), 400
+        return 文本响应("配置格式错误"), 400
     if "页面名" not in json:
-        return jsonify("json 缺少页面名"), 400
+        return 文本响应("json 缺少页面名"), 400
     页面名: str = json["页面名"]
     if not isinstance(页面名, str):
-        return jsonify("页面名必须是字符串"), 400
+        return 文本响应("页面名必须是字符串"), 400
     页面状态 = 获取页面状态(页面名=页面名)
     if 页面状态 == None:
-        return jsonify(f"页面“{页面名}”未创建"), 404
+        return 文本响应(f"页面“{页面名}”未创建"), 404
     elif 页面状态 == False:
-        return jsonify(f"页面“{页面名}”手动关闭"), 404
+        return 文本响应(f"页面“{页面名}”手动关闭"), 404
     try:
         page = 获取页面(页面名=页面名)
         image_bytes = 异步任务管理器.运行(page.screenshot(type="png", scale="css"))

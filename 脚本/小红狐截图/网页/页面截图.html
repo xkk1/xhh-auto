@@ -51,7 +51,7 @@ const 页面截图元素 = document.getElementById('页面截图');
     .then(res => {
         if (!res.ok) {
             // 显示错误信息
-            res.json().then(text => {
+            res.text().then(text => {
                 错误信息元素.textContent = text;
             });
             throw new Error(res.statusText);
