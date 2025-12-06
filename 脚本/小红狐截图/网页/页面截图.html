@@ -28,11 +28,13 @@
             <label for="下载">下载</label><input type="checkbox" id="下载"></input>
         </p>
         <pre id="错误信息" style="color: red;"></pre>
+        <p style="text-align: center;">
+            <!-- 空 img 用来接收图片 -->
+            <img src="" alt="页面截图" id="页面截图" style="display: none;"></img>
+        </p>
         <p>
             实时截图链接:<a href="#" target="_blank" id="截图URL元素"></a>
         </p>
-        <!-- 空 img 用来接收图片 -->
-        <img src="" alt="页面截图" id="页面截图" style="display: none;"></img>
     </main>
     <style>
 p {
@@ -45,7 +47,8 @@ p {
     content: "中...";
 }
 #页面截图 {
-    width: 100%;
+    max-width: 100%;
+    max-height: 100vh;
 }
     </style>
     <script>

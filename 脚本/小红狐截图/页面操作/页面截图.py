@@ -44,12 +44,10 @@ def 路由():
     页面名: str = request.args.get('页面名', None)
     if 页面名 == None:
         return 文本响应("页面名不能为空"), 400
-    类型: str = request.args.get('类型', "png")
+    类型: str = request.args.get('类型', "jpeg")
     if 类型 not in ["png", "jpeg"]:
         return 文本响应("不支持的类型，仅支持 png、jpeg"), 400
-    缩放: str = request.args.get('缩放', None)
-    if 缩放 == None:
-        缩放 = "css"
+    缩放: str = request.args.get('缩放', "css")
     if 缩放 not in ["css", "device"]:
         return 文本响应("不支持的缩放类型，仅支持 css、device"), 400
     全屏: bool = '全屏' in request.args
