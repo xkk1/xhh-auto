@@ -1,4 +1,5 @@
 from pathlib import Path
+import traceback
 from types import NoneType
 from typing import Any
 from flask import Blueprint, jsonify
@@ -67,7 +68,8 @@ def 重载指定脚本蓝图(package):
         重载脚本(脚本模块名)
         return jsonify(f"已重载脚本：{脚本模块名}")
     except Exception as e:
-        return jsonify(str(e)), 404
+        日志.错误(f"重载脚本错误：{traceback.format_exc()}")
+        return jsonify(str(e)), 500
 
 @脚本蓝图.route("/重载", methods=["GET"])
 def 重载所有脚本蓝图():

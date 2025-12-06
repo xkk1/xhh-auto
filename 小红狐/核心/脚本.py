@@ -170,8 +170,8 @@ def 重载脚本(模块名: str) -> ModuleType:
                         日志.警告(错误信息)
             if 加载脚本错误信息字典[模块名] == "":
                 del 加载脚本错误信息字典[模块名]
-            模块 = importlib.reload(导入脚本信息[模块名].模块)
             父模块 = importlib.reload(导入脚本信息[模块名].父模块)
+            模块 = importlib.reload(导入脚本信息[模块名].模块)
             导入脚本信息[模块名] = 小红狐脚本信息(模块, 父模块)
             return 导入脚本信息[模块名]
         except Exception as e:
