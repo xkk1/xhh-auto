@@ -8,24 +8,32 @@
 </head>
 <body>
     <main>
+        <p style="text-align: center;">
+            <button type="button" id="获取截图" style="font-size: 1.2rem;">获取<span id="页面名"></span>页面截图</button>
+        </p>
         <p>
-            <button type="button" id="获取截图">获取<span id="页面名"></span>页面截图</button>
-            <br />
-            <label for="类型">类型</label>
-            <select id="类型">
-                <option value="png">png</option>
-                <option value="jpeg" selected>jpeg</option>
-            </select>
-            &emsp;
-            <label for="缩放">缩放</label>
-            <select id="缩放">
-                <option value="css" selected>CSS</option>
-                <option value="device">设备(dpi)</option>
-            </select>
-            &emsp;
-             <label for="全屏">全屏</label><input type="checkbox" id="全屏"></input>
-            &emsp;
-            <label for="下载">下载</label><input type="checkbox" id="下载"></input>
+            <span class="不换行">
+                <label for="类型">类型</label>
+                <select id="类型">
+                    <option value="png">png</option>
+                    <option value="jpeg" selected>jpeg</option>
+                </select>
+            </span>
+            <span class="不换行">
+                <label for="缩放">缩放</label>
+                <select id="缩放">
+                    <option value="css" selected>CSS</option>
+                    <option value="device">设备(dpi)</option>
+                </select>
+            </span>
+            <span class="不换行">
+                <input type="checkbox" id="全屏" />
+                <label for="全屏">截全屏</label>
+            </span>
+            <span class="不换行">
+                <input type="checkbox" id="下载" />
+                <label for="下载">链接触发下载</label>
+            </span>
         </p>
         <pre id="错误信息" style="color: red;"></pre>
         <p style="text-align: center;">
@@ -47,6 +55,10 @@
     max-width: 100%;
     max-height: 100vh;
 }
+.不换行 {
+    white-space: nowrap;
+}
+
     </style>
     <script>
 // 获取当前 URL 的查询字符串部分，并解析
