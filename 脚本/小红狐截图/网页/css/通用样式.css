@@ -1,0 +1,19 @@
+:root {
+    /* 🌞 浅色主题 */
+    color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* 🌙 深色主题 */
+        color-scheme: dark;
+    }
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}

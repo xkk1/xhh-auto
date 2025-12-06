@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>页面截图</title>
+    <link rel="stylesheet" href="./css/通用样式.css">
+</head>
+<body>
+    <main>
+        <p>
+            <button type="button" id="获取截图">获取<span id="页面名"></span>页面截图</button>
+        </p>
+        <pre id="错误信息" style="color: red;"></pre>
+        <div>
+             <!-- 空 img 用来接收图片 -->
+            <img src="" alt="页面截图" id="页面截图" style="display: none;"></img>
+        </div>
+    </main>
+    <style>
+#获取截图.加载中::before {
+    content: "正在";
+}
+#获取截图.加载中::after {
+    content: "中...";
+}
+#页面截图 {
+    width: 100%;
+}
+    </style>
+    <script>
+// 获取当前 URL 的查询字符串部分，并解析
+const urlParams = new URLSearchParams(window.location.search);
+const pageName = urlParams.get('页面名') || '页面名';
+document.getElementById('页面名').textContent = pageName;
+const 错误信息元素 = document.getElementById('错误信息');
+const 获取截图按钮 = document.getElementById('获取截图');
+const 页面截图元素 = document.getElementById('页面截图');
+获取截图按钮.onclick = () => {
+    获取截图按钮.classList.add('加载中');
+    错误信息元素.textContent = '';
+    fetch('/api/脚本/路由/小红狐截图/api/页面操作/页面截图', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            页面名: pageName
+        })
+    })
+    .then(res => {
+        if (!res.ok) {
+            // 显示错误信息
+            res.json().then(text => {
+                错误信息元素.textContent = text;
+            });
+            throw new Error(res.statusText);
+        }
+        return res.blob();
+    })
+    .then(data => {
+        页面截图元素.src = URL.createObjectURL(data);
+        页面截图元素.style.display = '';
+    })
+    .catch(err => {
+        console.error(err);
+    })
+    .finally(() => {
+        获取截图按钮.classList.remove('加载中');
+    });
+};
+    </script>
+</body>
+</html>
