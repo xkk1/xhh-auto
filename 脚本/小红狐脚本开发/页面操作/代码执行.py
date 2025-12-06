@@ -1,8 +1,12 @@
 from contextlib import redirect_stdout
 import io
 import traceback
+from urllib.parse import quote
+
 from flask import jsonify, request
+
 from .. import __package__ as 模块名
+
 
 开启脚本页面名列表: list[str] = []
 
@@ -24,7 +28,7 @@ def 脚本状态(页面名: str | None) -> bool:
 
 def 配置页面(页面名: str) -> dict[str, str]:
     页面: dict[str, str] = {
-        f"/api/目录/脚本/{模块名}/网站/代码执行.html?页面名={页面名}": "代码执行",
+        f"/api/目录/脚本/{模块名}/网站/代码执行.html?页面名={quote(页面名, safe="")}": "代码执行",
     }
     return 页面
 
