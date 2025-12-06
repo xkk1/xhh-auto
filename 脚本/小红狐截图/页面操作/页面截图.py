@@ -1,8 +1,9 @@
 import datetime
 import io
 import traceback
+from urllib.parse import quote
 
-from flask import Response, jsonify, request, send_file
+from flask import Response, request, send_file
 
 from 小红狐.核心.页面 import 获取页面状态, 获取页面
 from 小红狐.工具.任务管理器工具 import 异步任务管理器
@@ -29,7 +30,7 @@ def 脚本状态(页面名: str | None) -> bool:
 
 def 配置页面(页面名: str) -> dict[str, str]:
     页面: dict[str, str] = {
-        f"/api/目录/脚本/{模块名}/网页/页面截图.html?页面名={页面名}": "页面截图",
+        f"/api/目录/脚本/{模块名}/网页/页面截图.html?页面名={quote(页面名, safe="")}": "页面截图",
     }
     return 页面
 
