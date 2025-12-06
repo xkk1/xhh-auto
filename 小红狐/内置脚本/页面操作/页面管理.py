@@ -1,3 +1,5 @@
+from urllib.parse import quote
+
 from ... import __package__ as 小红狐模块名
 
 
@@ -36,8 +38,8 @@ def 脚本状态(页面名: str | None = None) -> bool:
         return False
 
 def 配置页面(页面名: str) -> dict[str, str]:
-    页面: dict[str, str] = {
-        f"/api/目录/小红狐/内置脚本/网站/页面管理.html?页面名={页面名}": f"{页面名}页面管理",
+    页面: dict[str, str] = {""
+        f"/api/目录/小红狐/内置脚本/网站/页面管理.html?页面名={quote(页面名, safe="")}": f"{页面名}页面管理",
     }
     if 页面名 in ["小喾苦", "xkk1"]:
         页面.update({

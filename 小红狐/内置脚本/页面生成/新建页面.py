@@ -1,5 +1,6 @@
 import asyncio
 from typing import Any
+from urllib.parse import quote
 
 import playwright.async_api
 
@@ -37,9 +38,7 @@ def 获取页面(页面名: str | None = None) -> playwright.async_api.Page | No
     return 异步任务管理器.运行(小红狐获取页面(页面名=页面名))
 
 def 配置页面(页面名: str) -> dict[str, str]:
-    from ...核心.页面 import 获取页面配置名
-    配置名: str = 获取页面配置名(页面名)
     页面: dict[str, str] = {
-        f"/api/目录/小红狐/内置脚本/网站/新建页面.html?页面名={页面名}&配置名={配置名}": "页面生成",
+        f"/api/目录/小红狐/内置脚本/网站/新建页面.html?页面名={quote(页面名, safe="")}": "页面生成",
     }
     return 页面
