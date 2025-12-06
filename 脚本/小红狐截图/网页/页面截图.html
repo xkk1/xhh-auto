@@ -35,10 +35,17 @@
                 <label for="下载">链接触发下载</label>
             </span>
         </p>
+        <p>
+            <span class="不换行"></span>
+                <input type="checkbox" id="保存本地" />
+                <label for="保存本地">保存本地：</label>
+            <span class="不换行"></span>
+            <input type="text" id="路径" placeholder="数据/截图.jpeg"  disabled="" />
+        </p>
         <pre id="错误信息" style="color: red;"></pre>
         <p style="text-align: center;">
             <!-- 空 img 用来接收图片 -->
-            <img src="" alt="页面截图" id="页面截图" style="display: none;"></img>
+            <img src="" alt="页面截图" id="页面截图" style="display: none;" />
         </p>
         <p>
             实时截图链接:<a href="#" target="_blank" id="截图URL元素"></a>
@@ -58,7 +65,6 @@
 .不换行 {
     white-space: nowrap;
 }
-
     </style>
     <script>
 // 获取当前 URL 的查询字符串部分，并解析
@@ -73,6 +79,15 @@ const 类型元素 = document.getElementById('类型');
 const 缩放元素 = document.getElementById('缩放');
 const 全屏元素 = document.getElementById('全屏');
 const 下载元素 = document.getElementById('下载');
+const 保存本地元素 = document.getElementById('保存本地');
+const 路径元素 = document.getElementById('路径');
+// 禁用 路径元素
+保存本地元素.addEventListener('change', () => {
+    路径元素.disabled = !保存本地元素.checked;
+});
+类型元素.addEventListener('change', () => {
+    路径元素.setAttribute('placeholder', `数据/截图.${类型元素.value}`);
+});
 
 function 获取截图URL() {
     const baseUrl = '/api/脚本/路由/小红狐截图/api/页面操作/页面截图';
@@ -87,15 +102,18 @@ function 获取截图URL() {
     if (下载元素.checked) {
         params.append("下载", "");
     }
+    if (保存本地元素.checked) {
+        params.append("路径", 路径元素.value || '数据/截图.' + 类型元素.value);
+    }
     const url = baseUrl + '?' + params.toString();
     截图URL元素.href = url;
     截图URL元素.textContent = decodeURIComponent(url);
     return url;
 }
-[类型元素, 缩放元素, 全屏元素, 下载元素].forEach(element => {
-    element.onchange = () => {
+[类型元素, 缩放元素, 全屏元素, 下载元素, 保存本地元素, 路径元素].forEach(element => {
+    element.addEventListener('change', () => {
         截图URL = 获取截图URL();
-    };
+    });
 });
 let 截图URL = 获取截图URL();
 获取截图按钮.onclick = () => {

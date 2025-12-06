@@ -53,6 +53,7 @@ def 路由():
         return 文本响应("不支持的缩放类型，仅支持 css、device"), 400
     全屏: bool = '全屏' in request.args
     下载: bool = '下载' in request.args
+    路径: str = request.args.get('路径', None)
 
     页面状态 = 获取页面状态(页面名=页面名)
     if 页面状态 == None:
@@ -61,7 +62,7 @@ def 路由():
         return 文本响应(f"页面“{页面名}”手动关闭"), 404
     try:
         page = 获取页面(页面名=页面名)
-        image_bytes = 异步任务管理器.运行(page.screenshot(type=类型, scale=缩放, full_page=全屏))
+        image_bytes = 异步任务管理器.运行(page.screenshot(type=类型, path=路径, scale=缩放, full_page=全屏))
         # 将 bytes 包装为 BytesIO 流
         image_stream = io.BytesIO(image_bytes)
         image_stream.seek(0)  # 确保指针在开头
