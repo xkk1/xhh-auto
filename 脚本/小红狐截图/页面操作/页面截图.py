@@ -1,3 +1,4 @@
+import datetime
 import io
 import traceback
 
@@ -43,7 +44,17 @@ def 路由():
     页面名: str = request.args.get('页面名', None)
     if 页面名 == None:
         return 文本响应("页面名不能为空"), 400
-    
+    类型: str = request.args.get('类型', "png")
+    if 类型 not in ["png", "jpeg"]:
+        return 文本响应("不支持的类型，仅支持 png、jpeg"), 400
+    缩放: str = request.args.get('缩放', None)
+    if 缩放 == None:
+        缩放 = "css"
+    if 缩放 not in ["css", "device"]:
+        return 文本响应("不支持的缩放类型，仅支持 css、device"), 400
+    全屏: bool = '全屏' in request.args
+    下载: bool = '下载' in request.args
+
     页面状态 = 获取页面状态(页面名=页面名)
     if 页面状态 == None:
         return 文本响应(f"页面“{页面名}”未创建"), 404
@@ -51,15 +62,15 @@ def 路由():
         return 文本响应(f"页面“{页面名}”手动关闭"), 404
     try:
         page = 获取页面(页面名=页面名)
-        image_bytes = 异步任务管理器.运行(page.screenshot(type="png", scale="css"))
+        image_bytes = 异步任务管理器.运行(page.screenshot(type=类型, scale=缩放, full_page=全屏))
         # 将 bytes 包装为 BytesIO 流
         image_stream = io.BytesIO(image_bytes)
         image_stream.seek(0)  # 确保指针在开头
         return send_file(
             image_stream,
-            mimetype='image/png',
-            as_attachment=False,  # 设为 True 可触发下载
-            download_name=页面名 + '截图.png'  # Flask 2.0+
+            mimetype='image/' + 类型,
+            as_attachment=下载,  # 设为 True 可触发下载
+            download_name=页面名 + '截图' + datetime.datetime.now().strftime("%Y%m%d_%H%M%S_%f") + '.' + 类型
         )
     except:
         return 获取页面(f"获取页面截图错误！\n" + traceback.format_exc()), 500

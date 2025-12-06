@@ -10,15 +10,34 @@
     <main>
         <p>
             <button type="button" id="获取截图">获取<span id="页面名"></span>页面截图</button>
+            <br />
+            <label for="类型">类型</label>
+            <select id="类型">
+                <option value="png">png</option>
+                <option value="jpeg" selected>jpeg</option>
+            </select>
+            &emsp;
+            <label for="缩放">缩放</label>
+            <select id="缩放">
+                <option value="css" selected>css</option>
+                <option value="device">device</option>
+            </select>
+            &emsp;
+             <label for="全屏">全屏</label><input type="checkbox" id="全屏"></input>
+            &emsp;
+            <label for="下载">下载</label><input type="checkbox" id="下载"></input>
         </p>
         <pre id="错误信息" style="color: red;"></pre>
         <p>
-            实时截图URL:<a href="#" target="_blank" id="截图URL元素"></a>
+            实时截图链接:<a href="#" target="_blank" id="截图URL元素"></a>
         </p>
         <!-- 空 img 用来接收图片 -->
         <img src="" alt="页面截图" id="页面截图" style="display: none;"></img>
     </main>
     <style>
+p {
+    margin: 0;
+}
 #获取截图.加载中::before {
     content: "正在";
 }
@@ -38,16 +57,34 @@ const 错误信息元素 = document.getElementById('错误信息');
 const 获取截图按钮 = document.getElementById('获取截图');
 const 页面截图元素 = document.getElementById('页面截图');
 const 截图URL元素 = document.getElementById('截图URL元素');
+const 类型元素 = document.getElementById('类型');
+const 缩放元素 = document.getElementById('缩放');
+const 全屏元素 = document.getElementById('全屏');
+const 下载元素 = document.getElementById('下载');
+
 function 获取截图URL() {
     const baseUrl = '/api/脚本/路由/小红狐截图/api/页面操作/页面截图';
     const params = new URLSearchParams({
-        "页面名": pageName
+        "页面名": pageName,
+        "类型": 类型元素.value,
+        "缩放": 缩放元素.value,
     });
+    if (全屏元素.checked) {
+        params.append("全屏", ""); // 或直接 params.set("全屏", "")，甚至只写 params.append("全屏")
+    }
+    if (下载元素.checked) {
+        params.append("下载", "");
+    }
     const url = baseUrl + '?' + params.toString();
     截图URL元素.href = url;
     截图URL元素.textContent = decodeURIComponent(url);
     return url;
 }
+[类型元素, 缩放元素, 全屏元素, 下载元素].forEach(element => {
+    element.onchange = () => {
+        截图URL = 获取截图URL();
+    };
+});
 let 截图URL = 获取截图URL();
 获取截图按钮.onclick = () => {
     获取截图按钮.classList.add('加载中');
