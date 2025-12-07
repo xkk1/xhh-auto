@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <span id="页面名"></span>:fps<span id="fps">-</span>
+        <span id="页面名"></span>:FPS<span id="fps">-</span>
     </header>
     <main>
         <img src="" alt="加载页面截图中..." id="页面截图" />
@@ -59,12 +59,13 @@ async function 显示实时截图() {
         const blob = await response.blob();
         const url = URL.createObjectURL(blob);
         截图元素.src = url;
-        fps元素.textContent = (1000 / (Date.now() - 传输开始时间戳)).toFixed()
+        const fps = 1000 / (Date.now() - 传输开始时间戳)
+        fps元素.textContent = fps.toFixed(fps < 10 ? 1 : 0);
         传输开始时间戳 = Date.now();
     } catch (error) {
         console.error(error);
     }
-    // setTimeout(显示实时截图, 0);
+    setTimeout(显示实时截图, 0);
 }
 显示实时截图();
     </script>
