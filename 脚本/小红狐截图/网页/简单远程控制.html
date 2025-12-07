@@ -9,6 +9,7 @@
 <body>
     <header>
         <span id="页面名"></span>:FPS<span id="fps">-</span>
+        <button id="启停">停止</button>
     </header>
     <main>
         <img src="" alt="加载页面截图中..." id="页面截图" />
@@ -20,7 +21,8 @@ body {
 header { 
     position: absolute;
     top: 0;
-    left: 0;
+    left: 50%;   /* 距离左侧50% */
+    transform: translateX(-50%);
 }
 main {
     width: 100%;
@@ -44,6 +46,7 @@ const 页面名 = urlParams.get('页面名') || '页面名';
 document.getElementById('页面名').textContent = 页面名;
 const 截图元素 = document.getElementById('页面截图');
 const fps元素 = document.getElementById('fps');
+const 启停按钮 = document.getElementById('启停');
 // 获取当前时间
 params = new URLSearchParams({
     "页面名": 页面名,
@@ -51,7 +54,7 @@ params = new URLSearchParams({
     "缩放": "css",
 });
 const 截图URL = '/api/脚本/路由/小红狐截图/api/页面操作/页面截图' + '?' + params.toString();
-
+let 开启 = true;
 let 传输开始时间戳 = Date.now();
 async function 显示实时截图() {
     try {
@@ -65,9 +68,21 @@ async function 显示实时截图() {
     } catch (error) {
         console.error(error);
     }
-    setTimeout(显示实时截图, 0);
+    if (开启) {
+        setTimeout(显示实时截图);
+    }
 }
 显示实时截图();
+启停按钮.onclick = () => {
+    if (启停按钮.textContent === '停止') {
+        启停按钮.textContent = '开始';
+        开启 = false;
+    } else {
+        启停按钮.textContent = '停止';
+        开启 = true;
+        显示实时截图();
+    }
+};
     </script>
 </body>
 </html>
