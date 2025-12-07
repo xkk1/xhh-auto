@@ -33,3 +33,32 @@ def 配置页面(页面名: str) -> dict[str, str]:
         f"/api/目录/脚本/{模块名}/网页/简单远程控制.html?页面名={quote(页面名, safe="")}": "简单远程控制",
     }
     return 页面
+
+
+def 文本响应(string: str):
+    return Response(
+        string,
+        mimetype='text/plain',
+        content_type='text/plain; charset=utf-8'  # 显式声明 charset
+    )
+
+def 路由(子路径: str):
+    页面名: str = request.args.get('页面名', None)
+    if 页面名 == None:
+        return 文本响应("页面名不能为空"), 400
+    
+    页面状态 = 获取页面状态(页面名=页面名)
+    if 页面状态 == None:
+        return 文本响应(f"页面“{页面名}”未创建"), 404
+    elif 页面状态 == False:
+        return 文本响应(f"页面“{页面名}”手动关闭"), 404
+    page = 获取页面(页面名=页面名)
+    if 子路径 == "/点击":
+        x: int = request.args.get('x', None, type=int)
+        y: int = request.args.get('y', None, type=int)
+        if x == None or y == None:
+            return 文本响应("x, y 参数非法"), 400
+        else:
+            异步任务管理器.运行(page.mouse.click(x, y))
+            return 文本响应(f"点击({x},{y})"), 200
+    return 文本响应("未知操作：" + 子路径), 404

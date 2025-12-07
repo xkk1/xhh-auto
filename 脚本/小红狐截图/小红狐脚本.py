@@ -39,6 +39,10 @@ def flask路由(子路径: str):
     if 子路径 == "/api/页面操作/页面截图" and 请求方法 == "GET":
         from .页面操作 import 页面截图
         return 页面截图.路由()
+    简单远程控制url = "/api/页面操作/简单远程控制" 
+    if 子路径.startswith(简单远程控制url) and 请求方法 == "GET":
+        from .页面操作 import 简单远程控制
+        return 简单远程控制.路由(子路径.removeprefix(简单远程控制url))
     查询参数 = flask.request.args  # GET 参数
     表单数据 = flask.request.form  # POST 参数
     json请求体 = flask.request.get_json(silent=True)  # JSON 请求体，silent=True 避免解析失败报错
