@@ -21,6 +21,7 @@ body {
 
 .对话框,
 #对话框 {
+    margin: auto;
     padding: 0.4rem;
     border-width: 0.1rem;
     border-radius: 0.4rem;
