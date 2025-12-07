@@ -83,6 +83,24 @@ async function 显示实时截图() {
         显示实时截图();
     }
 };
+function 获取真实坐标(eclientX, eclientY) {
+    const rect = 截图元素.getBoundingClientRect();
+    // 计算点击位置相对于图片显示区域的坐标
+    const displayX = eclientX - rect.left;
+    const displayY = eclientY - rect.top;
+    // 计算图片的显示宽高比和原始宽高比
+    const displayedWidth = rect.width;
+    const displayedHeight = rect.height;
+    const naturalWidth = 截图元素.naturalWidth;
+    const naturalHeight = 截图元素.naturalHeight;
+
+    const x = Math.round(displayX * naturalWidth / displayedWidth);
+    const y = Math.round(displayY * naturalHeight / displayedHeight);
+    return { x, y };
+}
+截图元素.addEventListener('click', function(e) {
+    console.log(获取真实坐标(e.clientX, e.clientY));
+});
     </script>
 </body>
 </html>
