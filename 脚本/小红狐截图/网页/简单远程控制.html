@@ -8,8 +8,9 @@
 </head>
 <body>
     <header>
-        <span id="页面名"></span>:FPS<span id="fps">-</span>
-        <button id="启停">停止</button>
+        FPS<span id="fps">-</span>
+        <button id="启停">画面停止</button>
+        <button id="DPR按钮">更新DPR</button>
     </header>
     <main>
         <img src="" alt="加载页面截图中..." id="页面截图" />
@@ -43,7 +44,7 @@ main {
     <script>
 const urlParams = new URLSearchParams(window.location.search);
 const 页面名 = urlParams.get('页面名') || '页面名';
-document.getElementById('页面名').textContent = 页面名;
+document.title = 页面名 + ' - ' + document.title;
 const 截图元素 = document.getElementById('页面截图');
 const fps元素 = document.getElementById('fps');
 const 启停按钮 = document.getElementById('启停');
@@ -89,11 +90,11 @@ async function 显示实时截图() {
 }
 显示实时截图();
 启停按钮.onclick = () => {
-    if (启停按钮.textContent === '停止') {
-        启停按钮.textContent = '开始';
+    if (启停按钮.textContent === '画面停止') {
+        启停按钮.textContent = '画面开始';
         开启 = false;
     } else {
-        启停按钮.textContent = '停止';
+        启停按钮.textContent = '画面停止';
         开启 = true;
         传输开始时间戳 = Date.now();
         显示实时截图();
@@ -116,20 +117,29 @@ function 获取真实坐标(eclientX, eclientY) {
     return { x, y };
 }
 const API前缀 = '/api/脚本/路由/小红狐截图/api/页面操作/简单远程控制';
-fetch(`${API前缀}/DPR?页面名=${encodeURIComponent(页面名)}`)
-.then(res => {
-    if (!res.ok) {
-        throw new Error(res.statusText);
-    }
-    return res.text();
-})
-.then(text => {
-    DPR = parseFloat(text);
-    console.log(`DPR: ${DPR}`);
-})
-.catch(err => {
-    console.error(err);
-})
+function 更新DPR(用户输入 = false) {
+    fetch(`${API前缀}/DPR?页面名=${encodeURIComponent(页面名)}`)
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(res.statusText);
+            }
+            return res.text();
+        })
+        .then(text => {
+            DPR = parseFloat(text);
+            console.log(`DPR: ${DPR}`);
+        })
+        .catch(err => {
+            console.error(err);
+            if (用户输入) {
+                DPR = parseFloat(prompt('获取DPR失败，请输入DPR:', DPR));
+            }
+        })
+}
+更新DPR();
+document.getElementById('DPR按钮').onclick = () => {
+    更新DPR(true);
+};
 截图元素.addEventListener('click', function(e) {
     真实坐标 = 获取真实坐标(e.clientX, e.clientY);
     console.log(真实坐标);
