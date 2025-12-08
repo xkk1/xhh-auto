@@ -61,6 +61,20 @@ def 路由(子路径: str):
         else:
             异步任务管理器.运行(page.mouse.click(x, y))
             return 文本响应(f"点击({x},{y})"), 200
+    elif 子路径 == "/keydown":
+        key: str = request.args.get('key', None, type=str)
+        if key == None:
+            return 文本响应("key 参数非法"), 400
+        else:
+            异步任务管理器.运行(page.keyboard.down(key))
+            return 文本响应(f"按下 {key}"), 200
+    elif 子路径 == "/keyup":
+        key: str = request.args.get('key', None, type=str)
+        if key == None:
+            return 文本响应("key 参数非法"), 400
+        else:
+            异步任务管理器.运行(page.keyboard.up(key))
+            return 文本响应(f"抬起 {key}"), 200
     elif 子路径 == "/DPR":
         DPR: float = 异步任务管理器.运行(page.evaluate("window.devicePixelRatio || 1"))
         return 文本响应(str(DPR)), 200

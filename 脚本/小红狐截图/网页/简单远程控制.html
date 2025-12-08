@@ -157,6 +157,42 @@ document.getElementById('DPR按钮').onclick = () => {
         console.error(err);
     });
 });
+// 按键 按下
+window.addEventListener('keydown', (e) => {
+    console.log("发送按键：" + e.key);
+    fetch(`${API前缀}/keydown?页面名=${encodeURIComponent(页面名)}&key=${encodeURIComponent(e.key)}`)
+    .then(res => {
+        if (!res.ok) {
+            throw new Error(res.statusText);
+        }
+        return res.text();
+    })
+    .then(text => {
+        console.log("远程：" + text);
+    })
+    .catch(err => {
+        console.error(err);
+    })
+});
+// 按键 抬起
+window.addEventListener('keyup', (e) => {
+    console.log(e.key);
+    fetch(`${API前缀}/keyup?页面名=${encodeURIComponent(页面名)}&key=${encodeURIComponent(e.key)}`)
+    .then(res => {
+        if (!res.ok) {
+            throw new Error(res.statusText);
+        }
+        return res.text();
+    })
+    .then(text => {
+        console.log("远程：" + text);
+    })
+    .catch(err => {
+        console.error(err);
+    })
+});
+
+
     </script>
 </body>
 </html>
