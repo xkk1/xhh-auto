@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>简单远程控制</title>
     <link rel="stylesheet" href="./css/通用样式.css">
-    <script src="/js/小红狐工具.js"></script>
 </head>
 <body>
     <header>
@@ -58,19 +57,34 @@ const 截图URL = '/api/脚本/路由/小红狐截图/api/页面操作/页面截
 let 开启 = true;
 let 传输开始时间戳 = Date.now();
 async function 显示实时截图() {
+    let 成功 = true;
     try {
         const response = await fetch(截图URL);
-        const blob = await response.blob();
-        const url = URL.createObjectURL(blob);
-        截图元素.src = url;
-        const fps = 1000 / (Date.now() - 传输开始时间戳)
-        fps元素.textContent = fps.toFixed(fps < 10 ? 1 : 0);
-        传输开始时间戳 = Date.now();
+        if (!response.ok) {
+            截图元素.src = '';
+            截图元素.alt = await response.text();
+            fps元素.textContent = '-';
+            传输开始时间戳 = Date.now();
+            成功 = false;
+        } else {
+            const blob = await response.blob();
+            const url = URL.createObjectURL(blob);
+            截图元素.src = url;
+            const fps = 1000 / (Date.now() - 传输开始时间戳)
+            fps元素.textContent = fps.toFixed(fps < 10 ? 1 : 0);
+            传输开始时间戳 = Date.now();
+        }
     } catch (error) {
-        console.error(error);
+        截图元素.src = '';
+        截图元素.alt = '' + error;
+        console.error('' + error);
     }
     if (开启) {
-        setTimeout(显示实时截图);
+        if (成功) {
+            setTimeout(显示实时截图);
+        } else {
+            setTimeout(显示实时截图, 500);
+        }
     }
 }
 显示实时截图();
@@ -81,6 +95,7 @@ async function 显示实时截图() {
     } else {
         启停按钮.textContent = '停止';
         开启 = true;
+        传输开始时间戳 = Date.now();
         显示实时截图();
     }
 };
