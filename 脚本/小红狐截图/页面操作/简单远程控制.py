@@ -101,6 +101,13 @@ def 路由(子路径: str):
         else:
             异步任务管理器.运行(page.keyboard.up(key))
             return 文本响应(f"抬起 {key}"), 200
+    elif 子路径 == "/输入":
+        内容: str = request.args.get('内容', None, type=str)
+        if 内容 == None:
+            return 文本响应("内容参数非法"), 400
+        else:
+            异步任务管理器.运行(page.keyboard.insert_text(内容))
+            return 文本响应(f"输入 {内容}"), 200
     elif 子路径 == "/DPR":
         DPR: float = 异步任务管理器.运行(page.evaluate("window.devicePixelRatio || 1"))
         return 文本响应(str(DPR)), 200

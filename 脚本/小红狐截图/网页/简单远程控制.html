@@ -11,6 +11,7 @@
         FPS<span id="fps">-</span>
         <button id="启停">画面停止</button>
         <button id="DPR按钮">更新DPR</button>
+        <button id="远程输入">输入</button>
     </header>
     <main>
         <img src="" alt="加载页面截图中..." id="页面截图" />
@@ -272,8 +273,24 @@ window.addEventListener('keyup', (e) => {
         console.error(err);
     })
 });
-
-
+function 远程输入() {
+    const 内容 = prompt("输入内容");
+    if (!内容) return;
+    fetch(`${API前缀}/输入?页面名=${encodeURIComponent(页面名)}&内容=${encodeURIComponent(内容)}`)
+    .then(res => {
+        if (!res.ok) {
+            throw new Error(res.statusText);
+        }
+        return res.text();
+    })
+    .then(text => {
+        console.log("远程：" + text);
+    })
+    .catch(err => {
+        console.error(err);
+    })
+}
+document.getElementById("远程输入").addEventListener("click", 远程输入);
     </script>
 </body>
 </html>
