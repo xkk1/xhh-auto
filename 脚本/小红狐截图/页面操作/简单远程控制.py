@@ -61,6 +61,32 @@ def 路由(子路径: str):
         else:
             异步任务管理器.运行(page.mouse.click(x, y))
             return 文本响应(f"点击({x},{y})"), 200
+    elif 子路径 == "/mousedown":
+        x: int = request.args.get('x', None, type=int)
+        y: int = request.args.get('y', None, type=int)
+        if x == None or y == None:
+            return 文本响应("x, y 参数非法"), 400
+        else:
+            异步任务管理器.运行(page.mouse.move(x, y))
+            异步任务管理器.运行(page.mouse.down())
+            return 文本响应(f"鼠标按下({x},{y})"), 200
+    elif 子路径 == "/mouseup":
+        x: int = request.args.get('x', None, type=int)
+        y: int = request.args.get('y', None, type=int)
+        if x == None or y == None:
+            return 文本响应("x, y 参数非法"), 400
+        else:
+            异步任务管理器.运行(page.mouse.move(x, y))
+            异步任务管理器.运行(page.mouse.up())
+            return 文本响应(f"鼠标抬起({x},{y})"), 200
+    elif 子路径 == "/mousemove":
+        x: int = request.args.get('x', None, type=int)
+        y: int = request.args.get('y', None, type=int)
+        if x == None or y == None:
+            return 文本响应("x, y 参数非法"), 400
+        else:
+            异步任务管理器.运行(page.mouse.move(x, y))
+            return 文本响应(f"鼠标移动({x},{y})"), 200
     elif 子路径 == "/keydown":
         key: str = request.args.get('key', None, type=str)
         if key == None:
