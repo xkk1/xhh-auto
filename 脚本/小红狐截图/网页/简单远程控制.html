@@ -164,7 +164,7 @@ document.getElementById('DPR按钮').onclick = () => {
 // });
 // 鼠标 按下
 let 鼠标按下 = false;
-截图元素.addEventListener('mousedown', function(e) {
+function 鼠标按下事件函数(e) {
     鼠标按下 = true;
     真实坐标 = 获取真实坐标(e.clientX, e.clientY);
     console.log(真实坐标);
@@ -181,9 +181,10 @@ let 鼠标按下 = false;
     .catch(err => {
         console.error(err);
     });
-});
+}
+截图元素.addEventListener('mousedown', 鼠标按下事件函数);
 // 鼠标 抬起
-截图元素.addEventListener('mouseup', function(e) {
+function 鼠标抬起事件函数(e) {
     鼠标按下 = false;
     真实坐标 = 获取真实坐标(e.clientX, e.clientY);
     console.log(真实坐标);
@@ -200,7 +201,8 @@ let 鼠标按下 = false;
     .catch(err => {
         console.error(err);
     });
-})
+}
+截图元素.addEventListener('mouseup', 鼠标抬起事件函数);
 // 鼠标 移动
 function throttle(func, delay) {  // 节流函数
   let timeoutId;
@@ -237,6 +239,23 @@ let 抬起鼠标移动事件函数 = throttle(鼠标移动事件函数, 500);
         按下鼠标移动事件函数(e);
     } else {
         抬起鼠标移动事件函数(e);
+    }
+});
+/* 适配触摸事件 */
+截图元素.addEventListener('touchstart', (e) => {
+    const touch = e.touches[0];
+    鼠标按下事件函数(touch);
+});
+截图元素.addEventListener('touchend', (e) => {
+    const touch = e.touches[0];
+    鼠标抬起事件函数(touch);
+});
+截图元素.addEventListener('touchmove', (e) => {
+    const touch = e.touches[0];
+    if (鼠标按下) {
+        按下鼠标移动事件函数(touch);
+    } else {
+        抬起鼠标移动事件函数(touch);
     }
 });
 // 按键 按下
