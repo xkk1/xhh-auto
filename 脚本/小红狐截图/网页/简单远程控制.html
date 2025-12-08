@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>简单远程控制</title>
     <link rel="stylesheet" href="./css/通用样式.css">
+    <script src="/js/小红狐工具.js"></script>
 </head>
 <body>
     <header>
@@ -83,6 +84,7 @@ async function 显示实时截图() {
         显示实时截图();
     }
 };
+let DPR = 1;
 function 获取真实坐标(eclientX, eclientY) {
     const rect = 截图元素.getBoundingClientRect();
     // 计算点击位置相对于图片显示区域的坐标
@@ -94,11 +96,25 @@ function 获取真实坐标(eclientX, eclientY) {
     const naturalWidth = 截图元素.naturalWidth;
     const naturalHeight = 截图元素.naturalHeight;
 
-    const x = Math.round(displayX * naturalWidth / displayedWidth);
-    const y = Math.round(displayY * naturalHeight / displayedHeight);
+    const x = Math.round(displayX * naturalWidth / displayedWidth / DPR);
+    const y = Math.round(displayY * naturalHeight / displayedHeight / DPR);
     return { x, y };
 }
 const API前缀 = '/api/脚本/路由/小红狐截图/api/页面操作/简单远程控制';
+fetch(`${API前缀}/DPR?页面名=${encodeURIComponent(页面名)}`)
+.then(res => {
+    if (!res.ok) {
+        throw new Error(res.statusText);
+    }
+    return res.text();
+})
+.then(text => {
+    DPR = parseFloat(text);
+    console.log(`DPR: ${DPR}`);
+})
+.catch(err => {
+    console.error(err);
+})
 截图元素.addEventListener('click', function(e) {
     真实坐标 = 获取真实坐标(e.clientX, e.clientY);
     console.log(真实坐标);

@@ -3,7 +3,7 @@ import io
 import traceback
 from urllib.parse import quote
 
-from flask import Response, request, send_file
+from flask import Response, jsonify, request, send_file
 
 from 小红狐.核心.页面 import 获取页面状态, 获取页面
 from 小红狐.工具.任务管理器工具 import 异步任务管理器
@@ -61,4 +61,7 @@ def 路由(子路径: str):
         else:
             异步任务管理器.运行(page.mouse.click(x, y))
             return 文本响应(f"点击({x},{y})"), 200
+    elif 子路径 == "/DPR":
+        DPR: float = 异步任务管理器.运行(page.evaluate("window.devicePixelRatio || 1"))
+        return 文本响应(str(DPR)), 200
     return 文本响应("未知操作：" + 子路径), 404
