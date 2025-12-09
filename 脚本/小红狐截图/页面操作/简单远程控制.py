@@ -100,6 +100,7 @@ def 路由(子路径: str):
             return 文本响应("delta_x 或 delta_y 参数非法"), 400
         else:
             异步任务管理器.运行(page.mouse.wheel(delta_x=delta_x, delta_y=delta_y))
+            return 文本响应(f"成功滚动 {delta_x}px 水平 {delta_y}px 垂直")
     elif 子路径 == "/输入":
         内容: str = request.args.get('内容', None, type=str)
         if 内容 == None:
