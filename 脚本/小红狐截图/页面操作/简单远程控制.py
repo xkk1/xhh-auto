@@ -53,15 +53,7 @@ def 路由(子路径: str):
     elif 页面状态 == False:
         return 文本响应(f"页面“{页面名}”手动关闭"), 404
     page = 获取页面(页面名=页面名)
-    if 子路径 == "/点击":
-        x: int = request.args.get('x', None, type=int)
-        y: int = request.args.get('y', None, type=int)
-        if x == None or y == None:
-            return 文本响应("x, y 参数非法"), 400
-        else:
-            异步任务管理器.运行(page.mouse.click(x, y))
-            return 文本响应(f"点击({x},{y})"), 200
-    elif 子路径 == "/mousedown":
+    if 子路径 == "/mousedown":
         x: int = request.args.get('x', None, type=int)
         y: int = request.args.get('y', None, type=int)
         if x == None or y == None:
@@ -101,6 +93,13 @@ def 路由(子路径: str):
         else:
             异步任务管理器.运行(page.keyboard.up(key))
             return 文本响应(f"抬起 {key}"), 200
+    elif 子路径 == "/wheel":
+        delta_x: float = request.args.get('dx', None, type=float)
+        delta_y: float = request.args.get('dy', None, type=float)
+        if delta_x == None or delta_y == None:
+            return 文本响应("delta_x 或 delta_y 参数非法"), 400
+        else:
+            异步任务管理器.运行(page.mouse.wheel(delta_x=delta_x, delta_y=delta_y))
     elif 子路径 == "/输入":
         内容: str = request.args.get('内容', None, type=str)
         if 内容 == None:

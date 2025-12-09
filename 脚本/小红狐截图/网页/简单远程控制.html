@@ -241,6 +241,23 @@ let 抬起鼠标移动事件函数 = throttle(鼠标移动事件函数, 500);
         抬起鼠标移动事件函数(e);
     }
 });
+// 鼠标 滚轮
+截图元素.addEventListener("wheel", function(e) {
+    const { deltaX, deltaY } = e;
+    fetch(`${API前缀}/wheel?页面名=${encodeURIComponent(页面名)}&dx=${deltaX}&dy=${deltaY}`)
+    .then(res => {
+        if (!res.ok) {
+            throw new Error(res.statusText);
+        }
+        return res.text();
+    })
+    .then(text => {
+        console.log(text);
+    })
+    .catch(err => {
+        console.error(err);
+    });
+});
 /* 适配触摸事件 */
 截图元素.addEventListener('touchstart', (e) => {
     const touch = e.touches[0];
