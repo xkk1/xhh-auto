@@ -55,10 +55,19 @@ params = new URLSearchParams({
     "类型": "jpeg",
     "缩放": "css",
 });
+// 获取当前状态
+function 窗口最小化() {
+    return document.hidden || document.visibilityState === 'hidden' || false;
+}
 const 截图URL = '/api/脚本/路由/小红狐截图/api/页面操作/页面截图' + '?' + params.toString();
 let 开启 = true;
 let 传输开始时间戳 = Date.now();
 async function 显示实时截图() {
+    if (窗口最小化()) {
+        传输开始时间戳 = Date.now();
+        setTimeout(显示实时截图, 500);
+        return;
+    }
     let 成功 = true;
     try {
         const response = await fetch(截图URL);
