@@ -8,12 +8,40 @@
     <script src="./js/工具.js"></script>
     <script src="./js/实时.js"></script>
     <style>
-        #日志:hover {
+        html,
+        body,
+        main {
+            height: 100%;
+            width: 100%;
+        }
+        main {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            box-sizing: border-box;
+        }
+        #日志容器 {
+            width: 100%;
+            height: fit-content;
+            max-height: 100%;
+            overflow-y: auto; /* 关键：允许垂直滚动 */
+        }
+        .日志 {
+            margin: 0;
+            padding: 0;
+        }
+        .日志:hover {
             background-color: rgba(140, 140, 140, 0.4);
+        }
+        #切换显示最新 {
+            position: absolute;
+            right: 0;
+            top: 0;
         }
     </style>
 </head>
 <body>
+    <button type="button" id="切换显示最新">取消显示最新</button>
     <main>
         <div id="日志容器"></div>
     </main>
