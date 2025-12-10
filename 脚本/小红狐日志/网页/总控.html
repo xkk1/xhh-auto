@@ -11,7 +11,8 @@
 <body>
     <main>
         <div>
-            <button id="刷新日志渠道列表按钮" type="button" onclick="刷新日志渠道列表()">刷新</button>
+            <button type="button" id="刷新页面按钮" class="加载按钮" onclick="this.classList.add('加载中');location.reload();">刷新页面</button>
+            <button id="刷新日志渠道列表按钮" class="加载按钮" type="button" onclick="刷新日志渠道列表()">刷新日志渠道列表</button>
         </div>
         <ul id="日志渠道列表"></ul>
     </main>

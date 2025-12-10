@@ -33,7 +33,7 @@
         .日志:hover {
             background-color: rgba(140, 140, 140, 0.4);
         }
-        #切换显示最新 {
+        #右上 {
             position: absolute;
             right: 0;
             top: 0;
@@ -41,7 +41,10 @@
     </style>
 </head>
 <body>
-    <button type="button" id="切换显示最新">取消显示最新</button>
+    <div id="右上">
+        <button type="button" id="刷新页面按钮" class="加载按钮" onclick="this.classList.add('加载中');location.reload();">刷新页面</button>
+        <button type="button" id="切换显示最新">取消显示最新</button>
+    </div>
     <main>
         <div id="日志容器"></div>
     </main>

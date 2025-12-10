@@ -1,6 +1,8 @@
 async function 刷新日志渠道列表() {
+    const 刷新日志渠道列表按钮 = document.getElementById("刷新日志渠道列表按钮");
     const 日志渠道列表元素 = document.getElementById("日志渠道列表");
     const URL = "/api/脚本/路由/小红狐日志/api/日志/渠道名"
+    刷新日志渠道列表按钮.classList.add("加载中");
     fetch(URL)
         .then(response => response.json())
         .then(data => {
@@ -21,6 +23,9 @@ async function 刷新日志渠道列表() {
         .catch(error => {
             日志渠道列表元素.textContent = "获取日志渠道列表失败！\n" + error;
         })
+        .finally(() => {
+            刷新日志渠道列表按钮.classList.remove("加载中");
+        });
 }
 
 function 初始化日志渠道列表事件委托() {
