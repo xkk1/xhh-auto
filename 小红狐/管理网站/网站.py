@@ -5,6 +5,7 @@ import socket
 import webbrowser
 
 from flask import Flask
+from flask_cors import CORS
 from waitress import serve
 
 from ..工具.日志工具 import 获取日志记录器
@@ -43,6 +44,7 @@ def 主函数():
         static_url_path="",
         template_folder=模板目录
         )
+    CORS(网站)  # 允许所有来源访问所有路由（解决跨域访问问题）
 
     # 注册蓝图
     from .路由.主页 import 主页蓝图
