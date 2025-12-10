@@ -1,15 +1,3 @@
-.加载按钮.加载中 {
-    cursor: wait;
-}
-
-.加载按钮.加载中::before {
-    content: "正在";
-}
-
-.加载按钮.加载中::after {
-    content: "…";
-}
-
 #脚本信息容器 {
     width: 100%;
     overflow-x: auto;
