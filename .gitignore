@@ -7,6 +7,8 @@ __pycache__/
 # pyinstaller 打包
 /dist/
 /build/
+/打包/
+/打包*
 
 # 浏览器
 /浏览器/**/*
