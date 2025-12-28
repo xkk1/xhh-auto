@@ -25,6 +25,8 @@ def 脚本状态(页面名: str | None) -> bool:
         return False
     elif 页面名 in 开启脚本页面名列表:
         return True
+    else:
+        return False
 
 def 配置页面(页面名: str) -> dict[str, str]:
     页面: dict[str, str] = {
