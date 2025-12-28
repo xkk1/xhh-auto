@@ -1,12 +1,16 @@
 :root {
     /* 🌞 浅色主题 */
     color-scheme: light;
+
+    --背景色: #f8f9fa;
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
         /* 🌙 深色主题 */
         color-scheme: dark;
+
+        --背景色: #1e1e1e;
     }
 }
 
@@ -32,6 +36,10 @@ body {
     margin: 0;
     padding: 0;
     white-space: pre-wrap;
+}
+
+.提示 { 
+    background-color: var(--背景色);
 }
 
 .加载按钮.加载中 {
