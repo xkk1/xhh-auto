@@ -52,7 +52,7 @@ async function 新建页面() {
     小红狐.页面.新增页面名(页面名)
         .then(async (响应) => {
             刷新页面列表();
-            await 小红狐工具.对话框.提示(响应);
+            小红狐工具.提示(响应);
         })
         .catch(async error => {
             console.error("新增页面名失败：", error);
