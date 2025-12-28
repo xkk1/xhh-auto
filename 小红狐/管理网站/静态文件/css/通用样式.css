@@ -14,6 +14,14 @@
     }
 }
 
+/* 移动端样式 */
+@media (max-width: 768px) {
+    .提示容器 {
+        bottom: 1rem;
+        flex-direction: column;
+    }
+}
+
 html,
 body {
     height: 100%;
