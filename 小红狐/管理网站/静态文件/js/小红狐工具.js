@@ -386,6 +386,68 @@
             },
     }
 
+
+    // 创建容器（只创建一次）
+    let 提示容器 = null;
+    function 获取提示容器() {
+        if (!提示容器) {
+            提示容器 = document.createElement('div');
+            提示容器.className = `提示容器`;
+            提示容器.style.cssText = `
+position: fixed;
+left: 50%;
+transform: translateX(-50%);
+z-index: 9999;
+display: flex;
+flex-direction: column;
+align-items: center;
+pointer-events: none;
+bottom: 20px;
+width: 100%;
+`;
+            document.body.appendChild(提示容器);
+        }
+        return 提示容器;
+    }
+
+    // 显示单个 toast
+    function 提示(内容, 持续时间=3000) {
+        const container = 获取提示容器();
+
+        const toastEl = document.createElement('div');
+        toastEl.className = `提示`;
+        toastEl.textContent = 内容;
+        toastEl.style.cssText = `
+border: 0.1rem solid rgba(0, 0, 0, 0.2);
+padding: 0.5rem 1rem;
+border-radius: 6px;
+margin: 6px 0;
+max-width: 80%;
+word-break: break-word;
+text-align: center;
+opacity: 0;
+transition: opacity 0.3s ease;
+pointer-events: auto;
+`;
+
+        container.appendChild(toastEl);
+
+        // 触发重绘后淡入
+        setTimeout(() => {
+            toastEl.style.opacity = '1';
+        }, 10);
+
+        // 自动移除
+        setTimeout(() => {
+            toastEl.style.opacity = '0';
+            setTimeout(() => {
+                if (toastEl.parentNode) {
+                    toastEl.parentNode.removeChild(toastEl);
+                }
+            }, 300);
+        }, 持续时间);
+    }
+
     // 对外暴露的 小红狐工具 方法
     const 小红狐工具 = {
         请求: 请求,
@@ -397,6 +459,7 @@
         获取多页面: 获取多页面,
         多页面切换: 多页面切换,
         对话框: 对话框,
+        提示: 提示,
     };
 
     // 将 小红狐工具 挂载到全局对象上（比如 window），这样外部可直接使用
