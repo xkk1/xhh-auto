@@ -32,6 +32,9 @@
         获取页面操作开启脚本: function(页面名="页面名六个字") {
             return 请求.获取(this.api前缀 + `/页面操作开启脚本/${encodeURIComponent(页面名)}`);
         },
+        获取页面操作脚本状态: function(页面名, 脚本模块名, 页面操作脚本名) {
+            return 请求.获取(this.api前缀 + `/页面操作脚本状态/${encodeURIComponent(页面名)}/${encodeURIComponent(脚本模块名)}/${encodeURIComponent(页面操作脚本名)}`);
+        },
         获取页面操作自动开启脚本: function(页面名="页面名六个字") {
             return 请求.获取(this.api前缀 + `/页面操作自动开启脚本/${encodeURIComponent(页面名)}`);
         },

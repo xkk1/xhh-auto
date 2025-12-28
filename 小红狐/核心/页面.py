@@ -129,6 +129,16 @@ def 获取页面操作开启脚本(页面名: str = "默认页面六个字") -> 
                 日志.警告(f"获取页面操作开启脚本“{脚本模块名}”“{页面操作脚本名}”页面“{页面名}”失败: {e}")
     return 页面操作开启脚本
 
+def 获取页面操作脚本状态(页面名: str = "默认页面六个字", 脚本模块名: str | None = None, 页面操作脚本名: str | None = None) -> bool:
+    if 脚本模块名 is None or 页面操作脚本名 is None:
+        raise ValueError("脚本模块名或脚本名不能为空")
+    脚本模块: 小红狐脚本信息 = 获取脚本(模块名=脚本模块名)
+    脚本状态函数: Callable[[str], bool] = 脚本模块["页面操作"][页面操作脚本名].get("脚本状态", None)
+    if not isinstance(脚本状态函数, Callable):
+        return False
+    脚本状态 =  脚本状态函数(页面名=页面名)
+    return 脚本状态
+
 def 开启页面操作脚本(页面名: str = "默认页面六个字", 脚本模块名: str | None = None, 页面操作脚本名: str | None = None) -> None:
     if 脚本模块名 is None or 页面操作脚本名 is None:
         raise ValueError("脚本模块名或脚本名不能为空")

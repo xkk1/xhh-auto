@@ -7,7 +7,7 @@ from playwright.async_api import Page
 
 from .... import __package__ as 小红狐模块名
 from ....工具.日志工具 import 获取日志记录器
-from ....核心.页面 import 修改标签页URL排序, 修改页面初始URL, 修改页面名, 修改页面生成脚本, 修改页面账号名, 修改页面配置名, 关闭页面操作自动开启脚本, 删除页面, 复制页面, 开启页面操作自动开启脚本, 新增页面, 新建页面, 关闭页面, 获取全部页面名, 获取页面, 关闭页面操作脚本, 删除页面操作自动开启脚本, 开启页面操作脚本, 添加页面操作自动开启脚本, 获取标签页URL排序, 获取页面初始URL, 获取页面操作开启脚本, 获取页面操作自动开启脚本, 获取页面状态, 获取页面生成脚本, 获取页面账号名, 获取页面配置名
+from ....核心.页面 import 修改标签页URL排序, 修改页面初始URL, 修改页面名, 修改页面生成脚本, 修改页面账号名, 修改页面配置名, 关闭页面操作自动开启脚本, 删除页面, 复制页面, 开启页面操作自动开启脚本, 新增页面, 新建页面, 关闭页面, 获取全部页面名, 获取页面, 关闭页面操作脚本, 删除页面操作自动开启脚本, 开启页面操作脚本, 添加页面操作自动开启脚本, 获取标签页URL排序, 获取页面初始URL, 获取页面操作开启脚本, 获取页面操作脚本状态, 获取页面操作自动开启脚本, 获取页面状态, 获取页面生成脚本, 获取页面账号名, 获取页面配置名
 from ....核心.脚本 import 小红狐脚本信息, 获取脚本
 from .脚本 import 标准化
 
@@ -174,6 +174,18 @@ def 获取页面操作开启脚本路由(page_name):
     页面名: str = page_name
     页面操作开启脚本: dict[str, list[str]] = 获取页面操作开启脚本(页面名=页面名)
     return jsonify(页面操作开启脚本)
+
+@页面蓝图.route("/页面操作脚本状态/<page_name>/<script_module_name>/<script_name>", methods=["GET"])
+def 获取页面操作脚本状态路由(page_name, script_module_name, script_name):
+    页面名: str = page_name
+    脚本模块名: str = script_module_name
+    页面操作脚本名: str = script_name
+    try:
+        脚本状态: bool = 获取页面操作脚本状态(页面名=页面名, 脚本模块名=脚本模块名, 页面操作脚本名=页面操作脚本名)
+        return jsonify(脚本状态)
+    except Exception as e:
+        日志.警告(f"获取页面操作脚本状态失败，页面：“{页面名}”，脚本模块名：“{脚本模块名}”，页面操作脚本名“{页面操作脚本名}”: {e}")
+        return jsonify(False)
 
 @页面蓝图.route("/标签页URL排序/<page_name>", methods=["PUT"]) 
 def 修改标签页URL排序路由(page_name):
