@@ -9,6 +9,19 @@ function 对话框元素添加关闭按钮(对话框元素, 关闭按钮文本="
     关闭按钮.textContent = 关闭按钮文本;
     对话框表单.appendChild(关闭按钮);
     对话框元素.appendChild(对话框表单);
+    // 点击背景关闭
+    对话框元素.addEventListener('click', (e) => {
+        const rect = 对话框元素.getBoundingClientRect();
+        const isInDialog =
+            rect.top <= e.clientY &&
+            e.clientY <= rect.bottom &&
+            rect.left <= e.clientX &&
+            e.clientX <= rect.right;
+
+        if (!isInDialog) {
+            对话框元素.close();
+        }
+    });
 }
 
 async function 更新导入脚本信息字典() {
