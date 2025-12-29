@@ -34,17 +34,31 @@ body {
 .对话框,
 #对话框 {
     margin: auto;
-    padding: 0.4rem;
+    padding: 1rem;
     border-width: 0.1rem;
     border-radius: 0.4rem;
 }
 
 .对话框 .标题,
 .对话框 .消息内容 {
-    margin: 0;
+    margin: 0.5rem 0;
     padding: 0;
     white-space: pre-wrap;
 }
+
+/* 按钮区域样式 */
+.对话框 .按钮容器 {
+    text-align: right;
+    margin-top: 15px;
+}
+
+/* 按钮样式 */
+.对话框 .按钮容器 button {
+    margin-left: 0.6rem;
+    padding: 0.4rem 0.6rem;
+    cursor: pointer;
+}
+
 
 .提示 { 
     background-color: var(--背景色);
